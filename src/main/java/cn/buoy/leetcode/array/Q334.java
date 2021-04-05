@@ -1,0 +1,31 @@
+package cn.buoy.leetcode.array;
+
+import java.util.List;
+
+public class Q334 {
+    /*
+    https://www.youtube.com/watch?v=EtJY4fRBjw4
+     */
+    public boolean increasingTriplet(int[] nums) {
+        // start with two largest values, as soon as we find a number bigger than both, while both have been updated, return true.
+        int small = Integer.MAX_VALUE, big = Integer.MAX_VALUE;
+        for (int n : nums) {
+            if (n <= small) {
+                small = n;
+            } // update small if n is smaller than both
+            else if (n <= big) {
+                big = n;
+            } // update big only if greater than small but smaller than big
+            else return true; // return if you find a number bigger than both
+        }
+        return false;
+    }
+
+    /*
+    https://leetcode.com/problems/increasing-triplet-subsequence/discuss/79053/My-way-to-approach-such-a-problem.-How-to-think-about-it-Explanation-of-my-think-flow.
+     */
+    //todo dp
+    public boolean increasingTriplet1(int[] nums) {
+        return false;
+    }
+}
