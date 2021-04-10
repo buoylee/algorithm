@@ -9,6 +9,8 @@ public class Test {
 //        int k = 2;
 //        k %= 7;
 //        System.out.println(k);
-        System.out.println(Math.ceil(1.2));
+        int n = 1;
+        System.out.println(n <<= 1);
+        System.out.println(n <<= 1);
     }
 }

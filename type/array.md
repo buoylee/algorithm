@@ -43,7 +43,7 @@
 # 提高			
 - 4	Median of Two Sorted Arrays	视频讲解	很少考
 - 321	Create Maximum Number	视频讲解	很少考
-- 327	Count of Range Sum	视频讲解
+- 327	Count of Range Sum	视频讲解---------------------
 - 289	Game of Life	视频讲解 
 ## Interval			
 - 57	Insert Interval	视频讲解

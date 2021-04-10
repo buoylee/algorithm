@@ -68,7 +68,6 @@ gap: 4 -> 2 -> 1 ,同 插入排序
 
 同, 区别在于 氛围 < = > 3个区域, 当大小与时换位, 直到与大于区域指针相等.
 
-
 # 队列
 
 ## 优先队列
@@ -77,13 +76,13 @@ gap: 4 -> 2 -> 1 ,同 插入排序
 
 ## 最大二叉堆
 
-所有节点的子节点必小于其本身. 
-用数组表示时, 左子节点序号为父节点(父节点为`1`时)的`2n`, 右节点序号为父节点的`2n+1`.
-插入: shiftUp, 当新插入的节点,比其父节点大时, 与父节点交换位置, 一直交换到直到整个堆都符合最大二叉堆定义. O(nlogn)
+所有节点的子节点必小于其本身. 用数组表示时, 左子节点序号为父节点(父节点为`1`时)的`2n`, 右节点序号为父节点的`2n+1`. 插入: shiftUp, 当新插入的节点,比其父节点大时, 与父节点交换位置,
+一直交换到直到整个堆都符合最大二叉堆定义. O(nlogn)
 
 heapify: shiftDown, 由尾到头进行. O(n)
 
 当堆从数组[0]开始时, 父子序号关系为:
+
 ```
 parent(x) = (i - 1)/2
 left child(x) = 2*i + 1
@@ -100,61 +99,96 @@ right child(x) = 2*i + 2
 
 # union-find(并查集)
 
-union操作: 将与合并值相等的所有元素改为另一方, O(n) 
+union操作: 将与合并值相等的所有元素改为另一方, O(n)
 
 # 哈希
 
 一般的`哈希`失去了顺序性.
 
+# 图
+
+## 无向图
+
+邻接表 适合表示稀疏图, 每个点到其他点的边远小于点的数量, 认为是稀疏图. 连接表是2维数组, 存邻接的点
+
+## 有向图
+
+邻接矩阵 适合表示稠密图 邻接矩阵是2维数组, 存是否与另一点是否有直接相连, 有则置为1. 完全图: 所有的点到其他点都有连接.
+
+## BFS(广度优先遍历) 层序优先遍历 求无权图最短路径(和具体路径),
+
+用队列,放入第一个点, 该点未入过队的邻接点都入队, 依次检查队列中的点, 跳过已经在队中的点, 直到遍历结束.
+
+## DFS(深度优先遍历)
+
+递归: 每次都优先访问点到下一个点的从头到尾第一个未访问到的元素, 并记录每一个点是否访问过, 直到结束. 同样需要维护visit[], 可以维护from[], step[](源节点为0, 下一节点的step为上一节点的step[] +
+1).
+
+### 用于一般寻路(深度)
+
+dfs, 增加数组记录"第一次到达某点"的上一点from[].
+
+## 带权图
+
+### 邻接表
+
+无权 存的是 index, 有权 存的index和权重 {to: j, weight: x}.
+
+### 邻接矩阵
+
+直接存 邻接的weight, 0表无邻接.
+
+### 最小生成树 一般针对有权无向图. (用了算法思想?)
+
+v个节点, 就应该是v-1条边. 所有边的权值也是最小.
+
+#### lazy prim ElogE E = 边数
+
+证明: 数学归纳法, https://www.youtube.com/watch?v=cVkuug9NdmI&t=678s
+
+需要维护一个优先队列和一个visited[], 从一点开始, 加入临边到队列, 取出小最值, 此边即为最小生成树的其中一边, 并标记此边的另一点为visited, 每当有新的一批边加入后, 会继续选出(弹出)这些边的最小边(需排除掉2端点已经都被visited的边), 直到变数 = k点 - 1?, 直到队列为空. 
 
 
-n = 12
+#### prim ElogV v = 访问次数?
 
-11 push 11 true
-7 push 7 true
+其实只用关心, **其他点到某个点的最小值数组即可**, 记为edgeTo[] (indexMinHeap用到最小索引堆), (i对应某个点).  
+随意挑选一个点开始, 更新此点邻接边的另一端点的indexMinHeap[], 找出 现存edgeTo中最小边的点, 加入到visited[],  
+继续找新加入点的邻接点, 并更新edgeTo[], 取最小(记得排除掉已经visited过的邻接点), 该邻接点加入visited, 直到结束.
 
-7 push 7 true
-10 push 10 true
-6 push 6 true
+#### kruskal ElogE 靠 union-find 才降低了时间复杂度.
+先排序边大小, 从小到大加入, 如果形成环这去掉, 继续加入, 直到边够.
+用union-find 找环.
 
-10 push 10 true
-6 push 6 true
-6 push 6 true -
-2 push 2 true
+#### vyssotsky 没用, 因为没有对应好的 数据结构.
+不用先排序, 逐条加入, 当形成环, 则删除最大权值边, 直到最后边.
 
-6 push 6 true
-6 push 6 true -
-2 push 2 true
-9 push 9 true
-5 push 5 true
+### 最短路径
 
-2 push 2 true
-9 push 9 true
-5 push 5 true
-5 push 5 true -
-1 push 1 true
+松弛操作  relaxation
 
-9 push 9 true
-5 push 5 true
-5 push 5 true -
-1 push 1 true
-1 push 1 true -
+## 无负权值
 
-5 push 5 true
-5 push 5 true -
-1 push 1 true
-1 push 1 true -
-8 push 8 true
-4 push 4 true
-
-5 push 5 true -
-1 push 1 true
-1 push 1 true -
-8 push 8 true
-4 push 4 true
-4 push 4 true - 
+### dijkstra 单源最短路径 ElogV
+类似prim, 差别在不断更新的edgeTo[], 为从原点到该点的最近路径, 每当有新点加入到visited, 都会计算原点经过新点所到达的邻接点的路径大小, 小于则更新.
 
 
+## 有负权值
 
+不能处理负全环.
 
+### bellman-ford 可以判断是否有负全环(假如有n个点, 则最多只能经过n-1条边). O(EV) 
 
+- https://www.youtube.com/watch?v=FtN3BYH2Zes
+- https://www.youtube.com/watch?v=bC7Wfl3k7KU&t=4s
+- https://www.youtube.com/watch?v=YVwGDs2FYuw&t=461s (这个直接遍历所有边完事)
+
+对每个点都进行 v-1 次松弛操作(进过这个点到达的临边(distTo[] + v.weight),是否有更小值距离).
+```aidl
+for (1 to n-1){
+    for(0 to v-1){
+        for(所有临边){
+        
+        }
+    }
+}
+```
