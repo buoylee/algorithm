@@ -1,0 +1,52 @@
+package cn.buoy.leetcode.tree;
+
+import cn.buoy.leetcode.TreeNode;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Q257 {
+
+    /**
+     * 都是DFS, 用StringBuilder效率更高
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        helper(res, root, sb);
+        return res;
+    }
+
+    private void helper(List<String> res, TreeNode root, StringBuilder sb) {
+        if (root == null) {
+            return;
+        }
+        int len = sb.length();
+        sb.append(root.val);
+        if (root.left == null && root.right == null) {
+            res.add(sb.toString());
+        } else {
+            sb.append("->");
+            helper(res, root.left, sb);
+            helper(res, root.right, sb);
+        }
+        //关键 简单 回溯
+        sb.setLength(len);
+    }
+
+    public List<String> binaryTreePaths2(TreeNode root) {
+        List<String> answer = new ArrayList<String>();
+        if (root != null) searchBT(root, "", answer);
+        return answer;
+    }
+
+    private void searchBT(TreeNode root, String path, List<String> answer) {
+        //叶子节点 等于 前边的 string + 当前的value, 返回上一层执行, string + (string + (string + value))...
+        if (root.left == null && root.right == null) answer.add(path + root.val);
+        //其他节点则, 加好后放到下一层递归
+        if (root.left != null) searchBT(root.left, path + root.val + "->", answer);
+        if (root.right != null) searchBT(root.right, path + root.val + "->", answer);
+    }
+
+
+}
