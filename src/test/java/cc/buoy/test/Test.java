@@ -22,6 +22,6 @@ public class Test {
 //        currentResult.add(3);
 //        currentResult.add(4);
 //        System.out.println(currentResult);
-        System.out.println(Integer.MIN_VALUE);
+        System.out.println(Integer.MIN_VALUE + Integer.MAX_VALUE);
     }
 }
