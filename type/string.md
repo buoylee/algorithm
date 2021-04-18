@@ -13,6 +13,7 @@
 - 294	Flip Game II	视频讲解
 - 290	Word Pattern	视频讲解
 - 242	Valid Anagram	视频讲解
+  
 - 49	Group Anagrams	视频讲解
 - 249	Group Shifted Strings	视频讲解
 - 87	Scramble String	视频讲解
@@ -23,6 +24,7 @@
 - 358	Rearrange String k Distance Apart	视频讲解
 - 316	Remove Duplicate Letters	视频讲解
 - 271	Encode and Decode Strings	视频讲解
+  
 - 168	Excel Sheet Column Title	视频讲解
 - 171	Excel Sheet Column Number	视频讲解
 - 13	Roman to Integer	视频讲解
