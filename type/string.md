@@ -36,6 +36,7 @@
 # 提高			
 - 157	Read N Characters Given Read4	视频讲解
 - 158	Read N Characters Given Read4 II - Call multiple times	视频讲解
+  
 - 68	Text Justification	视频讲解
 - 65	Valid Number	视频讲解
 ## Substring			
@@ -48,6 +49,7 @@
 ## Palindrome			
 - 125	Valid Palindrome	视频讲解
 - 266	Palindrome Permutation	视频讲解
+  
 - 5	Longest Palindromic Substring	视频讲解
 - 9	Palindrome Number	视频讲解
 - 214	Shortest Palindrome	视频讲解
@@ -59,6 +61,7 @@
 - 20	Valid Parentheses	视频讲解
 - 22	Generate Parentheses	视频讲解
 - 32	Longest Valid Parentheses	视频讲解
+  
 - 241	Different Ways to Add Parentheses	视频讲解
 - 301	Remove Invalid Parentheses	视频讲解
 ## Subsequence			
