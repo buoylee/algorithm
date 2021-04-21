@@ -22,6 +22,8 @@ public class Test {
 //        currentResult.add(3);
 //        currentResult.add(4);
 //        System.out.println(currentResult);
-        System.out.println(Integer.MIN_VALUE + Integer.MAX_VALUE);
+//        System.out.println(Integer.MIN_VALUE + Integer.MAX_VALUE);
+        String substring = "1234".substring(0, 1);
+        System.out.println(substring);
     }
 }

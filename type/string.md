@@ -53,10 +53,13 @@
 - 5	Longest Palindromic Substring	视频讲解
 - 9	Palindrome Number	视频讲解
 - 214	Shortest Palindrome	视频讲解
-- 336	Palindrome Pairs	视频讲解
+---------- 
+todo
+- 336	Palindrome Pairs	视频讲解 todo
 - 131	Palindrome Partitioning	视频讲解
 - 132	Palindrome Partitioning II	视频讲解
 - 267	Palindrome Permutation II	视频讲解
+---------------------
 ## Parentheses			
 - 20	Valid Parentheses	视频讲解
 - 22	Generate Parentheses	视频讲解
