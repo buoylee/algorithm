@@ -8,6 +8,7 @@
 - 43	Multiply Strings	视频讲解
 - 29	Divide Two Integers	视频讲解
 - 69	Sqrt(x)	视频讲解
+  
 - 50	Pow(x, n)	视频讲解
 - 367	Valid Perfect Square	视频讲解
 - 365	Water and Jug Problem	视频讲解
