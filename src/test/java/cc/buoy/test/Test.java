@@ -23,14 +23,16 @@ public class Test {
 //        currentResult.add(4);
 //        System.out.println(currentResult);
 //        System.out.println(Integer.MIN_VALUE + Integer.MAX_VALUE);
-//        System.out.println(Integer.MAX_VALUE);
+        System.out.println(Integer.MAX_VALUE);
 //        System.out.println(Integer.MIN_VALUE);
 //        String substring = "1234".substring(0, 1);
 //        System.out.println(substring);
 //        System.out.println(3 & 1);
-        System.out.println(Math.sqrt(5));
-        boolean[] notPrime = new boolean[1];
-        System.out.println(notPrime[0]);
+//        System.out.println(Math.sqrt(5));
+//        boolean[] notPrime = new boolean[1];
+//        System.out.println(notPrime[0]);
+        System.out.println(999/(10*Integer.MAX_VALUE));
+
     }
 
 }

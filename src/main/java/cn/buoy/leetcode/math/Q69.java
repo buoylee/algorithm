@@ -15,6 +15,7 @@ public class Q69 {
             //避免int越界
             int mid = left + (right - left) / 2;
             //也是越界, mid * mid > x
+            //关键在于, 如果不是完全平方数, 最后的mid 可能会小, 也可能大, 需要选小的返回.
             if (mid > x / mid) {
                 right = mid - 1;
             } else {

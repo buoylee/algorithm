@@ -32,7 +32,9 @@
 - 202	Happy Number	视频讲解
 - 400	Nth Digit	视频讲解
 - 263	Ugly Number	视频讲解
-- 264	Ugly Number II	视频讲解
+  
+- 264	Ugly Number II	视频讲解 重复
+  
 - 306	Additive Number	视频讲解
 - 172	Factorial Trailing Zeroes	视频讲解
 - 343	Integer Break	视频讲解
