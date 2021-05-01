@@ -1,6 +1,7 @@
 package cc.buoy.test;
 
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -38,7 +39,13 @@ public class Test {
 //        ints.offer(2);
 //        ints.offer(3);
 //        System.out.println(ints.peek());
-
+        Integer[] x = {1, 3, 4, 6};
+//        System.out.println(x[1]);
+//        System.out.println(Arrays.binarySearch(x,0,0,7));
+        Arrays.sort(x, (n1, n2) -> {
+            return n1 - n2;
+        });
+        System.out.println(Arrays.toString(x));
     }
 
 }
