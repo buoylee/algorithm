@@ -1,0 +1,38 @@
+package cn.buoy.leetcode.matrix;
+
+public class Q329 {
+    /**
+     * https://www.youtube.com/watch?v=yZGpDJlcxRA
+     */
+    public static final int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix.length == 0) return 0;
+        int m = matrix.length, n = matrix[0].length;
+        int[][] cache = new int[m][n];
+        int max = 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int len = dfs(matrix, i, j, m, n, cache);
+                max = Math.max(max, len);
+            }
+        }
+        return max;
+    }
+
+    public int dfs(int[][] matrix, int i, int j, int m, int n, int[][] cache) {
+        if (cache[i][j] != 0) return cache[i][j];
+        int max = 1;
+        //遍历上下左右4种情况.
+        for (int[] dir : dirs) {
+            int x = i + dir[0], y = j + dir[1];
+            //过界 或 (新的节点 小于 当前节点) 都跳过
+            if (x < 0 || x >= m || y < 0 || y >= n || matrix[x][y] <= matrix[i][j]) continue;
+            int len = 1 + dfs(matrix, x, y, m, n, cache);
+            //会对比4个情况的大小, 不会被 int max = 1 影响, 只有在无法往下走的情况下才会返回1.
+            max = Math.max(max, len);
+        }
+        cache[i][j] = max;
+        return max;
+    }
+}
