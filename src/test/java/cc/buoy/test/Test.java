@@ -39,13 +39,21 @@ public class Test {
 //        ints.offer(2);
 //        ints.offer(3);
 //        System.out.println(ints.peek());
-        Integer[] x = {1, 3, 4, 6};
+//        Integer[] x = {1, 3, 4, 6};
 //        System.out.println(x[1]);
 //        System.out.println(Arrays.binarySearch(x,0,0,7));
-        Arrays.sort(x, (n1, n2) -> {
-            return n1 - n2;
-        });
-        System.out.println(Arrays.toString(x));
+//        Arrays.sort(x, (n1, n2) -> {
+//            return n1 - n2;
+//        });
+//        System.out.println(Arrays.toString(x));
+//        int[] a = {1, 2, 3};
+//        String a= "1";
+//        String b= "1";
+        long a= 1;
+        long b= 1;
+
+        long i = a ^ b;
+
     }
 
 }
