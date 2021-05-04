@@ -49,11 +49,11 @@ public class Test {
 //        int[] a = {1, 2, 3};
 //        String a= "1";
 //        String b= "1";
-        long a= 1;
-        long b= 1;
-
-        long i = a ^ b;
-
+//        long a= 1;
+//        long b= 1;
+//
+//        long i = a ^ b;
+        System.out.println(7>>1);
     }
 
 }
