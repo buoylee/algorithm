@@ -53,7 +53,10 @@ public class Test {
 //        long b= 1;
 //
 //        long i = a ^ b;
-        System.out.println(7>>1);
+//        System.out.println(7>>1);
+        System.out.println(Math.random());
+        System.out.println((int)(0.5D* 5));
+        System.out.println((0.5D* 5));
     }
 
 }
