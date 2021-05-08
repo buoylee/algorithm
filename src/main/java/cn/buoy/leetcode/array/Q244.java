@@ -16,8 +16,8 @@ public class Q244 {
     }
 }
 
-/*
-画图就好, 简单!
+/**
+ * 画图就好, 简单!
  */
 class WordDistance {
 
