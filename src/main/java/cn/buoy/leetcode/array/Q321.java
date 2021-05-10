@@ -2,13 +2,10 @@ package cn.buoy.leetcode.array;
 
 public class Q321 {
 
-    /*
-    分2步走:
-
-    删除k个数, 不改变顺序, 使数字最小; leetcode 402
-    https://leetcode-cn.com/problems/remove-k-digits/solution/yi-diao-kwei-shu-zi-by-leetcode-solution/
-
-
+    /**
+     * 分2步走:
+     * 删除k个数, 不改变顺序, 使数字最小; leetcode 402
+     * https://leetcode-cn.com/problems/remove-k-digits/solution/yi-diao-kwei-shu-zi-by-leetcode-solution/
      */
     public int[] maxNumber(int[] nums1, int[] nums2, int k) {
         int n = nums1.length;

@@ -28,7 +28,7 @@ public class Q274 {
     先大到小排序, 后用index sorting.
      */
     public int hIndex2(int[] citations) {
-        //todo
+        // FIXME: 2021/5/10
         return 0;
     }
 }

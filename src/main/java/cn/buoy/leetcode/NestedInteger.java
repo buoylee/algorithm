@@ -2,7 +2,6 @@ package cn.buoy.leetcode;
 
 import java.util.List;
 
-// TODO: 2021/4/11  
 public class NestedInteger {
     // Constructor initializes an empty nested list.
     public NestedInteger() {

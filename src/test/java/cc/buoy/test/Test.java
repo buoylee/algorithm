@@ -1,9 +1,7 @@
 package cc.buoy.test;
 
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Test {
 
@@ -54,9 +52,26 @@ public class Test {
 //
 //        long i = a ^ b;
 //        System.out.println(7>>1);
-        System.out.println(Math.random());
-        System.out.println((int)(0.5D* 5));
-        System.out.println((0.5D* 5));
+//        System.out.println(Math.random());
+//        System.out.println((int)(0.5D* 5));
+//        System.out.println((0.5D* 5));
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(1);
+        q.offer(2);
+        q.offer(3);
+        q.offer(4);
+        System.out.println(q.toString());
+//        q.poll();
+//        q.pop();
+//        q.pollFirst();
+//        q.pollLast();
+//        System.out.println(q.peek());
+//        System.out.println(q.peekFirst());
+//        System.out.println(q.peekLast());
+//        System.out.println(q.toString());
+//        System.out.println(q.toString());
+
+
     }
 
 }
