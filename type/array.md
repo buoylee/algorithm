@@ -30,13 +30,9 @@
 - 121 Best Time to Buy and Sell Stock 视频讲解
 - 122 Best Time to Buy and Sell Stock II 视频讲解
 
--------------
-
-- 123 Best Time to Buy and Sell Stock III 视频讲解 todo
+- 123 Best Time to Buy and Sell Stock III 视频讲解 
 - 188 Best Time to Buy and Sell Stock IV 视频讲解
 - 309 Best Time to Buy and Sell Stock with Cooldown 视频讲解
-
---------------
 
 - 11 Container With Most Water 视频讲解
 - 42 Trapping Rain Water 视频讲解
