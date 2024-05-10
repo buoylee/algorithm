@@ -1,11 +1,15 @@
 package cn.buoy.leetcode.array;
 
 public class Q41 {
+    //fixme [1, 2, 3, 4, 5]
+    //       0  1  2  3  4
+    //index + 1 == nums[index]
+
     public int firstMissingPositive(int[] nums) {
         int len = nums.length;
         for (int i = 0; i < len; i++)
             //index sorting
-            //排除掉小于等于0, 且大于len的数,然后使用index sorting
+            //排除掉小于等于0, 且大于len的数,然后使用index sorting; nums[i]如果不是对应位置的值, 那么应该要把它放在nums[i] - 1这个位置上.
             while (nums[i] > 0 && nums[i] <= len && nums[nums[i] - 1] != nums[i]) {
                 swap(nums, i, nums[i] - 1);
             }
