@@ -7,6 +7,9 @@ import java.util.stream.Stream;
 
 public class FindMiss {
     public static void main(String[] args) throws Exception {
+        System.out.println("test");
+        if (true) return ;
+
         FindMiss findMiss = new FindMiss("/Users/buoy/Documents/gitrepo/algorithm/src/main/java/cn/buoy/leetcode", "");
         List<String> list = findMiss.getList();
 //        for (String f : list) {
