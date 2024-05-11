@@ -6,7 +6,7 @@ import java.util.List;
 public class Q57 {
     /**
      * https://www.youtube.com/watch?v=w3xgyRJ5egY
-     * 画图!算简单.
+     * 简单
      */
     public int[][] insert(int[][] intervals, int[] newInterval) {
         List<int[]> result = new LinkedList<>();
