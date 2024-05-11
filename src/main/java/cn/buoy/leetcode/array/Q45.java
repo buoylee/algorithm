@@ -6,12 +6,12 @@ public class Q45 {
      */
     public int jump(int[] nums) {
         int len = nums.length;
-        int step = 0, curMax = 0, newMax = 0;
+        int step = 0, farestReachingIndex = 0, currentIndexFarestReachingIndex = 0;
         for (int i = 0; i < len - 1; i++) {
-            newMax = Math.max(newMax, i + nums[i]);
-            if (i == curMax) {
+            currentIndexFarestReachingIndex = Math.max(currentIndexFarestReachingIndex, i + nums[i]);
+            if (i == farestReachingIndex) {
                 step++;
-                curMax = newMax;
+                farestReachingIndex = currentIndexFarestReachingIndex;
             }
         }
         return step;
