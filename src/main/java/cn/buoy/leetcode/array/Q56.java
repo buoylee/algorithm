@@ -8,6 +8,7 @@ public class Q56 {
     /**
      * https://www.youtube.com/watch?v=uiOq8TO5CbE
      */
+    //fixme 简单
     public int[][] merge(int[][] intervals) {
         List<int[]> res = new ArrayList<>();
         if (intervals.length == 0 || intervals == null) return res.toArray(new int[0][]);
