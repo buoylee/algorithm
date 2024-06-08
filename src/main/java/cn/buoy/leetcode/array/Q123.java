@@ -2,6 +2,7 @@ package cn.buoy.leetcode.array;
 
 public class Q123 {
     /**
+     * 思路: 找出前后2个区间内最大的收益的可能index
      * https://www.youtube.com/watch?v=a8xKiVTpdks&t=405s
      * 能理解 121题, 这题不难.
      * 视频有p1 那里讲错了点, 注意下.

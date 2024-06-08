@@ -10,7 +10,7 @@ https://www.youtube.com/watch?v=rc2QdQ7U78I
  */
 public class Q128 {
     /*
-    视频 第一解, 更新每一块的头尾value, 左右邻居有无情况 分析.
+    视频 第一解, 更新每一块的左右边界value(这块连续数字的最长个数, left=right=value), 还有自己作为左右邻居的情况.
      */
     public int longestConsecutive(int[] nums) {
         int longest = 0;
@@ -35,7 +35,7 @@ public class Q128 {
 
     /*
     视频 第2解
-    检查每个set元素,
+    检查每个set元素, 找出所有可能连续的数字的左边界, 在开始统计最长连续数字串.
     如果set i index的值 - 1 存在于 set, 则不检查,
     否则检查 该值的 ++ ,直到 没有连续, 记录最大值.直到结束.
      */
