@@ -6,23 +6,24 @@ public class Q209 {
      * 简单! 双指针
      * 因为是正整数, 所以可以用双指针, 偏小时, 移动右指针, 偏大时, 移动左指针.
      */
-    public int minSubArrayLen(int s, int[] a) {
-        if (a == null || a.length == 0)
+    public int minSubArrayLen(int target, int[] arr) {
+        if (arr == null || arr.length == 0)
             return 0;
 
-        int i = 0, j = 0, sum = 0, min = Integer.MAX_VALUE;
+        int low = 0, high = 0, sum = 0, minSize = Integer.MAX_VALUE;
 
         //右指针移动
-        for (j = 0; j < a.length; j++) {
-            sum += a[j];
+        for (high = 0; high < arr.length; high++) {
+            sum += arr[high];
 
             //一旦sum大于等于 target, 开始移动左指针, 直到再次小于target
-            while (sum >= s) {
-                min = Math.min(min, j - i + 1);
-                sum -= a[i++];
+            while (sum >= target) {
+                // 當 low == high 時, 子序列長度爲1;
+                minSize = Math.min(minSize, high - low + 1);
+                sum -= arr[low++];
             }
         }
 
-        return min == Integer.MAX_VALUE ? 0 : min;
+        return minSize == Integer.MAX_VALUE ? 0 : minSize;
     }
 }

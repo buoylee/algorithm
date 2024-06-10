@@ -1,6 +1,8 @@
 package cn.buoy.leetcode.array;
 
 public class Q189 {
+    // https://www.youtube.com/watch?v=06-7_TTlkAw
+    // 思路1: 整體翻轉, 翻轉前k, 在翻轉後邊nums.length-k個.
     public void rotate(int[] nums, int k) {
         //整体反转 [1, 2, 3, 4]
         //k == 2
