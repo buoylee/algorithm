@@ -6,6 +6,10 @@ import java.util.List;
 
 /*
 https://www.bilibili.com/video/BV1z4411Q77E?from=search&seid=10207950481018677297
+
+
+https://www.youtube.com/watch?v=lGYHf_yMq7w
+快速讲解
  */
 public class Q229 {
     public List<Integer> majorityElement(int[] nums) {
@@ -30,8 +34,7 @@ public class Q229 {
         //不可能直接走这里, 不止3种值...
         cnt1 = cnt2 = 0;
         for (Integer num : nums) {
-            if (num.equals(major1))
-                cnt1++;
+            if (num.equals(major1)) cnt1++;
             else if (num.equals(major2)) {
                 //可能major1 == major2, 所以用else if
                 cnt2++;

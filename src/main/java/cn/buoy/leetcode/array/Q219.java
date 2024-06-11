@@ -5,6 +5,7 @@ import java.util.Set;
 
 public class Q219 {
     /*
+    一眼過
     从头开始插入set, 当超过间隔k, 先删掉最早index元素, 后假如新元素, 插入失败则返回true.
      */
     public boolean containsNearbyDuplicate(int[] nums, int k) {
