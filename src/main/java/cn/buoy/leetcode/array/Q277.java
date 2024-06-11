@@ -1,5 +1,9 @@
 package cn.buoy.leetcode.array;
 
+/**
+ * https://www.youtube.com/watch?v=wtQwckmEXR0
+ * 思路: a认识b, a肯定不是candidate;  a不认识b, b肯定不是candidate.
+ */
 public class Q277 {
     public int findCelebrity(int n) {
         int candidate = 0;

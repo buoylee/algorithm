@@ -11,6 +11,7 @@ public class Q252 {
         if (intervals == null) {
             return false;
         }
+        //先按start排序
         Arrays.sort(intervals, (i1, i2) -> i1[0] - i2[0]);
         for (int i = 0; i < intervals.length - 1; i++) {
             //next.start < prev.end, 则false.

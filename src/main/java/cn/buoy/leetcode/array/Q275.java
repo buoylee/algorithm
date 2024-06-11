@@ -1,5 +1,7 @@
 package cn.buoy.leetcode.array;
 
+//https://www.youtube.com/watch?v=qptGYoQmJN0
+// 需要复习
 public class Q275 {
     public int hIndex(int[] citations) {
         int len = citations.length;
