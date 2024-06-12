@@ -10,8 +10,10 @@ public class Q283 {
 
         //需要插入`不为0的value`的index
         int insertPos = 0;
+        //先完整处理不是0的数
         for (int num : nums) {
-            if (num != 0) nums[insertPos++] = num;
+            if (num != 0)
+                nums[insertPos++] = num;
         }
 
         //如果insertPos没到末尾, 则一直置0到末尾.

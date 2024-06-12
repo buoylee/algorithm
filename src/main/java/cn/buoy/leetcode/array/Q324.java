@@ -16,7 +16,7 @@ public class Q324 {
      */
 
     /**
-     * 这个自己画图, 能理解.
+     * 看上边解释就能理解, 但是空间为O(n)
      *
      * @param nums
      */
@@ -29,13 +29,17 @@ public class Q324 {
         //从wrong answer 里来.
         //偶数 刚好 间隔插 就好.
         if (nums.length % 2 == 1) {
-            for (int i = 0; i < nums.length; i += 2) nums[i] = val[idx++];
-            for (int i = 1; i < nums.length; i += 2) nums[i] = val[idx++];
+            for (int i = 0; i < nums.length; i += 2)
+                nums[i] = val[idx++];
+            for (int i = 1; i < nums.length; i += 2)
+                nums[i] = val[idx++];
         } else {
             //如果是 偶数, 有2中方式插, 选`中间的数`离得远的 插法 间隔相同的可能更低.
             //这样就不会有相同的隔壁, 但是递增递减顺序不同, reverse一下就好.
-            for (int i = 1; i < nums.length; i += 2) nums[i] = val[idx++];
-            for (int i = 0; i < nums.length; i += 2) nums[i] = val[idx++];
+            for (int i = 1; i < nums.length; i += 2)
+                nums[i] = val[idx++];
+            for (int i = 0; i < nums.length; i += 2)
+                nums[i] = val[idx++];
             for (int i = 0, j = val.length - 1; i < j; i++, j--) {
                 int tmp = nums[i];
                 nums[i] = nums[j];
@@ -44,6 +48,11 @@ public class Q324 {
         }
     }
 
+    /**
+     * 根据上边得出更简单的写法
+     *
+     * @param nums
+     */
     public void wiggleSort3(int[] nums) {
         int[] val = Arrays.copyOf(nums, nums.length);
         Arrays.sort(val);
@@ -97,4 +106,7 @@ public class Q324 {
             nums[i] = result[i];
         }
     }
+
+
+    //todo 可能有其他算法 3色
 }
