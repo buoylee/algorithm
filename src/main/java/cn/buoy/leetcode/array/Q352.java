@@ -1,23 +1,132 @@
 package cn.buoy.leetcode.array;
 
-import java.util.TreeMap;
+import java.util.*;
 
 public class Q352 {
     /**
      * 大致做法:
      * https://www.youtube.com/watch?v=WRE7innGPJ4
      * <p>
-     * treeMap:
-     * https://www.youtube.com/watch?v=mfBPUTW0cZY
+     * https://www.youtube.com/watch?v=PeAN0lWOzak
+     * 思路简单, addNum() 直插value, getIntervals需要遍历, 每当有连续[i,j++], 无连续则开新int[]
      */
     public class SummaryRanges {
-        TreeMap<Integer, int[]> map;
+
+        private Set<Integer> numbers;
 
         public SummaryRanges() {
-            map = new TreeMap<>();
+            numbers = new TreeSet<>();
         }
 
-        public void addNum(int val) {
+        // O(logn)
+        public void addNum(int value) {
+            numbers.add(value);
+        }
+
+        // O(n)
+        public int[][] getIntervals() {
+            // We are not sure of the size upfront
+            List<int[]> disjointInterval = new ArrayList<>();
+
+            for (int n : numbers) {
+                int size = disjointInterval.size();
+                //如果下一个value == 上一个end + 1, 就是连续; 否则新开范围数组.
+                if (size > 0 && disjointInterval.get(size - 1)[1] + 1 == n) {
+                    disjointInterval.get(size - 1)[1] = n;
+                    // [Merge] Update the right end state
+                } else {
+                    // [New entry] Create a new interval
+                    disjointInterval.add(new int[]{n, n});
+                }
+
+            }
+
+            return disjointInterval.toArray(new int[0][]);
+        }
+
+        /**
+         * https://www.youtube.com/watch?v=a7xGgDhRuA0
+         * 思路一样, 检查前一个和后一个,
+         * 分不同情况:
+         * [value, value];
+         * [start++, end];
+         * [start, end++];
+         * [start1, value--], value, [value++, end2]合并
+         */
+        private final TreeMap<Integer, Integer> orderedMap = new TreeMap<>();
+
+//            public SummaryRanges() {
+//                this.orderedMap = new TreeMap<>();
+//            }
+
+        public void addNum2(final int value) {
+            if (!this.orderedMap.containsKey(value)) {
+                final Map.Entry<Integer, Integer> low = this.orderedMap.lowerEntry(value);
+
+                if (low == null) {
+                    //无前, 有后, [start++, end]
+                    if (this.orderedMap.containsKey(value + 1)) {
+                        this.orderedMap.put(value, this.orderedMap.get(value + 1));
+                        this.orderedMap.remove(value + 1);
+                    } else {
+                        //无前, 无后, [value, value]
+                        this.orderedMap.put(value, value);
+                    }
+                } else {
+                    if (value > low.getValue()) {
+                        //有前, 无后(先做有前判断, 接着看有后再处理), [start, end++]
+                        if (low.getValue() == value - 1) {
+                            int right = value;
+
+                            //有前, 有后, [start1, value--], value, [value++, end2]合并
+                            if (this.orderedMap.containsKey(value + 1)) {
+                                right = this.orderedMap.get(value + 1);
+                                this.orderedMap.remove(value + 1);
+                            }
+
+                            this.orderedMap.put(low.getKey(), right);
+                        } else {
+                            //无前, 有后(先做有前判断, 接着看有后再处理), [start++, end]
+                            if (this.orderedMap.containsKey(value + 1)) {
+                                this.orderedMap.put(value, this.orderedMap.get(value + 1));
+                                this.orderedMap.remove(value + 1);
+                            } else {
+                                //无前, 无后(先做有前判断, 接着看有后再处理), [value, value]
+                                this.orderedMap.put(value, value);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public int[][] getIntervals2() {
+            final int[][] intervals = new int[this.orderedMap.size()][2];
+
+            int i = 0;
+
+            for (final Map.Entry<Integer, Integer> interval : this.orderedMap.entrySet()) {
+                intervals[i][0] = interval.getKey();
+                intervals[i++][1] = interval.getValue();
+            }
+
+            return intervals;
+        }
+
+
+        /**
+         * 先不用看
+         * treeMap:
+         * https://www.youtube.com/watch?v=mfBPUTW0cZY (失效)
+         * get会比较快
+         */
+        TreeMap<Integer, int[]> map = new TreeMap<>();
+
+//        public SummaryRanges2() {
+//            map = new TreeMap<>();
+//        }
+
+        public void addNum3(int val) {
             //重复
             if (map.containsKey(val)) return;
             //返回小于val的最大key
@@ -43,7 +152,7 @@ public class Q352 {
             }
         }
 
-        public int[][] getIntervals() {
+        public int[][] getIntervals3() {
             int[][] res = new int[map.size()][2];
             int i = 0;
             for (int[] a : map.values()) {

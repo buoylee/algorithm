@@ -3,36 +3,39 @@ package cn.buoy.leetcode.array;
 public class Q376 {
     /**
      * https://www.bilibili.com/video/BV1cZ4y1A7Pn?from=search&seid=8232337475929480634
-     * 画图! 还算比较好想!
+     * 简单, 直接看
      */
     public int wiggleMaxLength(int[] nums) {
 
         if (nums.length == 0) return 0;
 
-        int[] up = new int[nums.length];
-        int[] down = new int[nums.length];
+        //这里的dpUp代表的是到达该index时, 前一次是递增, 的最长的seq.size
+        int[] dpUp = new int[nums.length];
+        //这里的dpDown代表的是到达该index时, 前一次是递减, 的最长的seq.size
+        int[] dpDown = new int[nums.length];
 
-        //无论是up down 都会记1.
-        up[0] = 1;
-        down[0] = 1;
+        //无论up/down 初始记1.
+        dpUp[0] = 1;
+        dpDown[0] = 1;
 
         for (int i = 1; i < nums.length; i++) {
-            //如果递增, 就要拿 down[i - 1] + 1
-            //因为是递增, 所以 up[0] 只能维持一样.
+            //如果递增, 就要拿 dpDown[i - 1] + 1
+            //因为是递增, 所以 dpUp[0] 只能维持一样.
             if (nums[i] > nums[i - 1]) {
-                up[i] = down[i - 1] + 1;
-                down[i] = down[i - 1];
+                dpUp[i] = dpDown[i - 1] + 1;
+                dpDown[i] = dpDown[i - 1];
             } else if (nums[i] < nums[i - 1]) {
                 //同理
-                down[i] = up[i - 1] + 1;
-                up[i] = up[i - 1];
+                dpDown[i] = dpUp[i - 1] + 1;
+                dpUp[i] = dpUp[i - 1];
             } else {
-                down[i] = down[i - 1];
-                up[i] = up[i - 1];
+                //value相等就跳过(直接复制)
+                dpDown[i] = dpDown[i - 1];
+                dpUp[i] = dpUp[i - 1];
             }
         }
 
-        //选 down, up末尾index 大的value即可.
-        return Math.max(down[nums.length - 1], up[nums.length - 1]);
+        //最终取较大 seq size 即可.
+        return Math.max(dpDown[nums.length - 1], dpUp[nums.length - 1]);
     }
 }
