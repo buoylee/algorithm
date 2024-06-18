@@ -5,45 +5,48 @@ import java.util.List;
 
 public class Q93 {
 
-    public List<String> restoreIpAddresses(String s) {
+    /**
+     * https://www.youtube.com/watch?v=b8_w2ljAzeU
+     * 视频参考思路就好, 用的是递归. 代码用下边的backtracking比较直观和容易记.
+     */
+
+    public List<String> restoreIpAddresses(String str) {
         List<String> res = new ArrayList<>();
         List<String> list = new ArrayList<>();
-        if (s.length() < 4 || s.length() > 12) return res;
-        helper(s, res, list, 0);
+        if (str.length() < 4 || str.length() > 12) return res;
+        helper(str, res, list, 0);
         return res;
 
     }
 
-    private void helper(String s, List<String> res, List<String> list, int index) {
-        if (list.size() == 4) {
-            //段数满足, 但是 原str 还没到末尾, 则失败.
-            if (index != s.length()) return;
+    private void helper(String str, List<String> result, List<String> temp, int start) {
+        //IP段数满足
+        if (temp.size() == 4) {
+            //但是 原str 还没到末尾, 则失败.
+            if (start != str.length()) return;
             //满足时, 拼结果str add 进 res.
             StringBuilder sb = new StringBuilder();
-            for (String tmp : list) {
+            for (String tmp : temp) {
                 sb.append(tmp);
                 sb.append(".");
             }
             //去最后的`.`
             sb.deleteCharAt(sb.length() - 1);
-            res.add(sb.toString());
+            result.add(sb.toString());
             return;
-
         }
 
-        //遍历每段的各种可能, 每段只能是1~3位. 分3情况递归. 从现在的index位开始.
-        for (int i = index; i < s.length() && i < index + 3; i++) {
+        //遍历每段中的各种可能, 每段只能是1~3位.
+        for (int i = start; i < str.length() && i < start + 3; i++) {
             //记得加1, substring 不包括最后一位.
-            String tmp = s.substring(index, i + 1);
+            String tmp = str.substring(start, i + 1);
             if (isvalid(tmp)) {
-                list.add(tmp);
-                helper(s, res, list, i + 1);
+                temp.add(tmp);
+                helper(str, result, temp, i + 1);
                 //backtracking
-                list.remove(list.size() - 1);
+                temp.remove(temp.size() - 1);
             }
         }
-
-
     }
 
     private boolean isvalid(String s) {
@@ -54,9 +57,4 @@ public class Q93 {
         return digit >= 0 && digit <= 255;
     }
 
-    /**
-     * 这个视频不用backtracking, 因为 temp 按值传递.
-     * https://www.youtube.com/watch?v=b8_w2ljAzeU
-     */
-    // TODO: 2021/4/27
 }

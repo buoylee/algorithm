@@ -11,25 +11,24 @@ public class Q77 {
 
     /**
      * https://www.youtube.com/watch?v=2AzrCkRkRzc
+     * backtrack中简单的, 最普通的.
      */
-    public static List<List<Integer>> combine(int n, int k) {
+    public static List<List<Integer>> combine(int maxNum, int length) {
         List<List<Integer>> combs = new ArrayList<List<Integer>>();
-        combine(combs, new ArrayList<Integer>(), 1, n, k);
+        combine(combs, new ArrayList<Integer>(), 1, maxNum, length);
         return combs;
     }
 
-    //当k == 0, 或者 i > n 就会结束.
-    public static void combine(List<List<Integer>> combs, List<Integer> comb, int start, int n, int k) {
-        if (k == 0) {
-            //拷贝到 新的list 才放入result中.
-            combs.add(new ArrayList<Integer>(comb));
+    public static void combine(List<List<Integer>> result, List<Integer> tempList, int start, int maxNum, int remain) {
+        if (remain == 0) {
+            result.add(new ArrayList<Integer>(tempList));
             return;
         }
         //并不会出现 大的数在前 的这种排列组合, 这里限制了 只能取 start及其之后的.
-        for (int i = start; i <= n; i++) {
-            comb.add(i);
-            combine(combs, comb, i + 1, n, k - 1);
-            comb.remove(comb.size() - 1);
+        for (int i = start; i <= maxNum; i++) {
+            tempList.add(i);
+            combine(result, tempList, i + 1, maxNum, remain - 1);
+            tempList.remove(tempList.size() - 1);
         }
     }
 

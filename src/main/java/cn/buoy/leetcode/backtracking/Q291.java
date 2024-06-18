@@ -14,12 +14,10 @@ public class Q291 {
     }
 
     /**
-     * https://www.youtube.com/watch?v=f6Gd7AdegAs
-     * 好抽象
+     * (失效) https://www.youtube.com/watch?v=f6Gd7AdegAs
+     * 好抽象, 其他视频都很不具体, 不如直接看代码
      * <p>
-     * 思路:
-     * 遍历所有可能字母组合情况,
-     * 遍历顺序用的深度遍历, 从刚match失败那一个pat字母回溯, 都不满足才 往上遍历上上个pat字母.
+     * 思路: 主要依靠 strIndexStart 和 patIndexStart 能否同时走到最后来决定是否回溯, 中间通过对比 patLetter 和 startSubStr 唯一对应的关系, 来维持逻辑正确. 还算好理解.
      *
      * @param pattern
      * @param str
@@ -33,64 +31,63 @@ public class Q291 {
     }
 
     /**
-     * @param str
-     * @param i   表示str验到了那个index
-     * @param pat
-     * @param j   表示pat验到了那个index
-     * @param map 用来存放pat对应的substr. 如果pat出现重复的字母, 取回当时的substr比较; 相同则进行下一个pat字母校验, 不同则回溯到上一个pat字母,改变后继续验证.
-     * @param set 用来存放出现过的pat字母, 有则需要进行验证. 其实可以省略 用上边的map key 是否存在替代.
+     * @param completeStr
+     * @param strIndexStart 表示str验到了那个index
+     * @param completePat
+     * @param patIndexStart 表示pat验到了那个index
+     * @param letterStrMap  用来存放pat对应的substr. 如果pat出现重复的字母, 取回当时的substr比较; 相同则进行下一个pat字母校验, 不同则回溯到上一个pat字母,改变后继续验证.
+     * @param subStrSet
      * @return
      */
-    boolean isMatch(String str, int i, String pat, int j, Map<Character, String> map, Set<String> set) {
+    boolean isMatch(String completeStr, int strIndexStart, String completePat, int patIndexStart, Map<Character, String> letterStrMap, Set<String> subStrSet) {
         // base case
-        //当str, pat 都刚好结束, 则成功
-        if (i == str.length() && j == pat.length()) return true;
-        //排除掉上一行, 有1个先到尾, 则失败
-        if (i == str.length() || j == pat.length()) return false;
+        // 当str, pat 都刚好结束, 则成功
+        if (strIndexStart == completeStr.length() && patIndexStart == completePat.length()) return true;
+        // 有1个先到尾, 则失败
+        if (strIndexStart == completeStr.length() || patIndexStart == completePat.length()) return false;
 
         // get current pattern character
-        char c = pat.charAt(j);
+        char patLetter = completePat.charAt(patIndexStart);
 
         // if the pattern character exists
-        if (map.containsKey(c)) {
-            String s = map.get(c);
+        // 关键: 如果有存在曾经的'patLetter'.
+        if (letterStrMap.containsKey(patLetter)) {
+            String strOfPatLetter = letterStrMap.get(patLetter);
 
-            // then check if we can use it to match str[i...i+s.length()]
-            if (!str.startsWith(s, i)) {
+            // then check if we can use it to match str[i...i+s.length()], 检查strIndexStart开始的completeStr是否满足 strOfPatLetter 作为前缀.
+            if (!completeStr.startsWith(strOfPatLetter, strIndexStart)) {
                 return false;
             }
 
-            // if it can match, great, continue to match the rest
-            return isMatch(str, i + s.length(), pat, j + 1, map, set);
+            // if it can match, great, continue to match the rest, strIndexStart跳过Str.length, 继续检查.
+            return isMatch(completeStr, strIndexStart + strOfPatLetter.length(), completePat, patIndexStart + 1, letterStrMap, subStrSet);
         }
 
-        // pattern character does not exist in the map
-        //从下一个需要验证的str index开始, 遍历 每一种substr 对应 这个pat字母 的可能.(可不可能就看之前有没出现过这个pat字母, 如果暂时没出现, 会先跳过, 如果一直不重复出现则不用管, 直到 有其他重复的pat字母 与 之前相同的pat字母 不同时, 才会回溯调整.)
-        //每次调整都先调上一步的, 直到上一步走到最后都没法满足, 才会再次往上.
-        for (int k = i; k < str.length(); k++) {
-            String p = str.substring(i, k + 1);
+        // 关键: 走到这里, 说明以下是 '不存在曾经的 patLetter' 的情况, pattern character does not exist in the map.
+        // 从 strIndexStart 开始对比 subStr, 因为是未出现过的 patLetter, 遍历不同长度 substr, 直到找到新的 substr.
+        // 关键: 每次都直到走到最后都没法满足, 才会回溯.
+        for (int strIndex = strIndexStart; strIndex < completeStr.length(); strIndex++) {
+            String startSubStr = completeStr.substring(strIndexStart, strIndex + 1);
 
-            //看前边pat是否出现过这个字母
-            if (set.contains(p)) {
+            // 关键: 看前边是否出现过这个 subStr, 为什么跳过曾经出现过的 subStr? 因为在for开始前, 已经检查过与以往所有的 patLetter 是不同的, 所以, 也不可能用曾经出现过的 subStr.
+            if (subStrSet.contains(startSubStr)) {
                 continue;
             }
 
             // create or update it
-            //存放 pat 与 substr 映射
-            map.put(c, p);
-            //pat是否出现过某字母
-            set.add(p);
+            // 直至找到新的substr, 存放新的 patLetter 与新的 substr 映射
+            letterStrMap.put(patLetter, startSubStr);
+            subStrSet.add(startSubStr);
 
             // continue to match the rest
-            //深度遍历
-            if (isMatch(str, k + 1, pat, j + 1, map, set)) {
+            //深度遍历, 每一次都要走到最后, 发现base case不满足, 才会回溯.
+            if (isMatch(completeStr, strIndex + 1, completePat, patIndexStart + 1, letterStrMap, subStrSet)) {
                 return true;
             }
 
             // backtracking
-            //回溯到上一个字母, 延长substr len 来作为这个字母的新str, 然后再次验证剩下的str.
-            map.remove(c);
-            set.remove(p);
+            letterStrMap.remove(patLetter);
+            subStrSet.remove(startSubStr);
         }
 
         // we've tried our best but still no luck

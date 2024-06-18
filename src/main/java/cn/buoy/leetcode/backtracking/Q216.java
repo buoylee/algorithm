@@ -7,27 +7,27 @@ public class Q216 {
     /**
      * https://www.youtube.com/watch?v=qQcAm0CE21U
      */
-    public List<List<Integer>> combinationSum3(int k, int n) {
+    public List<List<Integer>> combinationSum3(int totalNum, int needingRemain) {
         List<List<Integer>> ans = new ArrayList<>();
-        combination(ans, new ArrayList<Integer>(), k, 1, n);
+        combination(ans, new ArrayList<Integer>(), totalNum, 1, needingRemain);
         return ans;
     }
 
-    //n 表示 剩下需要加的数
+    //needingRemain 表示 剩下需要加的数
     //start 表 从哪个数开始取
-    private void combination(List<List<Integer>> ans, List<Integer> comb, int k, int start, int n) {
-        if (comb.size() > k) {
+    private void combination(List<List<Integer>> ans, List<Integer> tempSubCombine, int totalNum, int start, int needingRemain) {
+        if (tempSubCombine.size() > totalNum) {
             return;
         }
-        if (comb.size() == k && n == 0) {
-            List<Integer> li = new ArrayList<Integer>(comb);
+        if (tempSubCombine.size() == totalNum && needingRemain == 0) {
+            List<Integer> li = new ArrayList<Integer>(tempSubCombine);
             ans.add(li);
             return;
         }
-        for (int i = start; i <= n && i <= 9; i++) {
-            comb.add(i);
-            combination(ans, comb, k, i + 1, n - i);
-            comb.remove(comb.size() - 1);
+        for (int i = start; i <= needingRemain && i <= 9; i++) {
+            tempSubCombine.add(i);
+            combination(ans, tempSubCombine, totalNum, i + 1, needingRemain - i);
+            tempSubCombine.remove(tempSubCombine.size() - 1);
         }
     }
 }

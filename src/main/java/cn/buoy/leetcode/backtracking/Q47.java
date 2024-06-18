@@ -10,6 +10,7 @@ public class Q47 {
 
     /**
      * https://www.youtube.com/watch?v=X2aaIte3RK8
+     * 注意理解排除重复
      */
     public List<List<Integer>> permuteUnique(int[] nums) {
         List<List<Integer>> list = new ArrayList<>();

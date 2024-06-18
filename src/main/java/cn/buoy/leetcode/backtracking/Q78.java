@@ -8,36 +8,7 @@ public class Q78 {
 
     /**
      * https://www.youtube.com/watch?v=rtFHxiQAICA
-     * 78, 80 题
-     * 第一解思路是, 选或不选
-     */
-    public List<List<Integer>> subsets(int[] nums) {
-        List<List<Integer>> ans = new ArrayList<>();
-        if (nums == null) {
-            return ans;
-        }
-//        Arrays.sort(nums);  // non-descending order
-        dfs(ans, nums, new ArrayList<Integer>(), 0);
-        return ans;
-    }
-
-    private void dfs(List<List<Integer>> ans, int[] nums, List<Integer> list, int index) {
-        if (index == nums.length) {
-            ans.add(new ArrayList<Integer>(list));
-            return;
-        }
-        dfs(ans, nums, list, index + 1);  // not pick the number at this index
-        list.add(nums[index]);
-        dfs(ans, nums, list, index + 1);  // pick the number at this index
-        //不回溯, 会带上末尾的str
-        list.remove(list.size() - 1);
-    }
-
-    /**
-     * 思路是, 选择排列
-     *
-     * @param S
-     * @return
+     * 典型回溯超简单. 一直用下一个元素就好
      */
     public List<List<Integer>> subsets2(int[] S) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
@@ -47,7 +18,7 @@ public class Q78 {
     }
 
     public void dfs(int[] s, int index, List<Integer> path, List<List<Integer>> result) {
-        //第一个空, 已经先加入.
+        //直接加入result
         result.add(new ArrayList<Integer>(path));
 
         for (int i = index; i < s.length; i++) {
@@ -57,5 +28,32 @@ public class Q78 {
         }
     }
 
+    /**
+     * 78, 80 题
+     * 思路: 也是回溯, 思路稍不同, 从左到右, 对每个元素做出'选'或'不选'.
+     */
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums == null) {
+            return result;
+        }
+//        Arrays.sort(nums);  // non-descending order
+        dfs(result, nums, new ArrayList<Integer>(), 0);
+        return result;
+    }
+
+    private void dfs(List<List<Integer>> result, int[] nums, List<Integer> tempList, int index) {
+        if (index == nums.length) {
+            result.add(new ArrayList<Integer>(tempList));
+            return;
+        }
+        // not pick the number at this index, 不选, 直接下一个index, 不需要回溯.
+        dfs(result, nums, tempList, index + 1);
+
+        // pick the number at this index, 选择加入当前元素, 结尾回溯.
+        tempList.add(nums[index]);
+        dfs(result, nums, tempList, index + 1);
+        tempList.remove(tempList.size() - 1);
+    }
 
 }

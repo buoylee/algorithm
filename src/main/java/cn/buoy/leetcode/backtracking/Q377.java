@@ -1,14 +1,20 @@
 package cn.buoy.leetcode.backtracking;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Q377 {
     /**
      * https://leetcode.com/problems/combination-sum-iv/discuss/85036/1ms-Java-DP-Solution-with-Detailed-Explanation
-     * 注意:leetcode 解释 dp[0]=1, 果然有点奇怪.
+     * leetcode 解释 dp[0]=1, 果然有点奇怪.(應該可以忽略, 不管就好)
      * EDIT: The problem says that target is a positive integer that makes me feel it's unclear to put it in the above way. Since target == 0 only happens when in the previous call, target = nums[i], we know that this is the only combination in this case, so we return 1.
-     * 不好理解, 多看.
+     * <p>
+     * https://www.youtube.com/watch?v=JFB0HZ5DcSw
+     * 注意: 關鍵, 因爲只要滿足target, 任意元素的排列組合都是合法的. 所以下邊的count可以一直累加; 又因爲這個原因, 使得dp[target]可以復用.
+     * 不如直接看代碼, 不用dp可以看視頻, 不過會超時.
      */
+    // dp[i]表示 累積到 '總和(remainingTarget)爲 i' 的 總數
     private int[] dp;
 
     public int combinationSum4(int[] nums, int target) {
@@ -22,24 +28,25 @@ public class Q377 {
         return helper(nums, target);
     }
 
-    private int helper(int[] nums, int target) {
-        if (dp[target] != -1) {
-            return dp[target];
+    private int helper(int[] nums, int remainingTarget) {
+        if (dp[remainingTarget] != -1) {
+            return dp[remainingTarget];
         }
-        int res = 0;
-        //假如target 是3, 你要找到 各种 到3的 可能方式; 有可能是 0-3, 1-3, 2-3, 3-3, 所以 任何 到3的可能数 等于 0-3的可能方式, 1-3的可能方式(先找到1,再找2) + 2-3的可能方式 + 3-3可能方式(因为sums中没有元素`0`, 所以不用计算).
+        int count = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (target >= nums[i]) {
-                res += helper(nums, target - nums[i]);
+            if (remainingTarget >= nums[i]) {
+                // 因爲只要滿足 remainingTarget, 任意的排列組合都是合法的. 所以下邊的 count 可以一直累加
+                count += helper(nums, remainingTarget - nums[i]);
             }
         }
-        dp[target] = res;
-        return res;
+        dp[remainingTarget] = count;
+        return count;
     }
 
 
     /**
      * https://www.bilibili.com/video/BV1V84y1F7Bz?from=search&seid=1746144970453404094
+     * 有上邊的dp解法, 可以先不用看這個
      *
      * @param nums
      * @param target
@@ -60,5 +67,31 @@ public class Q377 {
             }
         }
         return comb[target];
+    }
+
+
+    /**
+     * 會超時!
+     */
+    // m stores the precomputed result to avoid duplicate computation
+    Map<Integer, Integer> remainingTargetCountMap = new HashMap<Integer, Integer>();
+
+    public int combinationSum43(int[] nums, int remainingTarget) {
+        if (remainingTarget == 0) return 1;
+        else if (remainingTarget < 0) return 0;
+
+        if (remainingTargetCountMap.containsKey(remainingTarget)) return remainingTargetCountMap.get(remainingTarget);
+
+        int res = 0;
+        //重點: 這裏一層就是統計某一個 remainingTarget 的所有可能, 因爲每一個都可以使用每一個元素無限次.
+        for (int i = 0; i < nums.length; ++i) {
+            int num = nums[i];
+            int count = combinationSum43(nums, remainingTarget - num);
+            res += count;
+        }
+        remainingTargetCountMap.put(remainingTarget, res);
+
+
+        return res;
     }
 }
