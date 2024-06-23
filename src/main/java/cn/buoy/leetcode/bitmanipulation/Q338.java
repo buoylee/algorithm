@@ -2,8 +2,9 @@ package cn.buoy.leetcode.bitmanipulation;
 
 public class Q338 {
     /**
+     * 不太會考
      * https://www.youtube.com/watch?v=6VkD1Q9eSpU
-     * 巧妙dp
+     * 直接看視頻, 巧妙dp, 一個個寫出來, 找規律.
      */
     public int[] countBits(int num) {
         //f[i] 表示 数字为i 是有几个1

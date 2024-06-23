@@ -2,8 +2,9 @@ package cn.buoy.leetcode.binarysearch;
 
 public class Q278 {
     /**
-     * 二分法还是二分法,
-     * 关键在于 如何 处理边界问题,
+     * https://www.youtube.com/watch?v=coCl8ZGTAg0
+     * 还是二分法,
+     * 关键在于 如何 处理边界问题.
      */
     public int firstBadVersion(int n) {
         int start = 1;
@@ -23,6 +24,7 @@ public class Q278 {
     }
 
 
+    // dumb
     boolean isBadVersion(int version) {
         return false;
     }

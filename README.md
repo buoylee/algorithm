@@ -1,3 +1,5 @@
+[TOC]
+
 # algorithm
 
 ## 抑或

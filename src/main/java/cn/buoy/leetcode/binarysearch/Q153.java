@@ -3,6 +3,7 @@ package cn.buoy.leetcode.binarysearch;
 public class Q153 {
     /**
      * https://www.youtube.com/watch?v=gndg09dZSuI
+     * 直接看視頻, 看圖, 然後看代碼就懂了, 簡單
      */
     public int findMin(int[] nums) {
         if (nums.length == 1) return nums[0];

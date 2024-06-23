@@ -2,15 +2,17 @@ package cn.buoy.leetcode.bitmanipulation;
 
 public class Q268 {
     /**
-     * https://www.youtube.com/watch?v=QO-hbElvE3k
-     * 还是抑或, 相同value 抑或等于0, 所以便利时 多^一个n, 最后的res 就是缺少的值.
+     * https://www.youtube.com/watch?v=yMvY_ZOFUeQ
+     * 思路: 还是抑或, 利用了 index 和 value應該一一對應的這個條件,
+     * 關鍵在于 實際上arr.length == n([0~n]完整的長度應該位n+1), 我們要找的也是0~n中缺少的那個數,
+     * 所以index其實缺少^一個值, 就是nums.length.
      */
     public int missingNumber(int[] nums) {
-        int xor = 0, i = 0;
-        for (i = 0; i < nums.length; i++) {
+        // 關鍵: nums中的值的範圍是 0~nums.length, 而 nums 的 index 肯定沒有 nums.length 這個index, 所以要補上.
+        int xor = nums.length;
+        for (int i = 0; i < nums.length; i++) {
             xor = xor ^ i ^ nums[i];
         }
-        //是要在nums.len = n 的 范围在0~n(这是n+1个数字) 内找出 nums 少的那个数字, 所以 i 递增^时, 记得要多^一次i.
-        return xor ^ i;
+        return xor;
     }
 }

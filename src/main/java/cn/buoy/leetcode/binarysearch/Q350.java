@@ -7,7 +7,11 @@ import java.util.HashMap;
 public class Q350 {
     /**
      * https://www.youtube.com/watch?v=PIyn0fpidyM
-     * 1. map
+     * 簡單.
+     * <p>
+     * https://www.youtube.com/watch?v=AjU21ITjQw4
+     * 1. 只是在349基礎上, 把set變爲map,  增加記錄對應元素出現的次數, 然後在檢查交集時, --次數就好.
+     * <p>
      * 2. 先排序2arr, 双指针同向, 如果 value 相同, index 同时 ++ 并加入res,
      * 不同, 则value小的 index++, 直到 再次value 相同.
      */

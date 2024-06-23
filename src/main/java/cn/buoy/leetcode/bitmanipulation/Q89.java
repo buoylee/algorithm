@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Q89 {
     /**
+     * 應該不會考.
      * https://www.youtube.com/watch?v=Pp6LLp5_RFs
      * 背
      */

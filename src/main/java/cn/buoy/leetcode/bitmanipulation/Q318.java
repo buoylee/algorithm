@@ -3,6 +3,8 @@ package cn.buoy.leetcode.bitmanipulation;
 public class Q318 {
     /**
      * https://www.youtube.com/watch?v=tNM44ZCknp8
+     * 看視頻快速理解思路.
+     * 思路: 用一位來表示一個字母, 當2word相 & 時, 爲0則不存在相同的字母, 這個時候來選出max product of the length of each string to every other string.
      *
      * @param words
      * @return The soultion is calcuated by doing a product of the length of
@@ -16,23 +18,22 @@ public class Q318 {
      * "AND" the result will not be zero and we can ignore that case.
      */
     public int maxProduct(String[] words) {
-        int[] checker = new int[words.length];
+        int[] bitsCheckers = new int[words.length];
         int max = 0;
         // populating the checker array with their respective numbers
-        //每一位1代表一个字母
-        for (int i = 0; i < checker.length; i++) {
-            //拼凑每个word 有有什么字母组成 (26位, 分别对应每个字母, 有则置1).
+        for (int i = 0; i < bitsCheckers.length; i++) {
             int num = 0;
             for (int j = 0; j < words[i].length(); j++) {
+                // 關鍵: 用一位來表示一種字母, 一個單詞所有不同字母組成的2進制數.
                 num |= 1 << (words[i].charAt(j) - 'a');
             }
-            checker[i] = num;
+            bitsCheckers[i] = num;
         }
 
         for (int i = 0; i < words.length; i++) {
             for (int j = i + 1; j < words.length; j++) {
-                //只要没有公共的字母, 与 操作 后, 肯定为0.
-                if ((checker[i] & checker[j]) == 0) //checking if the two strings have common character
+                //用 & 來判斷有没有存在相同的字母, 为0時, 一個都沒有.
+                if ((bitsCheckers[i] & bitsCheckers[j]) == 0) //checking if the two strings have common character
                     max = Math.max(max, words[i].length() * words[j].length());
             }
         }

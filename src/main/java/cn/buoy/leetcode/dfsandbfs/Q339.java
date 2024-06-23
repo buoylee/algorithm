@@ -1,55 +1,29 @@
 package cn.buoy.leetcode.dfsandbfs;
 
+import cn.buoy.leetcode.NestedInteger;
+
 import java.util.List;
 
 /**
- * // This is the interface that allows for creating nested lists.
- * // You should not implement it, or speculate about its implementation
- * public interface NestedInteger {
- *     // Constructor initializes an empty nested list.
- *     public NestedInteger();
- *
- *     // Constructor initializes a single integer.
- *     public NestedInteger(int value);
- *
- *     // @return true if this NestedInteger holds a single integer, rather than a nested list.
- *     public boolean isInteger();
- *
- *     // @return the single integer that this NestedInteger holds, if it holds a single integer
- *     // Return null if this NestedInteger holds a nested list
- *     public Integer getInteger();
- *
- *     // Set this NestedInteger to hold a single integer.
- *     public void setInteger(int value);
- *
- *     // Set this NestedInteger to hold a nested list and adds a nested integer to it.
- *     public void add(NestedInteger ni);
- *
- *     // @return the nested list that this NestedInteger holds, if it holds a nested list
- *     // Return empty list if this NestedInteger holds a single integer
- *     public List<NestedInteger> getList();
- * }
+ * https://www.youtube.com/watch?v=_Uc55RZiuII
+ * 簡單看下視頻.
+ * 思路: bfs 和 dfs 都差不多(bfs可能更直觀), 一層數組是一deep, 代碼簡單.
  */
-
 public class Q339 {
-    class Solution {
-        public int depthSum(List<NestedInteger> nestedList) {
-            return helper(nestedList, 1);
-        }
-
-        private int helper(List<NestedInteger> list, int depth) {
-            int ret = 0;
-            //DFS
-            for (NestedInteger e : list) {
-                ret += e.isInteger() ? e.getInteger() * depth : helper(e.getList(), depth + 1);
-            }
-            return ret;
-        }
+    public int depthSum(List<NestedInteger> nestedList) {
+        return helper(nestedList, 1);
     }
-}
 
-interface NestedInteger {
-    public boolean isInteger();
-    public Integer getInteger();
-    public List<NestedInteger> getList();
+    private int helper(List<NestedInteger> list, int depth) {
+        int result = 0;
+        // 關鍵: DFS, 使得 都會先完成'下層的運算'才會完成'當前層的運算'.
+        for (NestedInteger ele : list) {
+            if (ele.isInteger()) {
+                result += ele.getInteger() * depth;
+            } else {
+                result += helper(ele.getList(), depth + 1); // ++depth
+            }
+        }
+        return result;
+    }
 }

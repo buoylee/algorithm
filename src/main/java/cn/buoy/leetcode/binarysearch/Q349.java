@@ -7,28 +7,33 @@ import java.util.HashSet;
 
 public class Q349 {
     /**
+     * https://www.youtube.com/watch?v=2yo0TDekO30
      * 太简单!
-     * 1. 先将其一放入 set, 在用 遍历另一arr是否包含相同元素, 有则放入resSet.
-     * 2. 将其一先排序, 用 遍历另一arr元素 是否 在前者排序后arr中用 2分发查找, 存在则放入resSet.
+     * 方法1: 用set作爲查找, 先将其一放入 set, 再用 遍历另一arr是否包含相同元素, 有则放入resSet.
+     * 方法2. 用sort arr作爲查找, 将其一先排序, 用 遍历另一arr元素 是否 在前者排序后arr中用 2分发查找, 存在则放入resSet.
      */
     public int[] intersection(int[] nums1, int[] nums2) {
-        HashSet<Integer> setIn = new HashSet<>();
-        HashSet<Integer> resSet = new HashSet<>();
+        HashSet<Integer> setForSearch = new HashSet<>();
+        HashSet<Integer> resultSet = new HashSet<>();
 
+        // 放入set
         for (int n : nums1) {
-            setIn.add(n);
+            setForSearch.add(n);
         }
+        // nums2的元素 有存在在 setForSearch, 就加入result
         for (int n : nums2) {
-            if (setIn.contains(n)) {
-                resSet.add(n);
+            if (setForSearch.contains(n)) {
+                resultSet.add(n);
             }
         }
-        int[] res = new int[resSet.size()];
+
+        // 寫的太多, 其實就是把set轉int[]後直接返回
+        int[] result = new int[resultSet.size()];
         int si = 0;
-        for (Integer i : resSet) {
-            res[si] = i;
+        for (Integer i : resultSet) {
+            result[si] = i;
             si++;
         }
-        return res;
+        return result;
     }
 }

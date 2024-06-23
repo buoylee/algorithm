@@ -3,7 +3,7 @@ package cn.buoy.leetcode.binarysearch;
 public class Q33 {
     /**
      * https://www.youtube.com/watch?v=lWEIIFFflQY
-     * 画图! 就好理解了!
+     * 看視頻, 好理解
      */
     public int search(int[] nums, int target) {
         int start = 0;

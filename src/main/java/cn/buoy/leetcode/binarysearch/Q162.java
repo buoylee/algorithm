@@ -3,6 +3,7 @@ package cn.buoy.leetcode.binarysearch;
 public class Q162 {
     /**
      * https://www.youtube.com/watch?v=etuTPmks7Dc
+     * 思路: 如果是遞增, 肯定有個peak在右; 同理, 如果是遞減, 肯定有個peak在左; 有思路就簡單
      */
     public int findPeakElement(int[] nums) {
         int n = nums.length;

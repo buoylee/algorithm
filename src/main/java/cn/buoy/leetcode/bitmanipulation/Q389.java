@@ -2,8 +2,11 @@ package cn.buoy.leetcode.bitmanipulation;
 
 public class Q389 {
     /**
-     * https://www.youtube.com/watch?v=1gZDA3zmlYY
-     * 相同的数, 异或 运算 相同 -> 0; 不同 -> 1.
+     * 超簡單,
+     * https://www.youtube.com/watch?v=ctd8TZI8uL0
+     * 視頻是另一解法, 沒必要
+     * <p>
+     * 思路: 相同的数, 异或运算 == 0. 把2string每個字母全部亦或, 即得到多出來那一個字母.
      */
     public char findTheDifference(String s, String t) {
         char c = 0;

@@ -3,7 +3,7 @@ package cn.buoy.leetcode.bitmanipulation;
 public class Q137 {
     /**
      * https://www.youtube.com/watch?v=puXcQpwgcD0
-     * 思路: 使 所有元素 某位上 有n(题目要求 除答案外 重复元素的重复次数)的倍数的`1` 转化为0, 这 剩下的就是 答案.
+     * 直接看視頻, 然後代碼就懂了, 算簡單. 思路: 使 所有元素 某位上 有n(题目要求 除答案外 重复元素的重复次数)的倍数的`1` 转化为0, 这 剩下的就是 答案.
      */
     public int singleNumber(int[] nums) {
         int ans = 0;

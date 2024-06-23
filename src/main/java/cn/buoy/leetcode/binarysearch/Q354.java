@@ -5,21 +5,25 @@ import java.util.Comparator;
 
 public class Q354 {
     /**
-     * https://www.youtube.com/watch?v=7phFRk34uBc&ab_channel=wenchaoguo
-     * 思路 部分与 300 相同.
+     * 先去看300! 思路 部分与 300 相同.
+     * <p>
+     * 參考(其實沒有很好): https://www.youtube.com/watch?v=7phFRk34uBc&ab_channel=wenchaoguo
      */
     public int maxEnvelopes(int[][] envelopes) {
         if (envelopes == null || envelopes.length == 0
                 || envelopes[0] == null || envelopes[0].length != 2)
             return 0;
-        //envelopes[i][j] 设 i宽j高, 按照 i递增, j递减 sort.
-        //这样可以很方便
+        //envelopes[x][y] 设 i宽j高, 按照 x递增, y递减 sort.
+        //關鍵: 爲什麼y可以递减排序, 因爲x的值可能相同, 如果y也遞增, 則需要加上判斷envelope[x] > envelope[0~(x-1)], 所以, 如果y按遞減, 不需要考慮x緯度, 完全當作300來做. https://www.youtube.com/watch?v=B1d2wV6mfzA, 時間點 15:13
         Arrays.sort(envelopes, (arr1, arr2) -> {
             if (arr1[0] == arr2[0])
                 return arr2[1] - arr1[1];
             else
                 return arr1[0] - arr2[0];
         });
+
+        // 下邊使用了2分解法, 可以參考300題, 用n^2的寫法相對更易理解一點.
+        // https://www.bilibili.com/video/BV1Mz4y1276W/?p=2&vd_source=43213e8a8aaeb48811d827b2f4ff6d04
         int dp[] = new int[envelopes.length];
         int len = 0;
         //利用了上边的排序, 只需要比宽即可, 高利用递增, 不需要判断同高的情况.
