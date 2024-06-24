@@ -5,6 +5,9 @@ public class Q10 {
      * https://www.youtube.com/watch?v=DqhPJ8MzDKM&t=3s
      * 难!
      * 关键在 转义方程, 需要用到 dp[i + 1][j + 1] 的 dp[i][j], dp[i + 1][j - 1], dp[i][j + 1], dp[i + 1][j - 1]的情况.
+     *
+     * https://www.youtube.com/watch?v=c5vsle60Uw8
+     * 看這個可能比較好
      */
     public boolean isMatch(String s, String p) {
 
@@ -16,9 +19,9 @@ public class Q10 {
         //两str都为null时, 初始为 true.
         dp[0][0] = true;
         //初始化第一行, str == null, pat 0~n-1, 如果出现*, 说明*前一位的字符可有可无, 只要 前2位的pat是true, 当前位 也可以是true.
-        for (int i = 0; i < p.length(); i++) {
-            if (p.charAt(i) == '*' && dp[0][i - 1]) {
-                dp[0][i + 1] = true;
+        for (int j = 0; j < p.length(); j++) {
+            if (p.charAt(j) == '*' && dp[0][j - 1]) {
+                dp[0][j + 1] = true;
             }
         }
         for (int i = 0; i < s.length(); i++) {

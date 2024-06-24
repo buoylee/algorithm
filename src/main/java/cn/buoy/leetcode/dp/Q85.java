@@ -5,6 +5,7 @@ import java.util.Stack;
 public class Q85 {
     /**
      * https://www.youtube.com/watch?v=2Yk3Avrzauk
+     * 這個視頻, 還要看 84.
      * 只要懂了 84题, 剩下就是转化成对应的柱形图表示, 然后调用84 func 即可.
      */
     public int maximalRectangle(char[][] matrix) {
@@ -28,7 +29,10 @@ public class Q85 {
         return max;
     }
 
-    // Exact same solution to Histogram
+    /**
+     * 這個函數 相同題目在 84.
+     * Exact same solution to Histogram
+     */
     public int maxArea(int[] heights) {
         Stack<Integer> stack = new Stack();
         int max = 0;

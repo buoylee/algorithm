@@ -3,6 +3,8 @@ package cn.buoy.leetcode.dp;
 public class Q91 {
     /**
      * https://www.youtube.com/watch?v=Q26NujacIpM
+     * 思路: 不要想太多, 就是1或2步的問題.
+     * dp[i] == dp[i-1](和前一個數字切分, 所以看前一個數字的數量) + dp[i-2](和前一個數字合併爲一個, 所以看前兩個數字的數量).
      */
     public int numDecodings(String s) {
         if (s == null || s.length() == 0) {
