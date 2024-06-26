@@ -4,26 +4,29 @@ import java.util.Arrays;
 
 public class Q279 {
     /**
-     * https://www.bilibili.com/video/BV1ft411j7gF/?spm_id_from=333.788.recommend_more_video.-1
-     * 还是相对简单, 有思路的话
+     * https://www.youtube.com/watch?v=TXGvkQLVSgA
+     * 还是相对简单, 有思路的话. 322.
+     * 思路: 從 0-n dp, 注意細節看註釋.
      */
     public int numSquares(int n) {
-        //这里的dp[i] 的i 指的是最后的和为i , dp[i]则是 和为i的 可能的 最小平方数 个数.
+        //dp[sum], 表示的是, 加總sum 需要最少的 完全平方数 个数.
+        // 要包括 0, 所以需要 n + 1 個位置.
         int[] dp = new int[n + 1];
         Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
-        //在i*i的 index上 都是 有最小值 为 1的(只用1个 完全平方数 即可).
-        for (int i = 1; i * i <= n; i++) {
-            dp[i * i] = 1;
-        }
 
-        //System.out.println(Arrays.toString(dp));
-        //到i 的 最少平方数开始遍历
-        for (int i = 1; i <= n; i++) {
-            //为什么到 <= j*j 为止, 如果一个平方数都超过了i, 不符合.
-            for (int j = 1; j * j <= i; j++) {
-                //找出 合理的j*j 范围内的数 + dp[i - j * j] 的所有可能 的 最小值.
-                dp[i] = Math.min(dp[i], 1 + dp[i - j * j]);
+        // 完全沒有必要, 可以省略, 通過下邊遍歷就可以得到例如: dp[9] == 1.
+        // 在i*i的 index上 都是 有最小值 为 1的(只用1个 完全平方数 即可).
+//        for (int i = 1; i * i <= n; i++) {
+//            dp[i * i] = 1;
+//        }
+
+        // 從 dp 1-n 小到大 開始找.
+        for (int sum = 1; sum <= n; sum++) {
+            //關鍵: j*j 組成 '完全平方數', 因爲 '每個加數' 都要保證是 '完全平方數', 所以 加數 最大應該在 j^2 的範圍內.
+            for (int i = 1; i * i <= sum; i++) {
+                // 關鍵: 減去的數也保證了是'完全平方數'.
+                dp[sum] = Math.min(dp[sum], 1 + dp[sum - i * i]);
             }
         }
         return dp[n];

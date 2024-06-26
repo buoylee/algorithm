@@ -9,32 +9,54 @@ public class Q312 {
     /**
      * https://www.youtube.com/watch?v=Ci39lcoLbyw
      * 视频简述: 第一层for 控制距离, 第2层控制left, 第3层遍历left+1, right-1 之间的所有可能数
-     * 转义方程不好想.
-     * 视频参考思路, 思想有区别.
+     * 视频用的循環.
+     * <p>
+     * 代碼用的遞歸, 比較簡單直觀.
      */
-    public int maxCoins(int[] iNums) {
-        int[] nums = new int[iNums.length + 2];
-        //从1开始填入数字, 且排除掉`0元素`, 头尾index 填1.
-        int n = 1;
-        for (int x : iNums)
-            if (x > 0)
-                nums[n++] = x;
-        nums[0] = nums[n++] = 1;
+    public int maxCoins(int[] nums) {
+        // 爲了方便計算, 首位各加入一個 1.
+        int[] newNums = new int[nums.length + 2];
+        // 从1开始填入数字
+        // 細節: 如果不排除掉0, 如果先刺到0的鄰居, 結果只會更小(乘積等於0).
+        int index = 1;
+        for (int ele : nums)
+            if (ele > 0)
+                newNums[index++] = ele;
+        newNums[0] = newNums[index++] = 1;
 
-        int[][] memo = new int[n][n];
-        return burst(memo, nums, 0, n - 1);
+        // 關鍵: dp[i][j], 表示的是, 戳破 i+1 到 j-1 範圍內的氣球, 最大的結果.
+        int[][] dp = new int[index][index];
+        return burst(dp, newNums, 0, index - 1);
     }
 
-    public int burst(int[][] memo, int[] nums, int left, int right) {
-        //中间的球都破了.
-        if (left + 1 == right) return 0;
-        if (memo[left][right] > 0) return memo[left][right];
+    /**
+     * 求 dp[left][right]
+     *
+     * @param dp
+     * @param nums
+     * @param left  不需要戳破的左邊界
+     * @param right 不需要戳破的右邊界
+     * @return
+     */
+    public int burst(int[][] dp, int[] nums, int left, int right) {
+        // 中间的球都破了.
+        if (left + 1 == right)
+            return 0;
+        // 有就返回.
+        if (dp[left][right] > 0)
+            return dp[left][right];
         int ans = 0;
-        //dp[left][right]就是, 爆掉left + 1 和 right - 1 之间的气球 的最大数. 爆掉气球分割前后2部分, 递归求解.
+        // 關鍵: 得到 dp[left][right], 必須戳破所有 i+1 到 j-1 範圍內的氣球.
+        // 所以 恰好上一步 就是 戳破 之間 某一球(lastBurst), 使得 之間 沒球,
+        // 我們 遍歷 dp[left][lastBurst] + dp[lastBurst][right] + nums[lastBurst] * nums[lastBurst] * nums[lastBurst], 找到max那個就是答案.
         for (int i = left + 1; i < right; ++i)
-            ans = Math.max(ans, nums[left] * nums[i] * nums[right]
-                    + burst(memo, nums, left, i) + burst(memo, nums, i, right));
-        memo[left][right] = ans;
+            ans = Math.max(ans,
+                    nums[left] * nums[i] * nums[right] //最後一個戳破的分數
+                            + burst(dp, nums, left, i) // 左邊
+                            + burst(dp, nums, i, right)); // 右邊
+        dp[left][right] = ans;
         return ans;
     }
+
+    //todo leetcode 不算靠前, 有時間再說
 }

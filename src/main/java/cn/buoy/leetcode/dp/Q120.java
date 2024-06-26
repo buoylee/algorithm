@@ -5,9 +5,28 @@ import java.util.List;
 public class Q120 {
     /**
      * https://www.youtube.com/watch?v=0qenZd4G4iI
-     * 思路相同, 不过用的迭代.
+     * 簡單.
+     * 思路: 其實用了dp, 只是在原 triangle 中做了dp操作. 從下到上, 計算出上一行的所有元素, 于下行匹配元素的最小可能. 到頂就是答案.
+     * 爲什麼步由上到下, 因爲底邊元素有多個, 還需要 多一次遍歷 才得出最小的值, 而頂點不再需要遍歷.
      */
     public int minimumTotal(List<List<Integer>> triangle) {
+        // 關鍵: 從 倒數第2行開始 遍歷.
+        for (int i = triangle.size() - 2; i >= 0; i--) {
+            List<Integer> curr = triangle.get(i);
+            for (int j = 0; j <= i; j++) {
+                // 本行的 j, 需要于下行的 j 和 j+1, 相加和比較.
+                int nextRow1 = triangle.get(i + 1).get(j);
+                int nextRow2 = triangle.get(i + 1).get(j + 1);
+                // 直接把 dp 的值放到本行 j 中.
+                curr.set(j, Math.min(nextRow1, nextRow2) + curr.get(j));
+            }
+        }
+        return triangle.get(0).get(0);
+    }
+
+
+    // dfs
+    public int minimumTotal2(List<List<Integer>> triangle) {
         int rows = triangle.size(), cols = triangle.get(rows - 1).size();
         int[][] memo = new int[rows][cols];
         memo[0][0] = dfs(triangle, 0, 0, memo);

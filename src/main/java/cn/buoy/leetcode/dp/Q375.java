@@ -3,37 +3,40 @@ package cn.buoy.leetcode.dp;
 public class Q375 {
     /**
      * https://www.youtube.com/watch?v=YTGHiGH_oTg
-     * 题意: 在保证猜到对的情况下, 可以选的付的钱最少钱的值.
+     * 簡單, 看了視頻就懂
+     * <p>
+     * 思路:聯想2分法, 先猜 某一點, 然後 按照 target 選擇一邊猜, 直到找到target. 所以, 可以想到 dp[i][j] = dp[i][mid-1] + i(猜的數, 需要扣的錢) + dp[mid+1][j], 然後一直用dfs就好.
      */
     public int getMoneyAmount(int n) {
-        //dp[i][j] 是指 从数字i~j范围内 最小的保证猜对的钱数.
+        //dp[i][j] 是指 从数字i~j范围内 最小的保证猜对的钱数. 方便計算使用n+1.
         int[][] dp = new int[n + 1][n + 1];
         return minCost2(dp, 1, n);
     }
 
     /**
-     * 这个理解简单点
+     * 找到 low 和 high 這個範圍內, 猜對最小需要多少錢.
      *
-     * @param mem
-     * @param lo
-     * @param hi
+     * @param dp
+     * @param low
+     * @param high
      * @return
      */
-    public int minCost2(int[][] mem, int lo, int hi) {
-        if (lo >= hi) return 0;
-
-        if (mem[lo][hi] != 0) return mem[lo][hi];
-
+    public int minCost2(int[][] dp, int low, int high) {
+        if (low >= high)
+            return 0;
+        if (dp[low][high] != 0)
+            return dp[low][high];
         int min = Integer.MAX_VALUE;
 
         //重点思路, 遍历每一种猜测. 在一直错到剩下一个答案的情况下, 选花费最小的.
-        for (int i = lo; i <= hi; i++) {
-            //分成前后2部分(lo到i - 1, i + 1到hi)后, 取 大的那边的值, 因为如果被猜数 在右边, 则也需要满足 足够的钱.
-            int maxCost = i + Math.max(minCost2(mem, lo, i - 1), minCost2(mem, i + 1, hi));
-            min = Math.min(min, maxCost);
+        for (int i = low; i <= high; i++) {
+            //
+            // 關鍵: 理解Math.max(), 分成前后2部分(lo到i - 1, i + 1到hi)后, 取 大的那边的值, 因为被猜数 可能出現在 任一邊, 所以需要满足 大的一邊的要求.
+            int leastCost = i + Math.max(minCost2(dp, low, i - 1), minCost2(dp, i + 1, high));
+            min = Math.min(min, leastCost);
         }
 
-        mem[lo][hi] = min;
+        dp[low][high] = min;
 
         return min;
     }
