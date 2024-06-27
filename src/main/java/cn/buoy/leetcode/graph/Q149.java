@@ -5,7 +5,8 @@ import java.util.*;
 public class Q149 {
     /**
      * https://www.youtube.com/watch?v=xF2G6DARKBM
-     * 思路: 如何判断 第3点 在1, 2 点的直线上, 3与 (1或2)的 斜率相同
+     * 思路: 同一點 和 其他點, 組成的線 的斜率, 如果一樣, 說明在一個條直線上.
+     * 細節: 爲什麼後邊的起始點不需要看前边的点? 因爲如果前邊的點影響後邊新組成的線上的點的max, 那麼說明, '前邊的點組成的線'其實和現在的點組成的是同一條線. 所以沒有必要統計前邊出現的點.
      */
     //Returns slope of a line. Vertical line slope is undefined and represented as Max value
     private double slope(int[] p1, int[] p2) {
@@ -27,14 +28,15 @@ public class Q149 {
         for (int i = 0; i < points.length; i++) {
             // How many points have a perticular slope w.r.t. this point
             //经过某个点的斜率相同的值.
-            //其他语言可能进度不够, 通过不了, 可以用string((a/gcd)/(b/gcd))方式做key
+            //其他语言可能精度不够, 通过不了, 可以用string((a/gcd)/(b/gcd))方式做key
             Map<Double, Integer> slopesCount = new HashMap<Double, Integer>();
             int dups = 0, max = 0;
 
             // FIXME: 2021/5/7
-            //不理解为什么可以不用看前边的点
-//            for (int j = i + 1; j < points.length; j++) {
-            for (int j = 0; j < points.length; j++) {
+            // 为什么可以不用看前边的点?
+            // 細節: 反過來想, 如果需要遍歷前邊的點(0-i之間), 而且會影響最後的max, 那麼, 他們的組成的線(之前的點(0-i之間) 和 當前的點), 就會和之前的線重合, 所以其實可以跳過這些點(因爲只有後邊的點和前邊的組成的線不再同一條線上, 才會有更大的max出現).
+            for (int j = i + 1; j < points.length; j++) {
+//            for (int j = 0; j < points.length; j++) {
                 if (i == j) continue;
 
                 // dups

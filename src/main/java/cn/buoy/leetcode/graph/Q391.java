@@ -4,12 +4,13 @@ import java.util.HashSet;
 
 public class Q391 {
     /**
-     * https://www.youtube.com/watch?v=8JM_dyOu_JY
-     * <p>
      * https://leetcode.com/problems/perfect-rectangle/discuss/87181/Really-Easy-Understanding-Solution(O(n)-Java)
+     * https://www.youtube.com/watch?v=8JM_dyOu_JY
+     * 簡單, 看視頻, 瞭解2個條件.
+     * <p>
      * The right answer must satisfy two conditions:
-     * 1.the large rectangle area should be equal to the sum of small rectangles
-     * 2.count of all the points should be even, and that of all the four corner points should be one
+     * 1.the large rectangle area should be equal to the sum of small rectangles 總的面積 應該等於 小方塊的和.
+     * 2.count of all the points should be even, and that of all the four corner points should be one. 除了4個角只能出現1詞, 其他點都應該是偶數.
      * 理解原理就好做.
      */
     public boolean isRectangleCover(int[][] rectangles) {
@@ -34,7 +35,7 @@ public class Q391 {
             //统计小矩形面积
             area += (rect[2] - rect[0]) * (rect[3] - rect[1]);
             //{x, y, x', y'}对应左下, 右上坐标
-            //四角坐标
+            //一個4邊形的四角坐标
             String s1 = rect[0] + " " + rect[1];
             String s2 = rect[0] + " " + rect[3];
             String s3 = rect[2] + " " + rect[3];
@@ -47,7 +48,7 @@ public class Q391 {
             if (!set.add(s4)) set.remove(s4);
         }
 
-        //剩下的 如果不是 有且只有4个角的坐标, false
+        //剩下的點 如果不是 只有4个角的坐标, false
         if (!set.contains(x1 + " " + y1) || !set.contains(x1 + " " + y2) || !set.contains(x2 + " " + y1) || !set.contains(x2 + " " + y2) || set.size() != 4)
             return false;
 

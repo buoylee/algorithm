@@ -5,6 +5,8 @@ import java.util.*;
 public class Q310 {
     /**
      * https://www.youtube.com/watch?v=pUtxTz134qM
+     * 簡單. 先看視頻, 思路清晰, 然後看註釋就好.
+     * 思路: 將 int[][] edges 轉化爲 node 的 度(一個node有幾個連接), 一個array, 還需要一個 map[node, neighbors](同一個關係, 需要各自保存對方的node.)
      */
     public List<Integer> findMinHeightTrees1(int n, int[][] edges) {
         List<Integer> res = new ArrayList<>();
@@ -12,8 +14,9 @@ public class Q310 {
             res.add(0);
             return res;
         }
+        // node的度
         int[] degree = new int[n];
-        //保存着 各点的临边
+        //保存着 各点的临边(每2個node的關係, 2個node需要各自保存另一個node, 用於當度爲1時彈出後, 他們的 neighbors 的度要 --)
         Map<Integer, Set<Integer>> map = new HashMap<>();
         for (int i = 0; i < n; i++) map.put(i, new HashSet<>());
         for (int[] e : edges) {
@@ -37,11 +40,14 @@ public class Q310 {
                 list.add(cur);
                 //关键代码: 单单看有点巧妙, 画图!
                 //拿出 degree == 1的node 的临界点, --临界点的degree 即可.
-                for (int parent : map.get(cur)) {
-                    degree[parent]--;
-                    if (degree[parent] == 1) q.offer(parent);
+                for (int neighbor : map.get(cur)) {
+                    degree[neighbor]--;
+                    // 每次 neighbor 度--, 馬上檢查當前 neighbor degree 是否爲1, 是就直接加入 queue
+                    if (degree[neighbor] == 1)
+                        q.offer(neighbor);
                 }
             }
+            // 直接把 list 放到 res 中, 只要 q.isEmpty(), 就是答案.
             res = list;
         }
         return res;
