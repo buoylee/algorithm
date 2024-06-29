@@ -3,23 +3,76 @@ package cn.buoy.leetcode.linkedlist;
 import cn.buoy.leetcode.ListNode;
 
 public class Q148 {
-
-    public static void main(String[] args) {
-        Q148 q148 = new Q148();
-        ListNode listNode = new ListNode(1);
-        listNode.next = new ListNode(2);
-        listNode.next.next = new ListNode(3);
-        listNode.next.next.next = new ListNode(4);
-        listNode.next.next.next.next = new ListNode(5);
-        listNode.next.next.next.next.next = new ListNode(6);
-//        listNode.next.next.next.next.next.next = new ListNode(7);
-        q148.sortList(listNode);
-    }
-
-    /*
-    https://www.youtube.com/watch?v=M1TwY0nsTZA
+    /**
+     * https://www.youtube.com/watch?v=xUFYCXsncm0 这个短
+     * 简单, 视频
+     * 思路: 典型 merge sort
      */
     public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+        ListNode middle = getMiddle(head);
+        // 3->7->5->1
+        // 3->7  5->1
+        // 3 7  5 1
+        ListNode next = middle.next;
+        middle.next = null;
+        // 递归调用sortList
+        // 直到只剩下一个元素的时候开始merge
+        // 然后返回结果
+        return merge(sortList(head), sortList(next));
+    }
+
+    /**
+     * 取中点, 注意边界.
+     *
+     * @param head
+     * @return
+     */
+    private ListNode getMiddle(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+
+        // 细节: 中点位置: while (fast != null && fast.next != null) // 奇数: 中点; 偶数: 后点
+        while (fast.next != null && fast.next.next != null) { // 奇数: 中点; 偶数: 前点
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        return slow;
+    }
+
+    /**
+     * 归并排序 merge 阶段
+     */
+    private ListNode merge(ListNode a, ListNode b) {
+        ListNode dummy = new ListNode(-1);
+        ListNode cur = dummy;
+        // 选小的插入
+        while (a != null && b != null) {
+            if (a.val <= b.val) {
+                cur.next = a;
+                a = a.next;
+            } else {
+                cur.next = b;
+                b = b.next;
+            }
+            cur = cur.next;
+        }
+        // 当 其一 link == null, 就把 另一 link 剩余node 插入最后.
+        if (a == null) {
+            cur.next = b;
+        } else {
+            cur.next = a;
+        }
+
+        return dummy.next;
+    }
+
+    /**
+     * https://www.youtube.com/watch?v=M1TwY0nsTZA
+     * 这个看起来代码不够简洁
+     */
+    public ListNode sortList2(ListNode head) {
         ListNode dummy = new ListNode(0);
         dummy.next = head;
         int n = 0;
@@ -36,7 +89,7 @@ public class Q148 {
                 ListNode left = cur;
                 ListNode right = split(left, step);
                 cur = split(right, step);
-                prev = merge(left, right, prev);
+                prev = merge2(left, right, prev);
             }
         }
 
@@ -61,7 +114,7 @@ public class Q148 {
         return right;
     }
 
-    private ListNode merge(ListNode left, ListNode right, ListNode prev) {
+    private ListNode merge2(ListNode left, ListNode right, ListNode prev) {
         //这里吧断开的连回来.同一个step 的前一部分 和 现在 l, r 链表 连起来.
         ListNode cur = prev;
         while (left != null && right != null) {
@@ -90,7 +143,7 @@ public class Q148 {
     /*
     自上而下, 空间复杂度为logn
      */
-    public ListNode sortList2(ListNode head) {
+    public ListNode sortList3(ListNode head) {
         if (head == null || head.next == null)
             return head;
 
@@ -113,7 +166,7 @@ public class Q148 {
         return merge(l1, l2);
     }
 
-    ListNode merge(ListNode l1, ListNode l2) {
+    ListNode merge3(ListNode l1, ListNode l2) {
         ListNode l = new ListNode(0), p = l;
 
         while (l1 != null && l2 != null) {
@@ -134,5 +187,17 @@ public class Q148 {
             p.next = l2;
 
         return l.next;
+    }
+
+    public static void main(String[] args) {
+        Q148 q148 = new Q148();
+        ListNode listNode = new ListNode(1);
+        listNode.next = new ListNode(2);
+        listNode.next.next = new ListNode(3);
+        listNode.next.next.next = new ListNode(4);
+        listNode.next.next.next.next = new ListNode(5);
+        listNode.next.next.next.next.next = new ListNode(6);
+//        listNode.next.next.next.next.next.next = new ListNode(7);
+        q148.sortList2(listNode);
     }
 }

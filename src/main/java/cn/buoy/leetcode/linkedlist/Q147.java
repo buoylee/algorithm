@@ -5,11 +5,46 @@ import cn.buoy.leetcode.ListNode;
 public class Q147 {
     /**
      * https://www.youtube.com/watch?v=N1VVLLan6S0
-     *
-     * @param head
-     * @return
+     * 簡單, 視頻
+     * 思路: 從頭檢查, 找到一個 next 比 curr 小的 temp node,
+     * 再次從頭找到 比這個 temp node 大的 pre.next, 然後 在 pre 和 pre.next 之間 插入 temp node, 直到curr.next == null.
      */
     public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        // 檢查過的最後一位(用來比較 cur 和 cur.next, 如果 cur > cur.next, 那 cur.next 就要移動位置).
+        ListNode cur = head;
+        // 應該插入位置的 prev
+        ListNode prev = null;
+        // 需要移動的 node
+        ListNode temp = null;
+        while (cur != null && cur.next != null) {
+            // 位置正確
+            if (cur.val <= cur.next.val) {
+                cur = cur.next;
+            } else {
+                // 提出要移動的 node
+                temp = cur.next;
+                // 刪除要移動的 node
+                cur.next = cur.next.next;
+                prev = dummy;
+                // 找到插入的位置
+                while (prev.next.val <= temp.val) {
+                    prev = prev.next;
+                }
+                // 插入
+                temp.next = prev.next;
+                prev.next = temp;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    // 不夠簡潔
+    public ListNode insertionSortList2(ListNode head) {
         if (head == null) return head;
         ListNode prev = new ListNode(0);
         //prev 等于dummy

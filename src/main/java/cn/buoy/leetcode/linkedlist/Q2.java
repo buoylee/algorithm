@@ -3,39 +3,68 @@ package cn.buoy.leetcode.linkedlist;
 import cn.buoy.leetcode.ListNode;
 
 public class Q2 {
-    /*
-    2种方法都差不多
+    /**
+     * https://www.youtube.com/watch?v=SeBLjY58iY8
+     * 簡單到爆, 直接看視頻
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode c1 = l1;
-        ListNode c2 = l2;
-        ListNode sentinel = new ListNode(0);
-        ListNode d = sentinel;
+        // 爲了方便取結果, 保留dummy指針.
+        ListNode dummy = new ListNode(-1);
+        ListNode curr = dummy;
+        // 進位
+        int carry = 0;
+        while (l1 != null || l2 != null) {
+            int x = l1 == null ? 0 : l1.val;
+            int y = l2 == null ? 0 : l2.val;
+
+            int sum = x + y + carry;
+            //餘數(加完後, curr 的值)
+            curr.next = new ListNode(sum % 10);
+            // 進位
+            carry = sum / 10;
+
+            curr = curr.next;
+            if (l1 != null) l1 = l1.next;
+            if (l2 != null) l2 = l2.next;
+        }
+        // 最後一位如果要進位, 記得+個 ListNode(1).
+        if (carry != 0) {
+            curr.next = new ListNode(carry);
+        }
+        return dummy.next;
+    }
+
+
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        // 爲了方便取結果, 保留dummy指針.
+        ListNode dummy = new ListNode(0);
+        ListNode curr = dummy;
         int sum = 0;
         //当2链表当前node都没有时, 跳出
-        while (c1 != null || c2 != null) {
+        while (l1 != null || l2 != null) {
             sum /= 10;
-            if (c1 != null) {
-                sum += c1.val;
-                c1 = c1.next;
+            if (l1 != null) {
+                sum += l1.val;
+                l1 = l1.next;
             }
-            if (c2 != null) {
-                sum += c2.val;
-                c2 = c2.next;
+            if (l2 != null) {
+                sum += l2.val;
+                l2 = l2.next;
             }
-            d.next = new ListNode(sum % 10);
-            d = d.next;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
         }
+        // 最後一位如果要進位, 記得+個 ListNode(1).
         if (sum / 10 == 1)
-            d.next = new ListNode(1);
-        return sentinel.next;
+            curr.next = new ListNode(1);
+        return dummy.next;
     }
 
 
     /*
     相对好读懂
      */
-    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+    public ListNode addTwoNumbers3(ListNode l1, ListNode l2) {
         int left = 0;
         ListNode dummy = new ListNode(0), tail = dummy;
 

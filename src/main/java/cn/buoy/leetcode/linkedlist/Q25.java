@@ -16,6 +16,11 @@ public class Q25 {
         q25.reverseKGroup(listNode, 2);
     }
 
+    /**
+     * https://www.youtube.com/watch?v=DryIN7iL4pA
+     * 很像 24, 其實是簡單的. 視頻快速看, 然後看註釋就好.
+     * 思路: 翻轉 linklist 有多種方式, 分組k. 然後就是一些邊界問題要想清楚.
+     */
     public ListNode reverseKGroup(ListNode head, int k) {
         //为什么需要 k+1, curr 作为 下k个一组 的开头,
         ListNode curr = head;
@@ -32,6 +37,9 @@ public class Q25 {
             // curr - head-pointer to reversed part;
             //将head移到第k位, 原第2做head
             //不好理解就画图!
+            // 這裏做法是, [1,2,3,4,5,6], k = 4
+            // [2,3,4,1,5,6] => [3,4,2,1,5,6] => [4,3,2,1,5,6]...
+            // 這裏其實 4- 步就能完成, 不過 這裏多做一步, 結果還是一樣.
             while (count-- > 0) { // reverse current k-group:
                 ListNode tmp = head.next; // tmp - next head in direct part
                 //作为第k个
@@ -53,6 +61,9 @@ public class Q25 {
         dmy.next = head;
         //剩下的大于等于k才可以继续
         for (ListNode prev = dmy, tail = head; n >= k; n -= k) {
+            // 這裏做法是, [1,2,3,4,5,6], k = 4
+            // [0,2,1,3,4,5,6] => [0,3,2,1,4,5,6] => [0,4,3,2,1,5,6]...
+            // 不斷的把, tail.next(1後邊的數),放在 dummy 之後; 然後 tail 指向 tail.next.next
             for (int i = 1; i < k; i++) {
                 ListNode next = tail.next.next;
                 tail.next.next = prev.next;

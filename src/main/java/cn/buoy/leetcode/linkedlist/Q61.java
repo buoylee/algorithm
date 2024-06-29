@@ -2,6 +2,11 @@ package cn.buoy.leetcode.linkedlist;
 
 import cn.buoy.leetcode.ListNode;
 
+/**
+ * https://www.youtube.com/watch?v=CABz3Nd64KQ
+ * 看視頻, 然後看註釋. 簡單.
+ * 思路: 首尾相連, 用偏移次數, 找出 tail node, 那 tail.next 就是 head.
+ */
 public class Q61 {
     public ListNode rotateRight(ListNode head, int k) {
         if (head == null) return null;
@@ -15,9 +20,8 @@ public class Q61 {
         }
         //收尾相连
         tail.next = head;
-        //加入 有2个元素, 要转3次, 1 -> 2, 2 -> 1, 1 -> 2, 2 -> 1, newIndex = 2 - 3%2 = 1
+        //假如 轉的次數 > list.size, 那麼 newIndex = 2 - 3%2 = 1
         int newHeadIndex = listNum - k % listNum;
-        //上例, 所以需要移一位
         for (int i = 0; i < newHeadIndex; i++) {
             tail = tail.next;
         }
@@ -25,7 +29,6 @@ public class Q61 {
         head = tail.next;
         //解除环
         tail.next = null;
-
         return head;
     }
 }

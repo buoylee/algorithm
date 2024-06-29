@@ -2,27 +2,34 @@ package cn.buoy.leetcode.linkedlist;
 
 import cn.buoy.leetcode.ListNode;
 
+/**
+ * https://www.youtube.com/watch?v=zSTt-x8JeFI
+ * 簡單, 看視頻.
+ * 思路: 快慢指針, fast 比 slow 快 n 步, 當 fast 到達 end 時, slow 就是 target 元素.
+ */
 public class Q19 {
     public ListNode removeNthFromEnd(ListNode head, int n) {
 
         //插个dummy
-        ListNode start = new ListNode(0);
-        ListNode slow = start, fast = start;
+        ListNode dummy = new ListNode(0);
+        ListNode slow = dummy, fast = dummy;
+        // dummy.next 指向 head
         slow.next = head;
 
-        //Move fast in front so that the gap between slow and fast becomes n
-        //倒数第n个, [-1, 0, 1, 2, 3, 4, 5], 假如倒2, j要到1然后同步移动到 j == null,  3 j = 2, 因为判断条件为j等于null, 所以要移到末尾后一位. 如果要删除这位 就要找到 n - 1 的元素才能删. (如果到倒2, 则机要比slow(1) + 3)
+        // 細節: 因爲 下邊 slow/fast 都多走了一步, 所以 這裏間隔也需要多1.
         for (int i = 1; i <= n + 1; i++) {
             fast = fast.next;
         }
         //Move fast to the end, maintaining the gap
+        // 細節: 注意這裏結束時, fast 多走了一步(末尾元素後一位).
         while (fast != null) {
             slow = slow.next;
             fast = fast.next;
         }
         //Skip the desired node 跳过要删除的node
+        // 刪除目標
         slow.next = slow.next.next;
         //跳掉dummy
-        return start.next;
+        return dummy.next;
     }
 }

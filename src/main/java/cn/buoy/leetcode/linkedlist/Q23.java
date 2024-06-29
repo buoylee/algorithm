@@ -7,30 +7,29 @@ import java.util.PriorityQueue;
 public class Q23 {
 
     /**
-     * 迭代
-     *
-     * @param lists
-     * @return
+     * https://www.youtube.com/watch?v=Jq6QWstM66s
+     * 超簡單, 看.
+     * 思路: 直接用一個 PriorityQueue, k個 node push 進去, pop 出最小那個後, 在 push 他的 next 入隊, 如此循環直到 k個 node 都爲空.
      */
-    public ListNode mergeKLists2(ListNode[] lists) {
+    public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
 
         PriorityQueue<ListNode> queue = new PriorityQueue<>(lists.length, (a, b) -> a.val - b.val);
 
         ListNode dummy = new ListNode(0);
-        ListNode tail = dummy;
+        ListNode curr = dummy;
 
-        //3个链表放入
+        // k個node 全部放入 queue
         for (ListNode node : lists)
             if (node != null)
                 queue.add(node);
 
         while (!queue.isEmpty()) {
-            //弹出的链表还有next继续放回队列中.
-            tail.next = queue.poll();
-            tail = tail.next;
-            if (tail.next != null)
-                queue.add(tail.next);
+            // 弹出的链表还有next继续放回队列中.
+            curr.next = queue.poll();
+            curr = curr.next;
+            if (curr.next != null)
+                queue.add(curr.next);
         }
         return dummy.next;
     }
@@ -42,7 +41,7 @@ public class Q23 {
      * @param lists
      * @return
      */
-    public static ListNode mergeKLists(ListNode[] lists) {
+    public static ListNode mergeKLists2(ListNode[] lists) {
         return partion(lists, 0, lists.length - 1);
     }
 
