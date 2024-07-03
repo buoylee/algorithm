@@ -5,49 +5,49 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Q18 {
-
     /**
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=oACoT4c_Tig
-     *
-     * @param num
-     * @param target
-     * @return
+     * 思路: 和 16題(3sum) 完全一樣, 直接在 3sum 外再套一層.
      */
     public List<List<Integer>> fourSum(int[] num, int target) {
-        ArrayList<List<Integer>> ans = new ArrayList<>();
-        if (num.length < 4) return ans;
+        ArrayList<List<Integer>> result = new ArrayList<>();
+        if (num.length < 4) return result;
         Arrays.sort(num);
-        //4sum
+        //關鍵: i < num.length - 3
         for (int i = 0; i < num.length - 3; i++) {
-            if (num[i] + num[i + 1] + num[i + 2] + num[i + 3] > target)
-                break; //first candidate too large, search finished
-            if (num[i] + num[num.length - 1] + num[num.length - 2] + num[num.length - 3] < target)
-                continue; //first candidate too small
-            if (i > 0 && num[i] == num[i - 1]) continue; //prevents duplicate result in ans list
-            //3sum
+            // 如果這次循環最小的可能都超過 target, 跳出整個循環. 可以省.
+//            if (num[i] + num[i + 1] + num[i + 2] + num[i + 3] > target)
+//                break; //first candidate too large, search finished
+            // 如果這次循環最大的可能達不到 target, 跳過這次循環. 可以省.
+//            if (num[i] + num[num.length - 1] + num[num.length - 2] + num[num.length - 3] < target)
+//                continue; //first candidate too small
+            // 去重
+            if (i > 0 && num[i] == num[i - 1]) continue; //prevents duplicate result in result list
+            // 16題 3sum, 幾乎一樣.
             for (int j = i + 1; j < num.length - 2; j++) {
-                if (num[i] + num[j] + num[j + 1] + num[j + 2] > target) break; //second candidate too large
-                if (num[i] + num[j] + num[num.length - 1] + num[num.length - 2] < target)
-                    continue; //second candidate too small
-                if (j > i + 1 && num[j] == num[j - 1]) continue; //prevents duplicate results in ans list
-                //2sum
+//                if (num[i] + num[j] + num[j + 1] + num[j + 2] > target) break; //second candidate too large
+//                if (num[i] + num[j] + num[num.length - 1] + num[num.length - 2] < target)
+//                    continue; //second candidate too small
+//                if (j > i + 1 && num[j] == num[j - 1]) continue; //prevents duplicate results in result list
                 int low = j + 1, high = num.length - 1;
                 while (low < high) {
+                    // 和 3sum 唯一差別
                     int sum = num[i] + num[j] + num[low] + num[high];
                     if (sum == target) {
-                        ans.add(Arrays.asList(num[i], num[j], num[low], num[high]));
+                        result.add(Arrays.asList(num[i], num[j], num[low], num[high]));
                         while (low < high && num[low] == num[low + 1]) low++; //skipping over duplicate on low
                         while (low < high && num[high] == num[high - 1]) high--; //skipping over duplicate on high
                         low++;
                         high--;
-                    }
-                    //move window
-                    else if (sum < target) low++;
-                    else high--;
+                    } else if (sum < target)
+                        low++;
+                    else
+                        high--;
                 }
             }
         }
-        return ans;
+        return result;
     }
 
     //时空优

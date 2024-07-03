@@ -2,6 +2,7 @@ package cn.buoy.leetcode.math;
 
 public class Q390 {
     /**
+     * 以後再看, 不好理解. todo
      * https://www.youtube.com/watch?v=D7_ALByjHMw
      * <p>
      * 这个不好理解:

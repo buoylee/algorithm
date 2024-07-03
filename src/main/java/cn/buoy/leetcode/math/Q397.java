@@ -6,35 +6,25 @@ import java.util.Map;
 public class Q397 {
     /**
      * https://www.youtube.com/watch?v=HsNz3a5RFSc
+     * 思路: 遞歸, 按題目做.
      */
-    Map<Long, Integer> dp;
+    // 表示 i 的最小步數
+    Map<Integer, Integer> dp = new HashMap<>();
 
     public int integerReplacement(int n) {
-        dp = new HashMap();
-        return helper(n);
-    }
-
-    private int helper(long n) {
-        if (dp.containsKey(n)) {
+        if (n == Integer.MAX_VALUE) return 32;
+        if (dp.containsKey(n))
             return dp.get(n);
-        }
-        if (n == 1) {
+        if (n == 1)
             return 0;
-        }
-        if (n <= 0) {
-            return Integer.MAX_VALUE;
-        }
-        int minS;
-        //考虑所有可能步骤
-        //都是本步 + 下边所有步
+        int currStep;
         if (n % 2 == 0) {
-            minS = helper(n / 2) + 1;
+            currStep = integerReplacement(n / 2) + 1;
         } else {
-            //+ 比较小的那种
-            minS = Math.min(helper(n + 1), helper(n - 1)) + 1;
+            currStep = Math.min(integerReplacement(n + 1), integerReplacement(n - 1)) + 1;
         }
-        dp.put(n, minS);
-        return minS;
+        dp.put(n, currStep);
+        return currStep;
     }
 
     /**

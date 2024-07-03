@@ -2,9 +2,12 @@ package cn.buoy.leetcode.math;
 
 public class Q372 {
     /**
+     * 就是背公式, 遞歸解.
      * https://www.bilibili.com/video/BV1bX4y1G77Z?from=search&seid=10130701434952054965
      * <p>
      * https://leetcode.com/problems/super-pow/discuss/84472/C%2B%2B-Clean-and-Short-Solution
+     * <p>
+     * https://www.youtube.com/watch?v=uMLTQnEjhSw 短
      */
     public int superPow(int a, int[] b) {
         return superPow(a, b, b.length, 1337);

@@ -3,7 +3,7 @@ package cn.buoy.leetcode.math;
 public class Q292 {
     /**
      * https://www.youtube.com/watch?v=JoYV1uJaOu4
-     * 只要能筹够4块石头的倍数 给对手 都不能赢.
+     * 思路: 當你後手時, 確保當你抽完, 剩下的n 可以 %4 == 0, 贏
      */
     public boolean canWinNim(int n) {
         return n % 4 != 0;

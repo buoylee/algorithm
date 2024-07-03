@@ -2,27 +2,30 @@ package cn.buoy.leetcode.math;
 
 public class Q69 {
     /**
+     * 簡單, 視頻, 代碼
      * https://www.youtube.com/watch?v=JrBlp8xWqSg
-     *
-     * @param x
-     * @return
+     * 思路: 2分, 通過 mid^2 和 x 比大小來定位 結果.
      */
     public int mySqrt(int x) {
-        if (x == 0)
-            return 0;
-        int left = 1, right = Integer.MAX_VALUE;
-        while (true) {
-            //避免int越界
-            int mid = left + (right - left) / 2;
-            //也是越界, mid * mid > x
-            //关键在于, 如果不是完全平方数, 最后的mid 可能会小, 也可能大, 需要选小的返回.
-            if (mid > x / mid) {
-                right = mid - 1;
+        long start = 1;
+        long end = x;
+        // 2分好用寫法.
+        while (start + 1 < end) {
+            // 防越界
+            long mid = start + (end - start) / 2;
+            if (mid * mid == x) {
+                return (int) mid;
+            } else if (mid * mid < x) {
+                start = mid;
             } else {
-                if (mid + 1 > x / (mid + 1))
-                    return mid;
-                left = mid + 1;
+                end = mid;
             }
+        }
+        // 右邊的end^2都比x小了, 左邊的start只會更小.
+        if (end * end <= x) {
+            return (int) end;
+        } else {
+            return (int) start;
         }
     }
 }
