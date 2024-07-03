@@ -7,38 +7,28 @@ public class Q302 {
      * 思路: dfs遍历所有 black, 记录 x的最大/小, y的最大/小. 相減, 再乘就是結果.
      * https://www.youtube.com/watch?v=cXBP5EQXaKc
      */
+    // x的最大/小, y的最大/小
     int minX, maxX, minY, maxY;
 
     public int minArea(char[][] image, int x, int y) {
+        // init 無所謂
         minX = x;
         maxX = x;
         minY = y;
         maxY = y;
-        // todo 優化掉 visited, 把 用過的 置爲 0 即可.(未leetcode驗證)
-//        boolean[][] visited = new boolean[image.length][image[0].length];
-//        dfs(image, x, y, visited);
         dfs(image, x, y);
         return (maxX - minX + 1) * (maxY - minY + 1);
     }
 
-    //    private void dfs(char[][] image, int x, int y, boolean[][] visited) {
     private void dfs(char[][] image, int x, int y) {
         if (x < 0 || x >= image.length || y < 0 || y >= image[0].length // 是否在 矩陣邊界 外
-//                || visited[x][y] // 是否 使用過
-                || image[x][y] == '0') { // 是否 == 0
+                || image[x][y] == '0') // 是否 == 0
             return;
-        }
-//        visited[x][y] = true;
         image[x][y] = '0';
         minX = Math.min(minX, x);
         maxX = Math.max(maxX, x);
         minY = Math.min(minY, y);
         maxY = Math.max(maxY, y);
-
-//        dfs(image, x - 1, y, visited); // 上
-//        dfs(image, x + 1, y, visited); // 下
-//        dfs(image, x, y - 1, visited); // 左
-//        dfs(image, x, y + 1, visited); // 右
         dfs(image, x - 1, y); // 上
         dfs(image, x + 1, y); // 下
         dfs(image, x, y - 1); // 左
