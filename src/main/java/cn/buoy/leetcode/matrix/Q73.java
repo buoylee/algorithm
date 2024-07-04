@@ -2,24 +2,30 @@ package cn.buoy.leetcode.matrix;
 
 public class Q73 {
     /**
+     * 簡單, 視頻, 註釋.
      * https://www.youtube.com/watch?v=-I8w2_sN93c
-     * 思路, 遍历每一个格子(x, y), 如果是0, 将对应的(x, 0), (0,y) 也置为0,
-     * 第2次遍历第一行/列, 只要出现0 就将 整行/列 置0,
-     * 注意! 因为我们将第一行 第一列作为了 辅助使用, 所以 当其出现0的时候, 会将 之前的标记都破坏, 所以要将这2个情况放在最后(大于1的行/列 都置0后)再处理.
+     * 思路:
+     * 1. 利用首行/列格子, 來標記該列/行存在0; 關鍵: 首行/列 要在最後處理, 不然還是會影響其他點的判斷.
+     * 2. 遍历從 index == 1 開始的每一个格子, 如果'對應的行/列的首格'是0, 将对应的整行/列都置0,
+     * 3. 例外點 matrix[0][0], 它同時代表了0行/列 是否存在0, 所以需要用2個變量(firstRow, firstCol)來存.
      */
     public void setZeroes(int[][] matrix) {
-        boolean firstRow = false, firstColumn = false;
+        boolean firstRow = false, firstCol = false;
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[0].length; j++) {
                 if (matrix[i][j] == 0) {
+                    // 關鍵: 第一行出現 0
                     if (i == 0) firstRow = true;
-                    if (j == 0) firstColumn = true;
+                    // 關鍵: 第一列出現 0
+                    if (j == 0) firstCol = true;
+                    // 關鍵: 該格子的對應的行的第一格子 改爲0
                     matrix[0][j] = 0;
+                    // 關鍵: 該格子的對應的列的第一格子 改爲0
                     matrix[i][0] = 0;
                 }
             }
         }
-        //skip过 第1行/列
+        //skip 过 index == 1 的行/列
         for (int i = 1; i < matrix.length; i++) {
             for (int j = 1; j < matrix[0].length; j++) {
                 if (matrix[i][0] == 0 || matrix[0][j] == 0) {
@@ -27,17 +33,13 @@ public class Q73 {
                 }
             }
         }
-        //现在才处理
-        if (firstRow) {
-            for (int j = 0; j < matrix[0].length; j++) {
+        // 最後再處理 index == 0 的行
+        if (firstRow)
+            for (int j = 0; j < matrix[0].length; j++)
                 matrix[0][j] = 0;
-            }
-        }
-        if (firstColumn) {
-            for (int i = 0; i < matrix.length; i++) {
+        // 最後再處理 index == 0 的列
+        if (firstCol)
+            for (int i = 0; i < matrix.length; i++)
                 matrix[i][0] = 0;
-            }
-        }
-
     }
 }

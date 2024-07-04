@@ -2,26 +2,21 @@ package cn.buoy.leetcode.matrix;
 
 public class Q59 {
     /**
+     * 巨簡單, 比 54 還簡單. 視頻.
      * https://leetcode.com/problems/spiral-matrix-ii/discuss/22289/My-Super-Simple-Solution.-Can-be-used-for-both-Spiral-Matrix-I-and-II
      * https://www.youtube.com/watch?v=HItCSdGVFq4
-     * 和 54 没什么区别.
+     * 思路: 每走完一行/列, 修改限制(布爾諾難過走到之前的行/列). 因爲是正方形, 不需要 多餘的判斷邊界.
      */
     public int[][] generateMatrix(int n) {
-        // Declaration
         int[][] matrix = new int[n][n];
-
-        // Edge Case
-        if (n == 0) {
+        if (n == 0)
             return matrix;
-        }
-
-        // Normal Case
         int rowStart = 0;
         int rowEnd = n - 1;
         int colStart = 0;
         int colEnd = n - 1;
-        int num = 1; //change
-
+        // 從 1 開始填.
+        int num = 1;
         while (rowStart <= rowEnd && colStart <= colEnd) {
             for (int i = colStart; i <= colEnd; i++) {
                 matrix[rowStart][i] = num++; //change
@@ -45,7 +40,6 @@ public class Q59 {
             }
             colStart++;
         }
-
         return matrix;
     }
 }
