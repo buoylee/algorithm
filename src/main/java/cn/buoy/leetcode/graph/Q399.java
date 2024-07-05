@@ -5,6 +5,7 @@ import java.util.*;
 public class Q399 {
     /**
      * https://www.youtube.com/watch?v=u9LE_7apB38
+     * https://www.youtube.com/watch?v=berj4Xm_YTY 看這個短的
      * 簡單, 看視頻.
      * 思路: 当 有向带权图 处理, a / b = 2, b / c = 1 => a / c = 2;
      * a -> b -> c;
