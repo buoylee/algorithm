@@ -8,8 +8,8 @@ import java.util.List;
 public class Q380 {
     /**
      * https://www.youtube.com/watch?v=4neZY8NIylk
-     * list: I: 1; D: N; R: 1
-     * map : I: 1; D: 1; R: N
+     * 思路: 爲了在 insert remove 時, 查找階段, 操作 O(1), 需要找到 value 後, 找他的 index, 需要class內維護一個 HashMap(value, index).具體放大看註釋.
+     * 爲了 得到隨機數, 需要隨機index, 所以需要class內維護一個 List
      * <p>
      * map 保存 list 的 value:index, 用来 快速删除 list的 value, 为了random方便(直接取list size), 将要删除的元素, 与末尾元素交换 再删除.
      */
@@ -42,7 +42,7 @@ public class Q380 {
          * map先判断是否存在value, 存在则与末尾元素交换 再删除list末尾. map 删除对应value, 还要更新原末尾元素的index.
          */
         public boolean remove(int val) {
-            //需要删除的index
+            // 需要删除的index
             int ind = valToInd.getOrDefault(val, -1);
             if (ind == -1) return false;
             Collections.swap(list, ind, list.size() - 1);
