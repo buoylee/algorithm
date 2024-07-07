@@ -4,14 +4,53 @@ import java.util.*;
 
 public class Q218 {
     /**
-     * https://www.youtube.com/watch?v=tQiXaCT0ndE
-     * <p>
+     * 好理解, 視頻, 註釋.
      * https://www.youtube.com/watch?v=v5CMa5MUGCo
+     * 思路: 轉爲處理 List<位置 : 高度變化(+/-)> 的影射關係, 用pq來記錄 highest, 當 位置改變, highest 也改變時, 記錄 一點.
      */
-//    public List<int[]> getSkyline(int[][] buildings) {
     public List<List<Integer>> getSkyline(int[][] buildings) {
+        // 轉爲記錄 List<位置 : 高度變化> 影射關係
+        // 例: (start, end, height) => [start, -height], [end, height],
+        // 相同位置情況下, 小的排在前, 因爲高度上升下降用+/-符號區分, (實際上 'highter 的高度' 先進後出pq).
+        List<int[]> changingHeights = new ArrayList<>();
+        for (int[] b : buildings) {
+            changingHeights.add(new int[]{b[0], -b[2]});
+            changingHeights.add(new int[]{b[1], b[2]});
+        }
+        Collections.sort(changingHeights, (a, b) -> {
+            if (a[0] != b[0])
+                return a[0] - b[0];
+            return a[1] - b[1];
+        });
 
-        //各个building 开始结束 相关点的 map list.
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+        pq.offer(0);
+        int prevHighest = 0;
+        List<List<Integer>> result = new ArrayList<>();
+        for (int[] changingHeight : changingHeights) {
+            if (changingHeight[1] < 0) {
+                // 因爲 height 升高記錄爲負數.
+                pq.offer(-changingHeight[1]);
+            } else {
+                pq.remove(changingHeight[1]);
+            }
+            // 關鍵: 不要搞混了, 這個 Highest 是 當到達他的結束位才會pop出, 不是比之前的點.
+            int currHighest = pq.peek();
+            // 高度發生改變就會記錄
+            // 關鍵: 如果高的不是先進後出, 會導致這裏 相同位置 不同高度記錄2次.
+            if (prevHighest != currHighest) {
+                result.add(Arrays.asList(changingHeight[0], currHighest));
+                prevHighest = currHighest;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * https://www.youtube.com/watch?v=tQiXaCT0ndE
+     */
+    public List<List<Integer>> getSkyline2(int[][] buildings) {
+        //各个building 开始/结束 相关点的 map list.
         Map<Integer, List<int[]>> cps = new TreeMap<>(); // ordered by the critical points
         for (int[] b : buildings) {
             //给building 的左右边界 的点, 创建list存放相同的点的 build.
@@ -109,40 +148,5 @@ public class Q218 {
             }
         }
         return res;
-    }
-
-
-    //    public List<int[]> getSkyline2(int[][] buildings) {
-    public List<List<Integer>> getSkyline2(int[][] buildings) {
-
-//        List<int[]> result = new ArrayList<>();
-        List<List<Integer>> result = new ArrayList<>();
-        List<int[]> height = new ArrayList<>();
-        for (int[] b : buildings) {
-            height.add(new int[]{b[0], -b[2]});
-            height.add(new int[]{b[1], b[2]});
-        }
-        Collections.sort(height, (a, b) -> {
-            if (a[0] != b[0])
-                return a[0] - b[0];
-            return a[1] - b[1];
-        });
-        Queue<Integer> pq = new PriorityQueue<>((a, b) -> (b - a));
-        pq.offer(0);
-        int prev = 0;
-        for (int[] h : height) {
-            if (h[1] < 0) {
-                pq.offer(-h[1]);
-            } else {
-                pq.remove(h[1]);
-            }
-            int cur = pq.peek();
-            if (prev != cur) {
-//                result.add(new int[]{h[0], cur});
-                result.add(Arrays.asList(h[0], cur));
-                prev = cur;
-            }
-        }
-        return result;
     }
 }

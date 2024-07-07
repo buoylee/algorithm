@@ -4,7 +4,11 @@ import java.util.Stack;
 
 public class Q155 {
     /**
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=oE8zkEBNxN8
+     * 思路: 保存變量 min,
+     * 當遇到比當前 min 更小值時, 先把 min 再 push 一次, 然後 push 當前值, 更新 min.
+     * pop 同理, 如果 pop 出的數 就是 min, 那需要再 pop 一次, 然後 更新 min.
      */
     class MinStack {
         int min = Integer.MAX_VALUE;

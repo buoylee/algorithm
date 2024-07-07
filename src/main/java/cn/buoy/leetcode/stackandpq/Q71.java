@@ -3,8 +3,10 @@ package cn.buoy.leetcode.stackandpq;
 import java.util.*;
 
 /**
+ * 简单, 視頻
  * https://www.youtube.com/watch?v=SxuGQnlsXcw
- * 简单
+ * 思路: 用 / 分隔, 用 stack 存儲,
+ * 對 "..", ".", " " 加以判斷, 最後注意 res 空時, 返回 "/"
  */
 public class Q71 {
     public String simplifyPath(String path) {

@@ -4,40 +4,28 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 public class Q84 {
-    public static void main(String[] args) {
-        int[] ints = {3, 3, 3, 1};
-        Q84 q84 = new Q84();
-        int i = q84.largestRectangleArea(ints);
-    }
-
     /**
-     * https://leetcode.com/problems/largest-rectangle-in-histogram/discuss/28902/5ms-O(n)-Java-solution-explained-(beats-96)
-     */
-    // TODO: 2021/4/12
-
-    /**
+     * 視頻講的很好, 由暴力解法(每個柱往2邊延伸(要高於自己的高度), O(n^2))發想過來.
      * https://www.youtube.com/watch?v=XwUb7x6YDeA
+     * 思路: 如果數組遞增時, 入stack, 每當發現'當前高度'低於'前一個', 即找到了'前一個'的延伸範圍, 就可以得到 '前一個' 高度下的 '最大正方形'.
+     * 細節: 下邊的寫法會出現, 相同的高度連續入stack, 當pop時, 會計算多次同一高度, 但是無所謂, 越後pop的同高度的面積越大.
      */
-    public int largestRectangleArea(int[] a) {
+    public int largestRectangleArea(int[] heights) {
         LinkedList<Integer> stack = new LinkedList<>();
-//        Stack<Integer> stack = new Stack<>();
-
-        int max=0;
-
-        for (int i = 0; i <= a.length; i++) {
+        int max = 0;
+        // 關鍵: 當到達 heights.length(heights長度+1), 由於最後 heights 可能沒有遞減, 所以需要在遍歷完成後, 往前pop出所有stack ele.
+        for (int i = 0; i <= heights.length; i++) {
             // if we finished all elements OR the current element is less than top
-            while (!stack.isEmpty() && (i==a.length || a[stack.peek()]>a[i]) ){
-                int height = a[stack.pop()];
-                int width = (!stack.isEmpty()) ? i-stack.peek()-1 : i;
+            while (!stack.isEmpty() && (i == heights.length || heights[stack.peek()] > heights[i])) {
+                int height = heights[stack.pop()];
+                // 因爲不包含當前高度柱子, 需要多 -1.
+                int width = (!stack.isEmpty()) ? i - stack.peek() - 1 : i;
                 max = Math.max(max, height * width);
             }
-
             stack.push(i);
         }
-
         return max;
     }
-
 
 
     public int largestRectangleArea3(int[] heights) {
@@ -93,5 +81,15 @@ public class Q84 {
         }
 
         return maxArea;
+    }
+
+    /**
+     * https://leetcode.com/problems/largest-rectangle-in-histogram/discuss/28902/5ms-O(n)-Java-solution-explained-(beats-96)
+     */
+    // TODO: 2021/4/12
+    public static void main(String[] args) {
+        int[] ints = {3, 3, 3, 1};
+        Q84 q84 = new Q84();
+        int i = q84.largestRectangleArea(ints);
     }
 }

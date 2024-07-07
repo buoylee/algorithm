@@ -3,31 +3,32 @@ package cn.buoy.leetcode.stackandpq;
 import java.util.Stack;
 
 /**
+ * 简单, 視頻
  * https://www.youtube.com/watch?v=6FCyyrrtjp0
- * 简单.
- * 数字则入栈, 遇到运算符, 弹出2个运算, 在把结果入栈, 反复直到结束.
+ * 思路: stack. 数字则入栈, 遇到运算符, 栈內弹出2个數运算, 再把结果入栈, 反复直到结束.
  */
 public class Q150 {
     public int evalRPN(String[] tokens) {
-        int a, b;
-        Stack<Integer> S = new Stack<Integer>();
+        int num1, num2;
+        Stack<Integer> stack = new Stack<Integer>();
         for (String s : tokens) {
             if (s.equals("+")) {
-                S.add(S.pop() + S.pop());
+                stack.add(stack.pop() + stack.pop());
             } else if (s.equals("/")) {
-                b = S.pop();
-                a = S.pop();
-                S.add(a / b);
+                // 因爲 被除數 後pop出, 所以要暫存. 同理除法.
+                num2 = stack.pop();
+                num1 = stack.pop();
+                stack.add(num1 / num2);
             } else if (s.equals("*")) {
-                S.add(S.pop() * S.pop());
+                stack.add(stack.pop() * stack.pop());
             } else if (s.equals("-")) {
-                b = S.pop();
-                a = S.pop();
-                S.add(a - b);
+                num2 = stack.pop();
+                num1 = stack.pop();
+                stack.add(num1 - num2);
             } else {
-                S.add(Integer.parseInt(s));
+                stack.add(Integer.parseInt(s));
             }
         }
-        return S.pop();
+        return stack.pop();
     }
 }

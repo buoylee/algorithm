@@ -4,37 +4,29 @@ import java.util.*;
 
 public class Q347 {
     /**
-     * 这个比较清楚
-     *
-     * @param nums
-     * @param k
-     * @return
+     * 超簡單, 看個簡單的就好.
+     * https://www.youtube.com/watch?v=oYqTe_DQA34
+     * 桶排序, 先轉爲 map(value, fre), 再把 fre對應的數字 放到 fre == index 的 index中, 從後取結果就好.
      */
     public int[] topKFrequent(int[] nums, int k) {
-
         List<Integer>[] bucket = new List[nums.length + 1];
         Map<Integer, Integer> frequencyMap = new HashMap<Integer, Integer>();
-
         //都丢进去map 统计, 数字n : 有几个
-        for (int n : nums) {
+        for (int n : nums)
             frequencyMap.put(n, frequencyMap.getOrDefault(n, 0) + 1);
-        }
-
         for (int key : frequencyMap.keySet()) {
             int frequency = frequencyMap.get(key);
-            //按 频率 作为 index 插入 bucket, 值为 那个数字
+            //按 频率 == index 插入 對應的 數字.
             if (bucket[frequency] == null) {
                 bucket[frequency] = new ArrayList<>();
             }
             bucket[frequency].add(key);
         }
-
         List<Integer> res = new ArrayList<>();
         //从后到头 找k个
         for (int pos = bucket.length - 1; pos >= 0 && res.size() < k; pos--) {
-            if (bucket[pos] != null) {
+            if (bucket[pos] != null)
                 res.addAll(bucket[pos]);
-            }
         }
 //        return res;
         int[] rr = new int[res.size()];
