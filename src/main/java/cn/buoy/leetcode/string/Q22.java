@@ -5,30 +5,28 @@ import java.util.List;
 
 public class Q22 {
     /**
+     * 简单, 視頻, 代碼, 沒有 backtracking, 只是 dfs.
      * https://www.youtube.com/watch?v=ptYZDPk2bOg
-     * 简单
-     *
-     * @param n
-     * @return
+     * 思路: 只有 剩餘的左括號 少於 右括號, 才可以使用 右括號.
      */
     public List<String> generateParenthesis(int n) {
-        List<String> list = new ArrayList<String>();
-        backtrack(list, "", n, n);
-        return list;
+        List<String> result = new ArrayList<String>();
+        dfs(result, "", n, n);
+        return result;
     }
 
-    public void backtrack(List<String> list, String str, int open, int close) {
+    // 關鍵: left 表示 剩餘的左括號
+    // 關鍵: right 表示 剩餘的右括號
+    public void dfs(List<String> list, String temp, int left, int right) {
         //都用完则退出
-        if (open == 0 && close == 0) {
-            list.add(str);
+        if (left == 0 && right == 0) {
+            list.add(temp);
             return;
         }
-
-        //只要 左没用完 都没用
-        if (open > 0)
-            backtrack(list, str + "(", open - 1, close);
-        //只要 左小于右 都可以用
-        if (open < close)
-            backtrack(list, str + ")", open, close - 1);
+        if (left > 0)
+            dfs(list, temp + "(", left - 1, right);
+        //只要 剩餘的左括號 少於 右括號, 就可以使用 右括號
+        if (left < right)
+            dfs(list, temp + ")", left, right - 1);
     }
 }

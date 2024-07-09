@@ -2,44 +2,55 @@ package cn.buoy.leetcode.string;
 
 public class Q248 {
     /**
+     * 直接看题目, 看注释, 是好理解的. 可以不看视频. yt 目前找不到好的.
      * https://www.youtube.com/watch?v=-4q6HsR5zzg
-     * 实现不一样, 和视频
+     * 思路: 从外层到内(因为最外层不能是0开头, 这样思考比较直观), 构建 合法的 180旋转后 相同的数字.
+     * 除了0开头, 还有考虑 中位数的 digit 的选择, (只能是 0, 1, 8)
      */
     private static final char[][] pairs = {{'0', '0'}, {'1', '1'}, {'6', '9'}, {'8', '8'}, {'9', '6'}};
 
     public int strobogrammaticInRange(String low, String high) {
         int[] count = {0};
-        for (int len = low.length(); len <= high.length(); len++) {
-            char[] c = new char[len];
-            dfs(low, high, c, 0, len - 1, count);
+        // 开始(low.length()) 和 结束(high.length()) 都是 具体数字的"位数"
+        for (int numStrLen = low.length(); numStrLen <= high.length(); numStrLen++) {
+            char[] c = new char[numStrLen];
+            // 因为用的 array 来表示 数的str, 所以 末尾 numStrLen - 1 表示.
+            dfs(low, high, c, 0, numStrLen - 1, count);
         }
         return count[0];
     }
 
-    //由外到内 去 填充 合适的数字, 到最深时, 完成填充, 进行判断.
-    public void dfs(String low, String high, char[] c, int left, int right, int[] count) {
+    /**
+     * @param lowNum  题目最小值
+     * @param highNum 题目最大值
+     * @param charArr "题目最小值 到 题目最大值" 范围内的数字的 "位数" 作为 "char[].length" 的 array
+     * @param left    当前需要填充的 左index
+     * @param right   当前需要填充的 右index
+     * @param count
+     */
+    public void dfs(String lowNum, String highNum, char[] charArr, int left, int right, int[] count) {
         if (left > right) {
-            String s = new String(c);
-            if ((s.length() == low.length() && s.compareTo(low) < 0) ||
-                    (s.length() == high.length() && s.compareTo(high) > 0)) {
+            String s = new String(charArr);
+            // 意义: 当前数字 不能 超过 lowNum <= x <= highNum 题目的范围
+            // 下边的写法是表示: string 表示的"相同位数的数字" 比较大小的方法
+            if ((s.length() == lowNum.length() && s.compareTo(lowNum) < 0) ||
+                    (s.length() == highNum.length() && s.compareTo(highNum) > 0)) {
                 return;
             }
             count[0]++;
             return;
         }
+        // "由外层到内" 填充合适的 pair, 到中位数为止.
         for (char[] p : pairs) {
-            c[left] = p[0];
-            c[right] = p[1];
-            //跳过不合法的拼写 首个数字为0, 且c不止1位的数字.
-            if (c.length != 1 && c[0] == '0') {
+            charArr[left] = p[0];
+            charArr[right] = p[1];
+            // 跳过不合法的组合, 这个组合的第一个digit为0, 且不是"只有个位数"的数字. 例如: "05", "073"; 因为, 只有个位数的 "0" 是合法的.
+            if (charArr.length != 1 && charArr[0] == '0')
                 continue;
-            }
-            //跳过 1个中位数 的位置
-            //最后将不会统计这些不是数字的组合.
-            if (left == right && p[0] != p[1]) {
+            // 跳过不合法的组合, 有2种情况(同一个位置不可能出现2种digit(6, 9; 9, 6)), 1. 中位数; 2. 只有"个位"的数. 他们的 pair 必须是相同的数(0, 1, 8)中选一个.
+            if (left == right && p[0] != p[1])
                 continue;
-            }
-            dfs(low, high, c, left + 1, right - 1, count);
+            dfs(lowNum, highNum, charArr, left + 1, right - 1, count);
         }
     }
 

@@ -2,31 +2,39 @@ package cn.buoy.leetcode.string;
 
 public class Q5 {
     /**
+     * 簡單, 視頻, 代碼
      * https://www.youtube.com/watch?v=QhFkiwPLvHg&t=279s
-     * 一般递归, 时空都不错, 还简单
+     * 思路: 2種情況.
+     * 1. 奇數, i 往左右2邊延伸, 保持相同字母.
+     * 2. 偶數, i往左 和 i+1往右延伸, 保持相同字母.
      */
-    private int lo, maxLen;
+    // 最大長度
+    private int maxLen;
+    // 最大長度時的, 左邊界
+    private int maxLenLeft;
 
     public String longestPalindrome(String s) {
-        int len = s.length();
-        if (len < 2)
-            return s;
-
-        for (int i = 0; i < len - 1; i++) {
+//        int len = s.length();
+//        if (len < 2)
+//            return s;
+        for (int i = 0; i < s.length(); i++) {
+            //奇 偶 情況遞歸
             extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
             extendPalindrome(s, i, i + 1); //assume even length.
         }
-        return s.substring(lo, lo + maxLen);
+        return s.substring(maxLenLeft, maxLenLeft + maxLen);
     }
 
-    private void extendPalindrome(String s, int j, int k) {
-        while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
-            j--;
-            k++;
-        }
-        if (maxLen < k - j - 1) {
-            lo = j + 1;
-            maxLen = k - j - 1;
+    private void extendPalindrome(String s, int left, int right) {
+        // 左右延伸
+        while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+            // 出現 更大的 maxLen時, 更新 maxLen 和 maxLenLeft
+            if (right - left + 1 > maxLen) {
+                maxLen = right - left + 1;
+                maxLenLeft = left;
+            }
+            left--;
+            right++;
         }
     }
 

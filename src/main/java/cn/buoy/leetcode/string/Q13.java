@@ -2,10 +2,12 @@ package cn.buoy.leetcode.string;
 
 public class Q13 {
     /**
+     * 簡單, 背, 跳過
      * https://www.youtube.com/watch?v=07W3b5SxeQ8
      */
     public int romanToInt(String s) {
         int sum = 0;
+        // 爲什麼不是 -= 1; 因爲先逐字母統計了 sum, 即 I + V = 1 + 5 = 6, 但實際是 5 - 1 = 4, 所以是 -2.
         if (s.indexOf("IV") != -1) sum -= 2;
         if (s.indexOf("IX") != -1) sum -= 2;
         if (s.indexOf("XL") != -1) sum -= 20;

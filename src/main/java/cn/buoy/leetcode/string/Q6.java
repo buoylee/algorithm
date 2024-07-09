@@ -1,23 +1,38 @@
 package cn.buoy.leetcode.string;
 
 public class Q6 {
+    /**
+     * 超簡單, 視頻, 代碼
+     * https://www.youtube.com/watch?v=y67AxS__8XE
+     * 思路: 不用想太多, 不要給圖搞混, 其實就是 '上到下, 然後下到上'放置字符.
+     */
     public String convert(String s, int numRows) {
-        if (numRows <= 1) return s;
-        //有几行, 初始化几行
+        // 構建 n 行 StringBuilder.
         StringBuilder[] sbs = new StringBuilder[numRows];
-        for (int i = 0; i < sbs.length; i++) sbs[i] = new StringBuilder();
-        int idx = 0;
-        int direction = -1;
-        char[] chars = s.toCharArray();
-        for (char c : chars) {
-            //先append, 如果到头, 转向, 再++;
-            //一开始是0, 向下(++ 1), 到numRows - 1, 向上(++ -1).
-            sbs[idx].append(c);
-            if (idx == 0 || idx == numRows - 1) direction = 0 - direction;
-            idx += direction;
+        for (int i = 0; i < numRows; i++)
+            sbs[i] = new StringBuilder();
+        // 初始 str index.
+        int i = 0;
+        while (i < s.length()) {
+            // 从上到下
+            int rowIndex = 0;
+            while (i < s.length() && rowIndex <= numRows - 1) {
+                sbs[rowIndex].append(s.charAt(i));
+                i++;
+                rowIndex++;
+            }
+            // 細節: 回頭時, 需要跳2步, 超出 s.length - 1 一步(因爲上個while最後多一個i++), s.length - 1 一步.
+            rowIndex -= 2;
+            // 回頭
+            while (i < s.length() && rowIndex >= 1) {
+                sbs[rowIndex].append(s.charAt(i));
+                i++;
+                rowIndex--;
+            }
         }
-        StringBuilder res = new StringBuilder();
-        for (StringBuilder sb : sbs) res.append(sb);
-        return res.toString();
+        // result: append 每一行str
+        for (int j = 1; j < numRows; j++)
+            sbs[0].append(sbs[j].toString());
+        return sbs[0].toString();
     }
 }

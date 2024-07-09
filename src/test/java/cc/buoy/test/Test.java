@@ -55,12 +55,12 @@ public class Test {
 //        System.out.println(Math.random());
 //        System.out.println((int)(0.5D* 5));
 //        System.out.println((0.5D* 5));
-        Deque<Integer> q = new ArrayDeque<>();
-        q.offer(1);
-        q.offer(2);
-        q.offer(3);
-        q.offer(4);
-        System.out.println(q.toString());
+//        Deque<Integer> q = new ArrayDeque<>();
+//        q.offer(1);
+//        q.offer(2);
+//        q.offer(3);
+//        q.offer(4);
+//        System.out.println(q.toString());
 //        q.poll();
 //        q.pop();
 //        q.pollFirst();
@@ -71,7 +71,8 @@ public class Test {
 //        System.out.println(q.toString());
 //        System.out.println(q.toString());
 
-
+        int i = "9".compareTo("133");
+        System.out.println(i);
     }
 
 }

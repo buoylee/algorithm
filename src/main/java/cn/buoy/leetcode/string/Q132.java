@@ -2,28 +2,35 @@ package cn.buoy.leetcode.string;
 
 public class Q132 {
     /**
+     * 看懂思路就簡單, 視頻, 註釋.
      * https://www.youtube.com/watch?v=kTCymFbU2ok&t=7s
-     * 不知道怎么想到的. 这种遍历顺序.
+     * 思路: dp[i] 表示 從 index 0~i 需要切多少次, 才能使所有 substr 都是迴文.
+     * 在確定 index low~high 是迴文的前提下, dp[high] = dp[low - 1] + 1
      */
     public static int minCut(String str) {
         if (str.isEmpty()) return 0;
         int len = str.length();
+        // dp[i] 表示 從 index 0~i 需要切多少次, 才能使 substr 都是迴文.
         int[] dp = new int[len];
+        // isPal[i][j] 表示 index i~j 是否是迴文. 爲了提高速度做的記憶化.
         boolean[][] isPal = new boolean[len][len];
-
-        //关键, 从头开始找dp[i], 后边的dp 依赖 前边的dp
-        for (int hi = 0; hi < str.length(); hi++) {
-            dp[hi] = hi;
-            isPal[hi][hi] = true;
+        // 關鍵: high 從 0~len遍歷, low 在 0~high 之間的點, 保證 low~high 之間爲迴文時, 可知  dp[high] = dp[low - 1] + 1
+        // low 表示迴文 左邊界; high 表示迴文 右邊界
+        for (int high = 0; high < str.length(); high++) {
+            dp[high] = high;
+            isPal[high][high] = true;
             //检查后半段是否为回文,
-            for (int lo = 0; lo <= hi; lo++) {
-                //只要lo == hi, 且( lo, hi是邻接点, 或者是相同点, 或, lo, hi 的内一层也是回文的话.
-                if (str.charAt(lo) == str.charAt(hi) && (hi - lo <= 1 || isPal[lo + 1][hi - 1])) {
-                    isPal[lo][hi] = true;
-                    //如果lo等于0 就是dp[hi], 一刀都不用切
-                    if (lo == 0) dp[hi] = 0;
-                        //如果lo不是0, 那就是在 lo-1 和 lo 之间 切一刀即可, 就是 dp[lo - 1] + 1
-                    else dp[hi] = Math.min(dp[lo - 1] + 1, dp[hi]);
+            for (int low = 0; low <= high; low++) {
+                // 判斷是否 low, high 間 是否是迴文.
+                if (str.charAt(low) == str.charAt(high) // 當前位於 low, high 位置 的 value 是否相同
+                        && (high - low <= 1 // 最內層, high - low < 1 表示 奇數迴文; high - low == 1 表示 偶數迴文.
+                        || isPal[low + 1][high - 1])) { // low, high 向內一層 是否是迴文.
+                    isPal[low][high] = true;
+                    //如果 low 等于0 就是 0~high 是迴文, 即 dp[high]
+                    if (low == 0)
+                        dp[high] = 0;
+                    else //如果 low 不是0, 需要分成 0~low-1 和 low~high(迴文), 則 dp[high] 就是 dp[low - 1] + 1
+                        dp[high] = Math.min(dp[low - 1] + 1, dp[high]);
                 }
             }
         }

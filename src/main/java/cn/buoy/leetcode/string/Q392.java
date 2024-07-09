@@ -3,11 +3,8 @@ package cn.buoy.leetcode.string;
 public class Q392 {
     /**
      * https://www.youtube.com/watch?v=LVablZAfKhI
-     * 简单解法: 按顺序找每个substr字母, 长str沿着往下找, 直到, str找到 或 到 长str结尾.
-     *
-     * @param s
-     * @param t
-     * @return
+     * https://www.youtube.com/watch?v=6tldFGiSxyE 短
+     * 简单解法: 短 str 一個個 char 在 長 str 中 往下找.
      */
     public boolean isSubsequence(String s, String t) {
         if (s.length() == 0) return true;
@@ -15,7 +12,8 @@ public class Q392 {
         while (indexT < t.length()) {
             if (t.charAt(indexT) == s.charAt(indexS)) {
                 indexS++;
-                if (indexS == s.length()) return true;
+                if (indexS == s.length())
+                    return true;
             }
             indexT++;
         }

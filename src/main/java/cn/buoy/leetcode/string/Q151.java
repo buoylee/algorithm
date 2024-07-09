@@ -1,9 +1,58 @@
 package cn.buoy.leetcode.string;
 
-public class Q151 {
-    public String reverseWords(String s) {
-        if (s == null) return null;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
+public class Q151 {
+    /**
+     * 簡單, 視頻, 代碼
+     * https://www.youtube.com/watch?v=J_gwr2llhBw
+     * 用 s.trim().split("\\s+") 提取出 所有 word
+     */
+    public String reverseWords(String s) {
+        // 提取出 所有 word
+        String[] words = s.trim().split("\\s+");
+        StringBuilder result = new StringBuilder();
+        // 從後往前 append word
+        for (int i = words.length - 1; i >= 0; i--) {
+            result.append(words[i]);
+            // 最後一個 word 不用補 " "
+            if (i != 0)
+                result.append(" ");
+        }
+        return result.toString();
+    }
+
+    /**
+     * 這個方法也行, 不用正則. stack.
+     */
+    public String reverseWords2(String s) {
+        int left = 0, right = s.length() - 1;
+        // Remove leading and trailing spaces
+        while (left <= right && s.charAt(left) == ' ') left++;
+        while (left <= right && s.charAt(right) == ' ') right--;
+        Deque<String> stack = new ArrayDeque<>();
+        StringBuilder word = new StringBuilder();
+        // Push words into stack
+        while (left <= right) {
+            char c = s.charAt(left);
+            // 遇到 ' ', 就把 word 放入 stack
+            if (c == ' ' && word.length() != 0) {
+                stack.offerFirst(word.toString());
+                word.setLength(0);
+            } else if (c != ' ')
+                word.append(c);
+            // 單純用作 for 遍歷 i 一樣.
+            left++;
+        }
+        // 最後一個word, 因爲之前 trim 掉了 首位空格, 需要手動再 push 一次.
+        stack.offerFirst(word.toString());
+        return String.join(" ", stack);
+    }
+
+    // 太長, 跳過
+    public String reverseWords3(String s) {
+        if (s == null) return null;
         char[] a = s.toCharArray();
         int n = a.length;
 

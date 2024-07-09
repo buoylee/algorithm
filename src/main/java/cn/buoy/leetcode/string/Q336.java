@@ -4,64 +4,60 @@ import java.util.*;
 
 public class Q336 {
     /**
+     * 有2种解法: 1. 切分找 reverse; 2. trie解法;
+     * 解法一可以選擇不看視頻. 解法一有空再看
+     * <p>
+     * 這個解法, 容易理解, 直观, 好实现. 可以直接看題目, 代碼.
      * https://www.youtube.com/watch?v=P5-bM5g4m5Q
-     * 有2种解法:
-     * 1. map<value, index>, 方便查找和时候同一元素.
-     * 2种情况, 如果是 有"", 只要另一个是回文即可; 长短 str, 按照 拼接顺序, 去掉头 尾开始, 剩下是回文即可.
-     */
-    /**
-     * 直观, 好实现.
-     *
-     * @param words
-     * @return
+     * 1. word 任意切爲2段 , 如果其中一段是迴文, 只要 另一段的 reverse 存在於 words 中, 就可以組成迴文.
+     * 要分別尋找 前/後 的 reverse, 因爲存在組成時 2個 word 的"先後關係", 例如 1. ccba, ab; 2. bacc, ab
      */
     public List<List<Integer>> palindromePairs(String[] words) {
-        List<List<Integer>> ret = new ArrayList<>();
-        if (words == null || words.length < 2) return ret;
+        List<List<Integer>> result = new ArrayList<>();
+        if (words == null || words.length < 2) return result;
         Map<String, Integer> map = new HashMap<String, Integer>();
-        //放map 好找
-        for (int i = 0; i < words.length; i++) map.put(words[i], i);
-        //遍历每个元素
+        // 方便查詢 index
+        for (int i = 0; i < words.length; i++)
+            map.put(words[i], i);
         for (int i = 0; i < words.length; i++) {
-            // System.out.println(words[i]);
-            //切2半,或不切
+            // 關鍵:
             for (int j = 0; j <= words[i].length(); j++) { // notice it should be "j <= words[i].length()"
-                String str1 = words[i].substring(0, j);
-                String str2 = words[i].substring(j);
-                //前半部是回文的话, 找map中是否存在 后半部的rvs 即可.
-                if (isPalindrome(str1)) {
-                    String str2rvs = new StringBuilder(str2).reverse().toString();
-                    if (map.containsKey(str2rvs) && map.get(str2rvs) != i) {
+                String firstPart = words[i].substring(0, j);
+                String secondPart = words[i].substring(j);
+                // firstPart 是回文的话, 就要找到 最終組合的 左半邊(secondPart 的 reverse)
+                if (isPalindrome(firstPart)) {
+                    String rvsSecondPart = new StringBuilder(secondPart).reverse().toString();
+                    if (map.containsKey(rvsSecondPart)
+                            && map.get(rvsSecondPart) != i) { // 細節: 如果 word 是 "", 不能重複使用 "", 組成迴文
                         List<Integer> list = new ArrayList<Integer>();
-                        list.add(map.get(str2rvs));
+                        list.add(map.get(rvsSecondPart));
                         list.add(i);
-                        ret.add(list);
-                        // System.out.printf("isPal(str1): %s\n", list.toString());
+                        result.add(list);
                     }
                 }
-                //后半部是回文的话, 找map中是否存在 前半部的rvs 即可.
-                if (isPalindrome(str2)) {
-                    String str1rvs = new StringBuilder(str1).reverse().toString();
-                    // check "str.length() != 0" to avoid duplicates
-                    if (map.containsKey(str1rvs) && map.get(str1rvs) != i && str2.length() != 0) {
+                // secondPart 是回文的话, 就要找到 最終組合的 右半邊(firstPart 的 reverse)
+                if (isPalindrome(secondPart)) {
+                    String rvsFirstPart = new StringBuilder(firstPart).reverse().toString();
+                    // 不能重複使用 word
+                    if (map.containsKey(rvsFirstPart)
+                            && map.get(rvsFirstPart) != i
+                            && secondPart.length() != 0) { // 細節: 去重; 例如: "", "xxx"(任意str) 配對
                         List<Integer> list = new ArrayList<Integer>();
                         list.add(i);
-                        list.add(map.get(str1rvs));
-                        ret.add(list);
-                        // System.out.printf("isPal(str2): %s\n", list.toString());
+                        list.add(map.get(rvsFirstPart));
+                        result.add(list);
                     }
                 }
             }
         }
-        return ret;
+        return result;
     }
 
     private boolean isPalindrome(String str) {
         int left = 0;
         int right = str.length() - 1;
-        while (left <= right) {
+        while (left <= right)
             if (str.charAt(left++) != str.charAt(right--)) return false;
-        }
         return true;
     }
 

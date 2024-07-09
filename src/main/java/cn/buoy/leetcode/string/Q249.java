@@ -4,40 +4,39 @@ import java.util.*;
 
 public class Q249 {
     /**
+     * 简单, 视频, 注释
      * https://www.youtube.com/watch?v=Im-isYiYqDk
-     * 思路是讲 所有的 string 的第一个字母 都转为a开头的序列, 如果转化后的序列相同, 则加入该arr中.
-     *
-     * @param strings
-     * @return
+     * 思路: 所有的原 str 都统一转为 "a 开头" 的相同偏移的 str, 如果转化后 str 相同的话, 则加入该分组中.
      */
     public List<List<String>> groupStrings(String[] strings) {
-        List<List<String>> result = new ArrayList<List<String>>();
         Map<String, List<String>> map = new HashMap<String, List<String>>();
         for (String str : strings) {
-            //算出原string 与 转化后的 差值.
-            int offset = str.charAt(0) - 'a';
-            String key = "";
-            //求助转化后的序列
-            for (int i = 0; i < str.length(); i++) {
-                char c = (char) (str.charAt(i) - offset);
-                if (c < 'a') {
-                    c += 26;
-                }
-                key += c;
-            }
-            //转化后的值作为map的key
-            if (!map.containsKey(key)) {
-                List<String> list = new ArrayList<String>();
-                map.put(key, list);
-            }
-            map.get(key).add(str);
+            // 转统一化成 "a 开头" 的相同偏移的 str
+            String shiftedKey = getShiftedKey(str);
+            map.putIfAbsent(shiftedKey, new ArrayList<>());
+            // 转化后的值作为map的key
+            map.get(shiftedKey).add(str);
         }
-        //丢到list返回
-        for (String key : map.keySet()) {
-            List<String> list = map.get(key);
-            Collections.sort(list);
-            result.add(list);
+        //map.values 放入 list 返回
+        return new ArrayList<>(map.values());
+    }
+
+    /**
+     * 转化后的 str 用作 map 的 key
+     */
+    private String getShiftedKey(String str) {
+        char[] chars = str.toCharArray();
+        StringBuilder key = new StringBuilder();
+        // 计算出以 str 第一个 letter 相对于 'a' 的偏移. 转化 后续所有 letter
+        int offset = chars[0] - 'a';
+        // 转化 str 的所有 char
+        for (char c : chars) {
+            char shiftedChar = (char) (c - offset);
+            // 例如: 原 char ==  'b', 需要偏移 -5, 那 shiftedChar 就是 负数了, 需要转为 合法的 letter char(+= 26)(等于 a~z 转了一圈).
+            if (shiftedChar < 'a')
+                shiftedChar += 26;
+            key.append(shiftedChar);
         }
-        return result;
+        return key.toString();
     }
 }

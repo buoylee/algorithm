@@ -2,6 +2,36 @@ package cn.buoy.leetcode.string;
 
 public class Q214 {
     /**
+     * https://www.youtube.com/watch?v=aQ-Y51n6SD0
+     * 思路:
+     * 例如: a a b c a d
+     * 1. 檢查 本身是不是迴文.
+     * 2. 檢查 head 只加 1個字母能不能構成 迴文.   x (a a b c  a) d
+     * 3. 檢查 head 只加 2個字母能不能構成 迴文. y x (a a b c) a  d
+     * ...
+     * 所以, 能看出, 就是不斷檢查 "()" 內 str, 是否是 迴文,
+     * 如果都不是迴文, 最後會在 第一個 'a' 作爲中點組成的 迴文.  x4 x3 x2 x1 (a) a b c a d;  x1-x4 就是 第一個 'a' 後邊的 char.
+     */
+    public String shortestPalindrome2(String s) {
+        int left = 0, right = s.length() - 1;
+        // 表示 迴文 末尾 可能的index. 這個點之後, 就是需要補元素在 s 頭部的 rev(str).
+        // 例如 [a a(這個就是 paliEnd) b c], 我們只需要補 c b 在頭部, 即 [c b a a b c]
+        int paliEnd = s.length() - 1;
+        while (left < right) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+                right--;
+            } else {
+                left = 0;
+                paliEnd--;
+                right = paliEnd;
+            }
+        }
+        return new StringBuilder(s.substring(paliEnd + 1)).reverse().toString() + s;
+    }
+
+    /**
+     * 有空來看
      * KMP算法:
      * https://www.youtube.com/watch?v=dgPabAsTFa8&t=915s
      * https://www.youtube.com/watch?v=3IFxpozBs2I
