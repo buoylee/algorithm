@@ -9,10 +9,10 @@ public class Q316 {
      * https://www.youtube.com/watch?v=-zmul9EyKng 思路具體清晰
      * 思路: 如果要滿足最小字典序, 需要每當發現 "當前 letter" 比 "棧頂 letter" 的字母序小, 且 "棧頂 letter" 還會在 "當前 letter" 後續出現, 則可以拋棄. 直到最後, 把 "當前 letter" 入棧, 繼續檢查 下一個 letter.
      */
-    public String removeDuplicateLetters(String sr) {
+    public String removeDuplicateLetters(String str) {
         int[] letterFreq = new int[26]; //will contain number of occurences of character (i+'a')
         boolean[] visited = new boolean[26]; //will contain if character (i+'a') is present in current result Stack
-        char[] charArr = sr.toCharArray();
+        char[] charArr = str.toCharArray();
         //count number of occurences of character
         for (char c : charArr)
             letterFreq[c - 'a']++;
@@ -92,7 +92,6 @@ public class Q316 {
     }
 
     private int findMinLastPos(HashMap<Character, Integer> map) {
-        this.map = map;
         int res = Integer.MAX_VALUE;
         for (int num : map.values()) {
             res = Math.min(res, num);
