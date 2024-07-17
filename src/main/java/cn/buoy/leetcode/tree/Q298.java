@@ -3,23 +3,29 @@ package cn.buoy.leetcode.tree;
 import cn.buoy.leetcode.TreeNode;
 
 public class Q298 {
+    /**
+     * 簡單, 視頻
+     * https://www.youtube.com/watch?v=jF7X1DFUHnI
+     * 思路: dfs, 一路驗證 "連續數" 到 node == null, 更新 max.
+     */
     private int max = 0;
 
     public int longestConsecutive(TreeNode root) {
         if (root == null) return 0;
-        helper(root, 0, root.val);
+        dfs(root, 0, root.val);
         return max;
     }
 
-    public void helper(TreeNode root, int cur, int target) {
-        //到底回头
+    public void dfs(TreeNode root, int actualNum, int target) {
+        // 到葉子節點
         if (root == null) return;
-        //如果 本值 与 父节点 + 1 相等, 说明是相连, ++
-        if (root.val == target) cur++;
-        //没到底, 又不连续, 则 回1重新统计.
-        else cur = 1;
-        max = Math.max(cur, max);
-        helper(root.left, cur, root.val + 1);
-        helper(root.right, cur, root.val + 1);
+        //如果 實際值 == target 相等, 就是相连, 然後 actualNum++ 提供給 "下一層dfs"
+        if (root.val == target)
+            actualNum++;
+        else // 没到底, 又不连续, 成爲起點.
+            actualNum = 1;
+        max = Math.max(actualNum, max);
+        dfs(root.left, actualNum, root.val + 1);
+        dfs(root.right, actualNum, root.val + 1);
     }
 }

@@ -8,32 +8,29 @@ import java.util.Queue;
 
 public class Q107 {
     /**
-     * BFS
-     *
-     * @param root
-     * @return
+     * 真的弱智. 可以跳過.
+     * https://www.youtube.com/watch?v=hDBBj8ijJm8
+     * 思路: 典型 bfs
      */
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
-        Queue<TreeNode> queue = new LinkedList<TreeNode>();
-        List<List<Integer>> wrapList = new LinkedList<List<Integer>>();
-
-        if (root == null) return wrapList;
-
+        Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> result = new LinkedList<List<Integer>>();
+        if (root == null) return result;
         queue.offer(root);
         while (!queue.isEmpty()) {
-            //关键: levelNum 就是该层 node个数, 也是接下来需要 弹出的个数.
-            int levelNum = queue.size();
-            List<Integer> subList = new LinkedList<Integer>();
-            for (int i = 0; i < levelNum; i++) {
-                if (queue.peek().left != null) queue.offer(queue.peek().left);
-                if (queue.peek().right != null) queue.offer(queue.peek().right);
-                subList.add(queue.poll().val);
+            //关键: levelSize 就是该层 node 个数, 也是接下来需要 弹出的个数.
+            int levelSize = queue.size();
+            List<Integer> currList = new LinkedList<Integer>();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode curr = queue.poll();
+                if (curr.left != null) queue.offer(curr.left);
+                if (curr.right != null) queue.offer(curr.right);
+                currList.add(curr.val);
             }
-            wrapList.add(0, subList);
+            result.add(0, currList);
         }
-        return wrapList;
+        return result;
     }
-
 
     /**
      * DFS

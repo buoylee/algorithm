@@ -5,11 +5,9 @@ import cn.buoy.leetcode.TreeNode;
 
 public class Q109 {
     /**
+     * 弱智, 108題 + "linklist 找中點", 視頻
      * https://www.youtube.com/watch?v=aH0rBLZLr2E
-     * 和前边做过的题很像, 快慢指针
-     *
-     * @param head
-     * @return
+     * 思路: linklist 找中點, 108題
      */
     public TreeNode sortedListToBST(ListNode head) {
         if (head == null) return null;
@@ -20,7 +18,6 @@ public class Q109 {
         ListNode slow = head;
         ListNode fast = head;
         if (head == tail) return null;
-
         while (fast != tail && fast.next != tail) {
             fast = fast.next.next;
             slow = slow.next;

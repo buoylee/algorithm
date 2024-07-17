@@ -6,11 +6,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Q257 {
-
     /**
-     * 都是DFS, 用StringBuilder效率更高
+     * 簡單, 視頻
+     * https://www.youtube.com/watch?v=hKeDLTcTZEs
+     * 思路: 典型 前序遍歷"curr + root.val".
      */
     public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        if (root == null) return res;
+        helper(res, root, "");
+        return res;
+    }
+
+    private void helper(List<String> res, TreeNode root, String curr) {
+        // 細節: 這裏是爲了, 省略 下邊 dfs 時, root.left 和 root.right 的 != null 判斷.
+        if (root == null) return;
+        // 到達 葉子節點
+        if (root.left == null && root.right == null) {
+            res.add(curr + root.val);
+            return;
+        }
+        helper(res, root.left, curr + root.val + "->");
+        helper(res, root.right, curr + root.val + "->");
+    }
+
+    public List<String> binaryTreePaths2(TreeNode root) {
         List<String> res = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         helper(res, root, sb);
@@ -34,7 +54,7 @@ public class Q257 {
         sb.setLength(len);
     }
 
-    public List<String> binaryTreePaths2(TreeNode root) {
+    public List<String> binaryTreePaths3(TreeNode root) {
         List<String> answer = new ArrayList<String>();
         if (root != null) searchBT(root, "", answer);
         return answer;

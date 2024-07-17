@@ -8,10 +8,21 @@ import java.util.Stack;
 
 public class Q144 {
     /**
-     * 迭代
-     *
-     * @param node
-     * @return
+     * 簡單
+     * https://www.youtube.com/watch?v=-1K0x0QY33Q
+     * 思路: 典型 preorder 递归
+     */
+    public List<Integer> preorderTraversal2(TreeNode root) {
+        List<Integer> result = new LinkedList<Integer>();
+        if (root == null) return result;
+        result.add(root.val);
+        result.addAll(preorderTraversal(root.left));
+        result.addAll(preorderTraversal(root.right));
+        return result;
+    }
+
+    /**
+     * stack 迭代
      */
     public List<Integer> preorderTraversal(TreeNode node) {
         List<Integer> list = new LinkedList<>();
@@ -31,25 +42,7 @@ public class Q144 {
     }
 
     /**
-     * 递归
-     *
-     * @param root
-     * @return
-     */
-    public List<Integer> preorderTraversal2(TreeNode root) {
-        List<Integer> pre = new LinkedList<Integer>();
-        if (root == null) return pre;
-        pre.add(root.val);
-        pre.addAll(preorderTraversal(root.left));
-        pre.addAll(preorderTraversal(root.right));
-        return pre;
-    }
-
-    /**
      * 递归2
-     *
-     * @param root
-     * @return
      */
     public List<Integer> preorderTraversal3(TreeNode root) {
         List<Integer> pre = new LinkedList<Integer>();
@@ -66,9 +59,6 @@ public class Q144 {
 
     /**
      * 迭代2
-     *
-     * @param root
-     * @return
      */
     public List<Integer> preorderTraversal4(TreeNode root) {
         List<Integer> pre = new LinkedList<Integer>();
@@ -83,5 +73,4 @@ public class Q144 {
         }
         return pre;
     }
-
 }
