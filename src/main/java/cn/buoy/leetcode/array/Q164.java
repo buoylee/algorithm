@@ -3,20 +3,61 @@ package cn.buoy.leetcode.array;
 import java.util.Arrays;
 
 public class Q164 {
-    public static void main(String[] args) {
-        int[] nums = {3, 6, 9, 1};
+    /**
+     * 懂如何求桶排序 大小 與 個數, 就簡單, 視頻很好
+     * https://www.youtube.com/watch?v=qN0qvtFbCYw
+     * 思路: 桶排序後, 後 min - 前 max, 得出 "最大 gap"
+     */
+    public int maximumGap(int[] nums) {
+        if (nums == null || nums.length < 2) return 0;
 
-        Q164 q164 = new Q164();
-        q164.maximumGap(nums);
-
+        // 爲了求 bucketSize, bucketCount 必須的數據
+//        int min = Arrays.stream(nums).min().getAsInt();
+//        int max = Arrays.stream(nums).max().getAsInt();
+        int min = nums[0];
+        int max = nums[0];
+        for (int i : nums) {
+            min = Math.min(min, i);
+            max = Math.max(max, i);
+        }
+        int numsLen = nums.length;
+        if (max == min) return 0;
+        // the minimum possible gap, ceiling of the integer division
+        // 因为排除了最大最小後, 需要总有一个空桶, 即 gap = n - 2 + 1 = n - 1. 就是最理想的.
+        // the maximum gap will be no smaller than ceiling[(max - min ) / (n - 1)]; 产生空的桶, 会让最大gap出现在空桶之间.
+        int bucketSize = Math.max(1, (max - min) / (numsLen - 1));
+        // 因爲 max 和 min 的差距, 導致 需要的 bucketCount 邊多. 所以需要反過來計算 bucketCount, 再 + 1, 視頻有解釋.
+        int bucketCount = (max - min) / bucketSize + 1;
+        // 不同桶的最小/大值
+        int[] bucketMin = new int[bucketCount];
+        int[] bucketMax = new int[bucketCount];
+        Arrays.fill(bucketMin, Integer.MAX_VALUE);
+        Arrays.fill(bucketMax, Integer.MIN_VALUE);
+        // num 分配入桶
+        for (int num : nums) {
+            int bucketIndex = (num - min) / bucketSize;
+            bucketMin[bucketIndex] = Math.min(bucketMin[bucketIndex], num);
+            bucketMax[bucketIndex] = Math.max(bucketMax[bucketIndex], num);
+        }
+        // result
+        int maxGap = 0;
+        // 爲了方便下邊代碼書寫方便
+        int previousMax = min;
+        // 檢查桶間距: 後 min - 前 max
+        for (int i = 0; i < bucketCount; i++) {
+            // 空桶
+            if (bucketMin[i] == Integer.MAX_VALUE) continue;
+            maxGap = Math.max(maxGap, bucketMin[i] - previousMax);
+            previousMax = bucketMax[i];
+        }
+        return maxGap;
     }
 
-    /*
-    https://www.youtube.com/watch?v=qN0qvtFbCYw
+    /**
+     * 看上邊的就好, 更好理解.
      */
-    public int maximumGap(int[] num) {
-        if (num == null || num.length < 2)
-            return 0;
+    public int maximumGap2(int[] num) {
+        if (num == null || num.length < 2) return 0;
         // get the max and min value of the array
         int min = num[0];
         int max = num[0];
@@ -25,12 +66,12 @@ public class Q164 {
             max = Math.max(max, i);
         }
         // the minimum possible gap, ceiling of the integer division
-        //因为排除了最大最小, 又是的总有一个空桶, 即剩下元素 + 1, n - 2 + 1 = n - 1. 得出的gap就是最理想的.
-        //the maximum gap will be no smaller than ceiling[(max - min ) / (n - 1)]; 产生空的桶, 会让最大gap出现在桶间
+        // 因为排除了最大最小後, 需要总有一个空桶, 即 gap = n - 2 + 1 = n - 1. 就是最理想的.
+        // the maximum gap will be no smaller than ceiling[(max - min ) / (n - 1)]; 产生空的桶, 会让最大gap出现在空桶之间.
         int gap = (int) Math.ceil((double) (max - min) / (num.length - 1));
-        //不同桶的所有最大值
+        // 不同桶的最小值
         int[] bucketsMIN = new int[num.length - 1]; // store the min value in that bucket
-        //不同桶的所有最小值
+        // 不同桶的最大值
         int[] bucketsMAX = new int[num.length - 1]; // store the max value in that bucket
         Arrays.fill(bucketsMIN, Integer.MAX_VALUE);
         Arrays.fill(bucketsMAX, Integer.MIN_VALUE);
@@ -81,4 +122,11 @@ public class Q164 {
 //        }
 //        return gap;
 //    }
+
+    public static void main(String[] args) {
+        int[] nums = {3, 6, 9, 1};
+        Q164 q164 = new Q164();
+        q164.maximumGap(nums);
+
+    }
 }
