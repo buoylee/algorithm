@@ -2,52 +2,48 @@ package cn.buoy.leetcode.topologicalsort;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Q210 {
     /**
      * https://www.youtube.com/watch?v=qunhYX91VLU
-     * 几乎没区别, 把放在queue里的元素, 同时放进res就好.
+     * 几乎和 207 没区别, 在 pop 出 queue 時, 同时放进res就好.
      */
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         int[] res = new int[numCourses];
-        int k = 0;
+        int index = 0;
         int[] indegree = new int[numCourses];
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++)
+            graph.add(new ArrayList<>());
+        for (int[] prereq : prerequisites) {
+            // 把 "相同前置 course" 的 course, 歸類到各自 list.
+            graph.get(prereq[1]).add(prereq[0]);
+            // 统计 每个 node 的 "入度數量"
+            indegree[prereq[0]]++;
+        }
+        // 用於處理 入度 == 0 的 node, 每個 進入 queue 的 node. 說明是可以完成的"沒有前置 course" 的 course.
         Queue<Integer> queue = new LinkedList<>();
-        //每个点的入度统计
-        for (int[] pair : prerequisites) {
-            indegree[pair[0]]++;
-        }
-        //选出没有入度的点 进入queue
-        for (int i = 0; i < indegree.length; i++) {
-            if (indegree[i] == 0) {
+        for (int i = 0; i < indegree.length; i++)
+            if (indegree[i] == 0)
                 queue.add(i);
-                //差别
-                res[k++] = i;
-            }
-        }
+        // 有一個 入度爲0的 node, 代表 可以完成一個 course.
+        int count = 0;
         while (!queue.isEmpty()) {
-            //已完成一个课程排序
-            numCourses--;
-            //弹出 入度为0 的点, 遍历所有prerequisites(边), 对依赖该点 的点 的入度--
             int course = queue.poll();
-            //
-            for (int[] pair : prerequisites) {
-                //如果有依赖该点
-                if (pair[1] == course) {
-                    //--
-                    indegree[pair[0]]--;
-                    //如果某点 所依赖的点(入度)为0, 可以放入0依赖queue中, 等待`排序`和`接下来的其他点对`该某点有依赖的入度的入--`
-                    if (indegree[pair[0]] == 0) {
-                        //放入0依赖queue中
-                        queue.add(pair[0]);
-                        //差别
-                        res[k++] = pair[0];
-                    }
-                }
+            count++;
+            // 入度 == 0 的点, 就是 路過的 course.
+            res[index++] = course;
+            // 把 "當前入度爲0的 node" 作爲 "前置 course" 的 course 的入度--
+            for (int neighbor : graph.get(course)) {
+                indegree[neighbor]--;
+                // 一旦 course的 入度 == 0, 又會被 offer 進 queue
+                if (indegree[neighbor] == 0)
+                    queue.add(neighbor);
             }
         }
-        return numCourses == 0 ? res : new int[0];
+        return numCourses == count ? res : new int[0];
     }
 
     /**

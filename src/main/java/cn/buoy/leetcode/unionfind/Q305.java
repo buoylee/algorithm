@@ -4,13 +4,69 @@ import java.util.*;
 
 public class Q305 {
     /**
+     * 代碼不好理解, 好好看註釋
      * https://www.youtube.com/watch?v=A6FeeG2JVnk
-     * 第一反应, 之前做过类似的bfs, 用不同数字标识`陆地`, 应该可以.
-     * 题目的是有序的, numIslands递增没问题.
+     * 思路: 轉爲 並查集.
      */
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        List<Integer> result = new ArrayList<>();
+        if (m <= 0 || n <= 0) return result;
+        // 保存 每個格子的 最頂父節點.
+        int[] roots = new int[m * n]; // one island = one tree
+        Arrays.fill(roots, -1); // 初始化所有点都是水
+        // 上下左右4個方向找 1
+        int[][] directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        // 當前 島數量
+        int count = 0;
+        // 遍歷陸地
+        for (int[] position : positions) {
+            // 一維的位置
+            int currPos = position[0] * n + position[1];
+            // 被提前找到, count 不變.
+            if (roots[currPos] != -1) {
+                result.add(count);
+                continue;
+            }
+            roots[currPos] = currPos; // 变成陆地
+            count++;
+            // 上下左右4個鄰居, 找是否已經有陸地.
+            for (int[] direction : directions) {
+                int x = position[0] + direction[0];
+                int y = position[1] + direction[1];
+                // 關鍵: 爲什麼要使用1維arr 來保存 roots, 因爲即使 用 2維 arr 來保存, arr 中的值, 也是string 之類的類型, 還是要經過提取來得到 root 的位置.
+                int neiborIdx = x * n + y;
+                // 上下左右 鄰居 是 -1, 就不會 更新成 之前最頂 root(因爲第一個root 就是本身).
+                if (x >= 0 && x < m && y >= 0 && y < n && roots[neiborIdx] != -1) {
+                    // 鄰居 最頂root
+                    int neiborRoot = find(roots, neiborIdx);
+                    // 現在 node 不是 鄰居 node 的最頂root, 要合併.
+                    if (currPos != neiborRoot) { // 若根节点不同，说明是不同的岛屿，合并
+                        // 最頂root 更新 之前的 最頂root
+                        roots[currPos] = neiborRoot;
+                        // 一旦合完, 其他鄰居就不用檢查了, 把 currPos 改爲 舊的 root(neiborRoot)
+                        currPos = neiborRoot;
+                        count--;
+                    }
+                }
+            }
+            result.add(count);
+        }
+        return result;
+    }
+
+    // 找最頂的 parent, 直到 node 的 parent 是 "node 本身"(id != roots[id])
+    private int find(int[] roots, int id) {
+        while (id != roots[id]) {
+            roots[id] = roots[roots[id]]; // 路径压缩
+            id = roots[id];
+        }
+        return id;
+    }
+
+    // 上邊比較簡潔
     int[] parent;
 
-    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+    public List<Integer> numIslands22(int m, int n, int[][] positions) {
         List<Integer> ans = new ArrayList<>();
         parent = new int[n * m + 1];
         int numIslands = 0;
@@ -68,7 +124,7 @@ public class Q305 {
     /**
      *
      */
-    public List<Integer> numIslands22(int m, int n, int[][] positions) {
+    public List<Integer> numIslands23(int m, int n, int[][] positions) {
         List<Integer> ans = new ArrayList<>();
         HashMap<Integer, Integer> land2id = new HashMap<Integer, Integer>();
         int num_islands = 0;

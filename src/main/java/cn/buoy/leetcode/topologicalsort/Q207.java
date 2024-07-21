@@ -2,30 +2,63 @@ package cn.buoy.leetcode.topologicalsort;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Q207 {
     /**
+     * 知道思路就簡單, 視頻
      * https://www.youtube.com/watch?v=oa6uR2yNG_s
-     * 最基本的拓扑解法
+     * https://www.youtube.com/watch?v=fskPWs3Nuhc 清楚
+     * 思路: 最基本的拓扑解法, 把 node 的 "前置 node 數量"(入度數) 統計成 indegree[]
      */
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         int[] indegree = new int[numCourses];
-        Queue<Integer> queue = new LinkedList<>();
-        //每个点的入度统计
-        for (int[] pair : prerequisites) {
-            indegree[pair[0]]++;
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++)
+            graph.add(new ArrayList<>());
+        for (int[] prereq : prerequisites) {
+            // 把 "相同前置 course" 的 course, 歸類到各自 list.
+            graph.get(prereq[1]).add(prereq[0]);
+            // 统计 每个 node 的 "入度數量"
+            indegree[prereq[0]]++;
         }
-        //选出没有入度的点 进入queue
-        for (int i = 0; i < indegree.length; i++) {
-            if (indegree[i] == 0) {
-                queue.add(i);
+        // 用於處理 入度 == 0 的 node, 每個 進入 queue 的 node. 說明是可以完成的"沒有前置 course" 的 course.
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++)
+            if (indegree[i] == 0)
+                queue.offer(i);
+        // 有一個 入度爲0的 node, 代表 可以完成一個 course.
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int course = queue.poll();
+            count++;
+            // 把 "當前入度爲0的 node" 作爲 "前置 course" 的 course 的入度--
+            for (int neighbor : graph.get(course)) {
+                indegree[neighbor]--;
+                // 一旦 course的 入度 == 0, 又會被 offer 進 queue
+                if (indegree[neighbor] == 0)
+                    queue.offer(neighbor);
             }
         }
+        return count == numCourses;
+    }
+
+    public boolean canFinish2(int numCourses, int[][] prerequisites) {
+        int[] indegree = new int[numCourses];
+        Queue<Integer> queue = new LinkedList<>();
+        // 每个 node 的 "入度數量" 统计
+        for (int[] pair : prerequisites)
+            indegree[pair[0]]++;
+        // 选出 入度爲0的 node 进入 queue
+        for (int i = 0; i < indegree.length; i++)
+            if (indegree[i] == 0)
+                queue.add(i);
+
         while (!queue.isEmpty()) {
-            //已完成一个课程排序
+            // 有一個 入度爲0的 node, 代表 可以完成一個 course.
             numCourses--;
-            //弹出 入度为0 的点, 遍历所有prerequisites(边), 对依赖该点 的点 的入度--
+            // 弹出 入度为0 的点, 遍历所有prerequisites(边), 对依赖该点 的点 的入度--
             int course = queue.poll();
             //
             for (int[] pair : prerequisites) {
@@ -52,7 +85,7 @@ public class Q207 {
      * @param prerequisites
      * @return
      */
-    public boolean canFinish2(int numCourses, int[][] prerequisites) {
+    public boolean canFinish3(int numCourses, int[][] prerequisites) {
         ArrayList<Integer>[] graph = new ArrayList[numCourses];
         for (int i = 0; i < numCourses; i++) {
             graph[i] = new ArrayList();
