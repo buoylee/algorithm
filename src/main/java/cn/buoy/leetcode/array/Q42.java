@@ -1,30 +1,32 @@
 package cn.buoy.leetcode.array;
 
 public class Q42 {
-    /*
-    https://www.youtube.com/watch?v=EIFpXEzFIj8
-    2指针l = 0, r = len - 1 头尾一个. 2边往里走.
-    当 l <= r, 可以算出l + 1 的 水高度, 因为右边再大, 也会受到l 的限制; 右边再小, 因为受 r 影响, 也不可能低于 l 高度.
-    同理 l >= r.
+    /**
+     * https://www.youtube.com/watch?v=EIFpXEzFIj8
+     * https://www.youtube.com/watch?v=bu1quf2rOp8 短, 原理很清楚, 思路/實現稍微不同.
+     * 思路: 头尾2指针, 向內收縮;
+     * 当 height[left] <= height[right], 可以得知他們之間[left+1 ~ right-1], 如果有小於 height[left] 的 index, 就可以儲水. height[left] >= height[right]同理.
+     * 小的一邊往裏收縮, 如果 遇到比 height[left] 小的, 很好, 記下儲水量, left++ 往內收縮;
+     * 如果遇到比 height[left] 大(或等於)的, 這時, 沒法儲水, 但是我們知道, 後續能儲水的量邊多了, 即, 他的 maxleft(從左邊往右時, 發現最大的高度) 更新了.
+     * <p>
+     * maxleft 更新後, 就有可能出現上邊提到的 height[left] >= height[right] 情況, 這時, 我們就要向內收縮 right, 如果遇到比 height[right] 小的, 很好, 記下儲水量, right--;
+     * 如果遇到比 height[right] 大(或等於)的, 這時, 沒法儲水, 但是我們知道, 後續能儲水的量邊多了, 即, 他的 maxright(從右邊往左時, 發現最大的高度) 更新了.
+     * 如此反覆直到 left index > right index 越界.
      */
-    //fixme 思路: 储水需要一次完整的"高度递减+高度递增",
-    // 所以第一步需要找到递减趋势, 否则, 设置为maxleft作为再次起始点,
-    // 蓄水高度由低位决定.
-    // 中间无论高度如何, 都不会影响某个index的蓄水高度, 只由最左和最右高度影响, 注意看图就能知道.
     public int trap(int[] height) {
-//        int[] height= height;
         int len = height.length;
         int left = 0;
         int right = len - 1;
         int res = 0;
-        int maxleft = 0, maxright = 0;
+        int maxleft = 0; // 從左邊往右收縮時, 發現最大的高度
+        int maxright = 0; // 從右邊往左收縮時, 發現最大的高度
         while (left <= right) {
-            //如果左小,
+            // 如果左小
             if (height[left] <= height[right]) {
-                //如果 [l] 比 maxleft都大时, [l] 无法储水起始点. 并设置maxleft为当前高度.
+                // 如果 [l] 比 maxleft 大, [l] 无法储水起始点, 更新 maxleft 为当前高度.
                 if (height[left] >= maxleft)
                     maxleft = height[left];
-                else //累加水量:
+                else // 累加水量:
                     res += maxleft - height[left];
                 left++;
             } else {
