@@ -4,38 +4,37 @@ import java.util.Iterator;
 
 public class Q284 {
     /**
+     * 簡單, 視頻, 代碼
      * https://www.youtube.com/watch?v=evNDFy6Gtg0
+     * https://www.youtube.com/watch?v=5aATZPMKJ-I 短
+     * 思路: 提前一步取一次 next 來當 curr, 作爲 peek() 的返回; next() 返回 curr, 馬上取一次 next 填補 curr.
      */
     class PeekingIterator implements Iterator<Integer> {
-        private Integer next = null;
+        private Integer curr = null;
         private Iterator<Integer> iter;
 
         public PeekingIterator(Iterator<Integer> iterator) {
-            // initialize any member here.
-            //初始化时, 先 取出一次next 放入 this.next
+            // 關鍵: 初始化时, 先取出一次 next 放入 curr
             iter = iterator;
             if (iter.hasNext())
-                next = iter.next();
+                curr = iter.next();
         }
 
-        // Returns the next element in the iteration without advancing the iterator.
         public Integer peek() {
-            return next;
+            return curr;
         }
 
-        // hasNext() and next() should behave the same as in the Iterator interface.
-        // Override them if needed.
-        //返回this.next, 再将 this.next 指向 iter.next().
         @Override
         public Integer next() {
-            Integer res = next;
-            next = iter.hasNext() ? iter.next() : null;
-            return res;
+            // 關鍵: 返回 curr 後, 馬上取一次 next, 沒有就賦值 null.
+            Integer result = curr;
+            curr = iter.hasNext() ? iter.next() : null;
+            return result;
         }
 
         @Override
         public boolean hasNext() {
-            return next != null;
+            return curr != null;
         }
     }
 }

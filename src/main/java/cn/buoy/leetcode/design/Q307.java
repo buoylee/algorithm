@@ -2,8 +2,13 @@ package cn.buoy.leetcode.design;
 
 public class Q307 {
     /**
-     * https://www.youtube.com/watch?v=8XSfWhZFSBs
-     * 线段树
+     * 簡單, 下邊2個視頻都不錯, 快速視頻, 註釋.
+     * https://www.youtube.com/watch?v=7rDxwVHg_zU Fenwick Tree（Binary Indexed Tree）
+     * https://www.youtube.com/watch?v=8XSfWhZFSBs SegmentTree
+     * 思路: SegmentTree, 後續遍歷.
+     * build: 线段树. 從 root(整個區間 和 整個區間的 sum) 開始2分"前後區間"(left/right child) 和 各自的 sum, 繼續遞歸到 "每個區間" 只有 "1個數".
+     * update: 和 build 一樣, 用後序遍歷, 從 root 2分下去, 直到找到單個元素的區間[a, a], 然後原路返回時, 更新各級 root 的 sum.
+     * sumRange: 和 build 一樣.
      */
     public class NumArray {
 
@@ -15,77 +20,81 @@ public class Q307 {
             SegmentTreeNode left, right;
 
             public SegmentTreeNode(int start, int end) {
-                this.start = start;
-                this.end = end;
-                this.left = null;
-                this.right = null;
-                this.sum = 0;
+                this.start = start; // index 的 start
+                this.end = end; // index 的 end
+                this.sum = 0; // start~end 的 sum
+                this.left = null; // node 的 left child
+                this.right = null; // node 的 right child
             }
         }
 
         SegmentTreeNode root = null;
 
+        public int sumRange(int i, int j) {
+            return sumRange(root, i, j);
+        }
+
+        // 查找 指定範圍 sum
+        public int sumRange(SegmentTreeNode root, int start, int end) {
+            // 剩餘個元素的區間
+            if (root.end == end && root.start == start) {
+                return root.sum;
+            } else {
+                int mid = root.start + (root.end - root.start) / 2;
+                // 關鍵: 直接 在所屬範圍內查找即可.
+                // 因爲構建的時候, mid 放在前半部.
+                if (end <= mid) {
+                    return sumRange(root.left, start, end);
+                } else if (start >= mid + 1) {
+                    return sumRange(root.right, start, end);
+                } else // 橫跨前後2個區間, 就分開查找, 再 sum.
+                    return sumRange(root.left, start, mid) + sumRange(root.right, mid + 1, end);
+            }
+        }
+
         public NumArray(int[] nums) {
             root = buildTree(nums, 0, nums.length - 1);
         }
 
+        // 構建 線段樹
         private SegmentTreeNode buildTree(int[] nums, int start, int end) {
-            if (start > end) {
+            if (start > end)
                 return null;
+            SegmentTreeNode root = new SegmentTreeNode(start, end);
+            // 區間只剩1个元素, 放进去
+            if (start == end) {
+                root.sum = nums[start];
             } else {
-                SegmentTreeNode ret = new SegmentTreeNode(start, end);
-                //剩1个, 放进去
-                if (start == end) {
-                    ret.sum = nums[start];
-                } else {
-                    //分区间
-                    int mid = start + (end - start) / 2;
-                    ret.left = buildTree(nums, start, mid);
-                    ret.right = buildTree(nums, mid + 1, end);
-                    //sum 左右
-                    ret.sum = ret.left.sum + ret.right.sum;
-                }
-                return ret;
+                // 2分
+                int mid = start + (end - start) / 2;
+                // 細節: left sum 構建的時候, mid 歸屬於 前半部, 查找時也記得同樣的範圍定義.
+                root.left = buildTree(nums, start, mid);
+                // right sum
+                root.right = buildTree(nums, mid + 1, end);
+                // root 的 sum
+                root.sum = root.left.sum + root.right.sum;
             }
+            return root;
         }
 
         void update(int i, int val) {
             update(root, i, val);
         }
 
-        void update(SegmentTreeNode root, int pos, int val) {
-            //只有1个元素, 或找到 单个元素pos
+        // 後續遍歷, 和 buildTree 一樣, 也是從 "頂 root" 開始2分. 直到找到 指定 index, 更新完後, 一路更新 sum 上去.
+        void update(SegmentTreeNode root, int index, int val) {
+            // 只有1个元素, 或找到某个指定 index
             if (root.start == root.end) {
                 root.sum = val;
             } else {
                 int mid = root.start + (root.end - root.start) / 2;
-                //适应buildTree 2分法, pos <= mid 在左边
-                if (pos <= mid) {
-                    update(root.left, pos, val);
-                } else {
-                    update(root.right, pos, val);
-                }
-                //倒数第2层底往上 走这里
+                // 符合上邊 buildTree 的2分法, index <= mid 在左边
+                if (index <= mid)
+                    update(root.left, index, val);
+                else
+                    update(root.right, index, val);
+                // 處理完 left/right, 最後更新 "本 root" sum
                 root.sum = root.left.sum + root.right.sum;
-            }
-        }
-
-        public int sumRange(int i, int j) {
-            return sumRange(root, i, j);
-        }
-
-        public int sumRange(SegmentTreeNode root, int start, int end) {
-            if (root.end == end && root.start == start) {
-                return root.sum;
-            } else {
-                int mid = root.start + (root.end - root.start) / 2;
-                if (end <= mid) {
-                    return sumRange(root.left, start, end);
-                } else if (start >= mid + 1) {
-                    return sumRange(root.right, start, end);
-                } else {
-                    return sumRange(root.right, mid + 1, end) + sumRange(root.left, start, mid);
-                }
             }
         }
     }

@@ -1,34 +1,34 @@
 package cn.buoy.leetcode.design;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Q346 {
     /**
-     *
+     * 簡單, 視頻
+     * https://www.youtube.com/watch?v=PnpRkJqPzxk
+     * 思路: link 放 ele, len > 容量 就 pop head, 再算 average
      */
     public class MovingAverage {
-        private int[] window;
-        //n是有窗口内元素个数; insert是当前要插入的index
-        private int n, insert;
-        private long sum;
+        private int capacity; // 限制容量
+        private Queue<Integer> queue;
+        private double sum; // link 的所有 ele 的 sum
 
-        /**
-         * Initialize your data structure here.
-         */
-        public MovingAverage(int size) {
-            window = new int[size];
-            insert = 0;
-            sum = 0;
+        public MovingAverage(int capacity) {
+            this.capacity = capacity;
+            this.queue = new LinkedList<>();
+            this.sum = 0.0;
         }
 
         public double next(int val) {
-            if (n < window.length) n++;
-            //移除
-            sum -= window[insert];
+            // 等於容量了, 就pop head, 並 sum 減去 value.
+            if (queue.size() == capacity)
+                sum -= queue.poll();
+            // 加入 value
+            queue.offer(val);
+            // 算 average
             sum += val;
-            window[insert] = val;
-            //先移动到下次 先删除后插入的位置
-            insert = (insert + 1) % window.length;
-
-            return (double) sum / n;
+            return sum / queue.size();
         }
     }
 }

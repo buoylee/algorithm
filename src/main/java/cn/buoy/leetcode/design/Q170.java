@@ -4,17 +4,43 @@ import java.util.*;
 
 public class Q170 {
     /**
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=BKL4fTaIbRw
-     * 关键思路: 用map 的O(1) 用value反向查找index
+     * 思路: map 存 value: "value 的次數",
+     * find 的時候, 遍歷 map 的 ele, 檢查 map 中是否也存在 "value - ele", 即可,
+     * 有 特例, 如果 ele == "value - ele", 則 檢查 map(ele) 是否 > 1.
      */
     class TwoSum {
+        private HashMap<Integer, Integer> map;
+
+        public TwoSum() {
+            map = new HashMap<>();
+        }
+
+        public void add(int number) {
+            map.put(number, map.getOrDefault(number, 0) + 1);
+        }
+
+        public boolean find(int value) {
+            // 遍歷 map 的 ele
+            for (int num : map.keySet()) {
+                // 關鍵: 檢查 "value - ele" 是否也存在, 或者, ele == "value - ele"時, 需要 map(ele) > 1
+                int complement = value - num;
+                if ((complement != num && map.containsKey(complement)) || (complement == num && map.get(num) > 1))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    class TwoSum4 {
 
         Map<Integer, Integer> map;
         List<Integer> list;
         int min;
         int max;
 
-        public TwoSum() {
+        public TwoSum4() {
             map = new HashMap<>();
             list = new ArrayList<>();
             min = Integer.MAX_VALUE;
@@ -45,10 +71,8 @@ public class Q170 {
         public boolean find(int value) {
             //corner case
             if (list.size() < 2) return false;
-            if (value < min * 2 || value > max * 2) {
+            if (value < min * 2 || value > max * 2)
                 return false;
-            }
-
             for (int i = 0; i < list.size(); i++) {
                 //遍历每个list value
                 int n = list.get(i);
