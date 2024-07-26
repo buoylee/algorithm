@@ -4,20 +4,18 @@ import java.util.Arrays;
 
 public class Q27 {
     /**
-     * 簡單, 視頻, 畫圖就非常清楚.
+     * 27; 283
+     * 簡單, 視頻.
      * https://www.youtube.com/watch?v=tFSOSgHX0pQ
-     * 思路: 同向雙指針, i: int[]遍歷; j: 0~j-1 元素都已完成處理, j 表示當前需要處理的 index.
-     * 把 toBeDone 前當作 "非 target" 區看待, 發現 i 不是 target 就放到前邊(非 target 區)就ok. 記得 toBeDone++
+     * 思路: 同向雙指針, i: int[] 遍歷 index; handlingIdx: 當前需要處理的 index, 0~handlingIdx-1 元素都已完成處理.
+     * 發現 [i] 不是 target val 就賦值給 [handlingIdx], 然後 handlingIdx++
      */
     public int removeElement(int[] nums, int val) {
-        int toBeDone = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != val) {
-                nums[toBeDone] = nums[i];
-                toBeDone++;
-            }
-        }
-        return toBeDone;
+        int handlingIdx = 0;
+        for (int i = 0; i < nums.length; i++)
+            if (nums[i] != val)
+                nums[handlingIdx++] = nums[i];
+        return handlingIdx;
     }
 
     /**

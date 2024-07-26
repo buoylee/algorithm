@@ -4,16 +4,16 @@ import java.util.Arrays;
 
 public class Q164 {
     /**
-     * 懂如何求桶排序 大小 與 個數, 就簡單, 視頻很好
+     * 懂如何求桶排序 需要的桶大小 與 桶個數, 就簡單, 視頻很好. 可以複習.
      * https://www.youtube.com/watch?v=qN0qvtFbCYw
      * 思路: 桶排序後, 後 min - 前 max, 得出 "最大 gap"
      */
     public int maximumGap(int[] nums) {
         if (nums == null || nums.length < 2) return 0;
-
-        // 爲了求 bucketSize, bucketCount 必須的數據
+        // 爲了求 bucketSize, bucketCount 必要的前提條件
 //        int min = Arrays.stream(nums).min().getAsInt();
 //        int max = Arrays.stream(nums).max().getAsInt();
+        // arr 的 最大/小值
         int min = nums[0];
         int max = nums[0];
         for (int i : nums) {
@@ -41,7 +41,7 @@ public class Q164 {
         }
         // result
         int maxGap = 0;
-        // 爲了方便下邊代碼書寫方便
+        // 爲了方便下邊代碼書寫方便, 使得 第一個桶gap(index0) == 0.
         int previousMax = min;
         // 檢查桶間距: 後 min - 前 max
         for (int i = 0; i < bucketCount; i++) {

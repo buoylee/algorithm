@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Q118 {
     /**
-     * 簡單, 見過幾次了, 視頻
+     * 簡單, 見過很多次了, 視頻
      * https://leetcode.com/problems/pascals-triangle/discuss/38141/My-concise-solution-in-Java
      * https://www.youtube.com/watch?v=QpLdVwe1hvs
      * 思路: 每次構建一行時, arr head 插個 '1', 然後 从index = 1开始, num[i] = num[i]+num[i+1], 直到 index = (len-1)-1.

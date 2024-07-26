@@ -4,14 +4,15 @@ public class Q88 {
     /**
      * 簡單, 視頻
      * https://www.youtube.com/watch?v=91bi3bIrW3I
-     * 思路: 从后往前排, 超簡單. 不用處理位置問題.
+     * 思路: 从后往前排, 超簡單. 不用過多處理位置問題.
      */
     public void merge(int[] nums1, int m, int[] nums2, int n) {
+        // 合併後的最後 index
         int lastIdx = m + n - 1;
-        // "2 arr 指針" 移動到 "合法的最後一位 index"
+        // "2個 arr 各自的指針" 移動到 "合法的最後一位 index"
         m--;
         n--;
-        // 只要 2 arr "都還有數", 就需要比.
+        // 只要2個 arr 都還有元素, 就需要比.
         while (m >= 0 && n >= 0)
             // 選大放到 lastIdx, 然后 lastIdx--, 被取的那個 arr index--
             nums1[lastIdx--] = nums2[n] > nums1[m] ? nums2[n--] : nums1[m--];

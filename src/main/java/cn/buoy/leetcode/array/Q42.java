@@ -2,6 +2,7 @@ package cn.buoy.leetcode.array;
 
 public class Q42 {
     /**
+     * 明白原理就簡單, 視頻
      * https://www.youtube.com/watch?v=EIFpXEzFIj8
      * https://www.youtube.com/watch?v=bu1quf2rOp8 短, 原理很清楚, 思路/實現稍微不同.
      * 思路: 头尾2指针, 向內收縮;
