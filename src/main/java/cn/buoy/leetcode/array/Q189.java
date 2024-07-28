@@ -1,17 +1,23 @@
 package cn.buoy.leetcode.array;
 
 public class Q189 {
-    // https://www.youtube.com/watch?v=06-7_TTlkAw
-    // 思路1: 整體翻轉, 翻轉前k, 在翻轉後邊nums.length-k個.
+    /**
+     * 简单, 视频, 有思路的话.
+     * https://www.youtube.com/watch?v=06-7_TTlkAw
+     * 思路: 1. 整體翻轉; 2. 翻轉前k个 num; 3. 翻轉 剩余的 後邊 nums.length-k 個 num.
+     */
     public void rotate(int[] nums, int k) {
-        //整体反转 [1, 2, 3, 4]
-        //k == 2
+        // 例: [1, 2, 3, 4]; k == 2
+        // 因为题目 rotate 可能超过 arr.len, 所以取余.
         k %= nums.length;
-        //[4, 3, 2, 1]
+        // 整体反转
+        // [4, 3, 2, 1]
         reverse(nums, 0, nums.length - 1);
-        //[3, 4, 2, 1]
+        // 翻轉前k个 num
+        // [3, 4, 2, 1]
         reverse(nums, 0, k - 1);
-        //[3, 4, 1, 2]
+        // 翻轉 剩余的 後邊 nums.length-k 個 num
+        // [3, 4, 1, 2]
         reverse(nums, k, nums.length - 1);
     }
 

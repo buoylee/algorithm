@@ -4,43 +4,42 @@ import java.util.*;
 
 public class Q352 {
     /**
+     * 簡單, 視頻
      * 大致做法:
      * https://www.youtube.com/watch?v=WRE7innGPJ4
      * <p>
      * https://www.youtube.com/watch?v=PeAN0lWOzak
-     * 思路简单, addNum() 直插value, getIntervals需要遍历, 每当有连续[i,j++], 无连续则开新int[]
+     * 思路: 關鍵: 使用 treeSet 存儲 num,
+     * addNum(): 直插 num;
+     * getIntervals(): 遍历 treeSet,
+     * 如果 curr num == latest interval(用 int[2] 表示開始/結束的區間) end + 1,
+     * 說明是連續, 更新 latest interval end == end + 1, 例如: [start, end + 1]
+     * 不等, 說明補是連續, 加入 int[curNum, curNum] 即可.
      */
     public class SummaryRanges {
-
         private Set<Integer> numbers;
 
         public SummaryRanges() {
+            // 關鍵: 用 tree set
             numbers = new TreeSet<>();
         }
 
-        // O(logn)
         public void addNum(int value) {
             numbers.add(value);
         }
 
-        // O(n)
         public int[][] getIntervals() {
             // We are not sure of the size upfront
             List<int[]> disjointInterval = new ArrayList<>();
-
+            // 因爲使用了 treeSet, 只需要不斷往後檢查即可.
             for (int n : numbers) {
                 int size = disjointInterval.size();
-                //如果下一个value == 上一个end + 1, 就是连续; 否则新开范围数组.
+                // 如果下一个value == 上一个 end + 1, 就是连续; 否则新开范围数组.
                 if (size > 0 && disjointInterval.get(size - 1)[1] + 1 == n) {
-                    disjointInterval.get(size - 1)[1] = n;
-                    // [Merge] Update the right end state
-                } else {
-                    // [New entry] Create a new interval
-                    disjointInterval.add(new int[]{n, n});
-                }
-
+                    disjointInterval.get(size - 1)[1] = n; // [Merge] Update the right end state
+                } else
+                    disjointInterval.add(new int[]{n, n}); // [New entry] Create a new interval
             }
-
             return disjointInterval.toArray(new int[0][]);
         }
 

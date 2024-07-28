@@ -4,27 +4,30 @@ import java.util.HashMap;
 
 public class Q325 {
     /**
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=RxIf_N6JiMM
-     * 像之前的求[i, j] 之间元素和, sum[j] - sum[i-1]
-     * 思路: dp[i]: 包括i和之前的sum, 1. 当前dp于之前dp之间的差为result; 2. 当前value; 如再次出现相同的dp, 跳过, 因为之前的相同dp的距离肯定更大.
+     * 思路: 類似之前求 [i, j] 之间元素和, sum[j] - sum[i-1]
+     * 有 2種 可能的 pre sum,
+     * 1. 当前 [0 ~ i] 的 preSum;
+     * 2. 当前 preSum 與 "之前 preSum" 的差为 result;
+     * 從中選出 max 即可.
+     * 注意: 如再次出现相同的dp, 跳过, 因为 計算 curr preSum - "之前的相同 preSum" 的距离肯定更大.
      */
     public int maxSubArrayLen(int[] nums, int k) {
-        int sum = 0, max = 0;
-        //key为dp(sum), value为index
+        int preSum = 0, result = 0;
+        // 關鍵: map<preSum, index>
         HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
         for (int i = 0; i < nums.length; i++) {
-            sum = sum + nums[i];
-            //表示从index==0开始, 到当前index刚好sum==k的情况.
-            if (sum == k)
-                max = i + 1;
-                //查看是否存在x, 使得 sum-x, 刚好好是k, 然后选择记录更大的width
-            else if (map.containsKey(sum - k))
-                max = Math.max(max, i - map.get(sum - k));
-            //前缀和, map<sum, index>
-            //如再次出现相同的dp, 跳过, 因为之前的相同dp的距离肯定更大.
-            if (!map.containsKey(sum))
-                map.put(sum, i);
+            preSum = preSum + nums[i];
+            // 關鍵: 表示从 index0 开始, 到 当前index 刚好 preSum == k 的情况, 直接賦值 result, 因爲是, 遍歷到當前 長度最大的時候.
+            if (preSum == k)
+                result = i + 1;
+            else if (map.containsKey(preSum - k)) //查看之前是否有存過 preSum == x, 使得 "當前 preSum" - x, 刚好好是 k, 然后比較 max
+                result = Math.max(result, i - map.get(preSum - k));
+            // 關鍵: 如再次出现相同的 preSum, 跳过, 因为 計算 curr preSum - "之前的相同 preSum" 的距离肯定更大.
+            if (!map.containsKey(preSum))
+                map.put(preSum, i);
         }
-        return max;
+        return result;
     }
 }

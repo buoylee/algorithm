@@ -5,8 +5,8 @@ public class Q309 {
      * 相對簡單, 視頻
      * https://www.youtube.com/watch?v=5mcq_V2-JlU
      * 思路: 定義2種狀態, 當天持有, 當天不持有:
-     * 當天持有 = (上一天 hold, 不动;) 或 (上上一天 nohold) 較大的那個
-     * 當天不持有 = (上上一天 nohold, 上一天 cooldown, 现在变为 hold;) 或 (上一天 hold, 现在變 nohold;) 較大的那個
+     * 當天持有 = (上一天 hold, 不动;) 或 (上上一天 nohold, cooldown, 现在變 hold) 2者中, 較大的那個
+     * 當天不持有 = (上一天 nohold, 不动;) 或 (上一天 hold, 现在變 nohold;) 2者中, 較大的那個
      * dp 到結束.
      */
     public int maxProfit(int[] prices) {
@@ -23,10 +23,10 @@ public class Q309 {
             //關鍵:
             // 當天 hold stock 包括:
             hold[i] = Math.max(hold[i - 1], // 上一天 hold, 不动;
-                    nohold[i - 2] - prices[i]); // 上上一天 nohold, 上一天 cooldown, 现在变为 hold;
+                    nohold[i - 2] - prices[i]); // 上上一天 nohold, 上一天 cooldown, 现在變 hold;
             // 當天 nohold stock 包括:
             nohold[i] = Math.max(nohold[i - 1], // 上一天 nohold, 不动;
-                    hold[i - 1] + prices[i]); // 上一天 hold, 现在變 nohold; 這種情況需要 cooldown, 注意這裏, 可以瞭解到, 排除掉這種 cooldown 的情況後, nohold[i + 1] 要買進的話, 只需要看 nohold[i - 1]
+                    hold[i - 1] + prices[i]); // 上一天 hold, 现在變 nohold;
         }
         return nohold[len - 1];
     }

@@ -5,30 +5,31 @@ import java.util.PriorityQueue;
 
 public class Q253 {
     /**
+     * 视频讲的好, 简单
      * https://www.youtube.com/watch?v=4MEkBvqE_2Q
-     * 这个好理解,
-     * 思路: 只要需要用房就会尝试往queue加,
-     * 如果queue是空的直接加不用判断,
-     * 如果queue最小(早)的结束时间满足当前开始时间, 可以替换(poll后offer),
-     * 如果不满足, 则直接加入queue,
-     * 这样的操作最后留下的size就是曾经用房最多时的size.
+     * 思路: 只要需要用 room 就会加入 PriorityQueue,
+     * 如果 PriorityQueue 是空的直接加不用判断,
+     * 如果 PriorityQueue 最小(早)的 end <= "curr meeting start", 可以使用 已使用结束的 room(poll 后, offer "curr meeting end"),
+     * 如果不满足条件, 则 "curr meeting end" 直接加入 PriorityQueue,
+     * 关键: 这样的操作最后留下的size就是曾经用房最多时的size.(可以看下边操作步骤好理解)
      */
     public int minMeetingRooms(int[][] intervals) {
-        //[1,2]
-        //[1,3][2,3];
-        //[1,3][4,5];
+        // intervals 先按 start 小到大排序.
         Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        // 由小到大排序 依序加入其中的 intervals end
         PriorityQueue<Integer> endsQueue = new PriorityQueue<>((a, b) -> a - b);
         endsQueue.offer(intervals[0][1]);
-
+        // 从 index == 1 开始 curr meeting start 和 queue top end 比较.
         for (int i = 1; i < intervals.length; i++) {
-            //前一个结束时间是否 <= 后一个开始时间, 是的话, 表示有空位.
-            if (endsQueue.peek() <= intervals[i][0]) {
+            // queue top end(已经开始的 meeting 最早结束的 end) 是否 <= curr meeting start, 表示可以腾空已使用结束的 room.
+            if (endsQueue.peek() <= intervals[i][0])
                 endsQueue.poll();
-            }
             endsQueue.offer(intervals[i][1]);
         }
-        //最后的size, 其实是表示曾经出现过占用最多房间时候的大小, 因为只会poll出当时可以刚好可以接着开会的interval(实际endsQueue存的是结束时间, 用于片段是否可以接用).
+        // 关键: 最后的size, 就是占用最多房间时候的大小.
+        // 因为, 每开始一个 meeting, 就会入 queue,
+        // 差别在于, 如果 queue top(最小end) 的 end <= curr meeting start(meeting 占用结束), 就会 poll 出 top, 然后加入 curr meeting end,
+        // 这样的操作的结果, 就会保留曾经同时开会的最多数量.
         return endsQueue.size();
     }
 

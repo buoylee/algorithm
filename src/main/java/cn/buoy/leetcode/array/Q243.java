@@ -4,7 +4,7 @@ public class Q243 {
     /**
      * 簡單, 視頻.
      * https://www.youtube.com/watch?v=HmBjC413Vug
-     * 思路: 遍歷 words, 一旦出現 word1/word2, index 賦值給對應的 p1/p2,
+     * 思路: 遍歷 words, 一旦出現 word1/word2, 他们的 index 賦值給對應的 p1/p2,
      * 只要 word1/2 都存在, 就計算距離.
      */
     public int shortestDistance(String[] words, String word1, String word2) {

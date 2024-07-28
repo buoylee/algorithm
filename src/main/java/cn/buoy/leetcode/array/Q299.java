@@ -7,22 +7,24 @@ public class Q299 {
      * 思路: 重點在如何 算 cows, 只要 freq 是否 一致, 細節看註釋.
      */
     public String getHint(String secret, String guess) {
+        // 完全相同的 digit
         int bulls = 0;
+        // 位置不同, value 相同的 digit
         int cows = 0;
         int[] count = new int[10];
-
+        // 比較每個 同一位置的 char
         for (int i = 0; i < secret.length(); i++) {
             char s = secret.charAt(i);
             char g = guess.charAt(i);
             if (s == g) {
                 bulls++;
             } else {
-                // 爲什麼這麼寫, 而不寫 count == 0, 因爲沒法判斷 是否第一次遇到.
+                // 爲什麼這麼寫, 而不寫 count == 0, 因爲沒法識別 "一次都沒遇到" 的情況.
                 // 關鍵: 因爲 secret 遇到則++, guess 遇到則--
-                // 所以, 當發現 secret 遍歷出 "某char" 時, 且 count < 0 時(表示 guess 遇到且多個 secret 遇到 "某char"), 這時, 表示出現了相同的char配對, 所以, cows++. 反之亦然.
+                // 所以, 當發現 secret 遍歷出 "某char" 時, 且 count < 0 時(表示 guess 遇到過 "某char" 且 比 secret 遇到過 "某char" 多), 這時, 表示出現了相同的char配對, 所以, cows++. 反之亦然.
                 if (count[s - '0'] < 0) cows++;
                 if (count[g - '0'] > 0) cows++;
-                // 檢查完再操作 count
+                // 算完 cow, 再更新 count
                 count[s - '0']++;
                 count[g - '0']--;
             }
