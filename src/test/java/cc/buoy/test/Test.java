@@ -71,8 +71,9 @@ public class Test {
 //        System.out.println(q.toString());
 //        System.out.println(q.toString());
 
-        int i = "9".compareTo("133");
-        System.out.println(i);
+//        int i = "9".compareTo("133");
+//        System.out.println(i);
+        System.out.println(1/2);
     }
 
 }

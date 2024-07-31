@@ -3,60 +3,89 @@ package cn.buoy.leetcode.backtracking;
 import java.util.*;
 
 public class Q140 {
-    public static void main(String[] args) {
-        Q140 q140 = new Q140();
-        List<String> strings = q140.wordBreak2("catsanddog", Arrays.asList("cat", "cats", "and", "sand", "dog"));
-    }
-
     /**
+     * 簡單, 视频不好理解. 直接看下边代码. 下边代码太好理解了.
      * https://www.youtube.com/watch?v=pYKGRZwbuzs
-     * 视频不好理解.
-     * 直接看下边代码. 下边代码太好理解了. 很传统的回溯.
+     * 思路: 不斷 切出 preStr, 判斷是否存在于 wordDict, 有就繼續遞歸切 剩餘的 subStr, 當 startIdx 來到了 str.len, 說明是有效的解, 加入 result
+     * 優化: 可以求出 最長 word 的 Len, 減少切 preSub 時的 遍歷次數.
      */
-    // 最长len的wordDict元素 的len
-    private int length = 0;
+    // 最长的 word len
+    private int maxWordLen = 0;
 
     public List<String> wordBreak(String str, List<String> wordDict) {
-        //wordDict 转set
+        // wordDict 转 set, 加速查找
         Set<String> dictSet = new HashSet<>();
         List<String> result = new ArrayList<>();
-        //temp
+        // temp
         List<String> candidates = new ArrayList<>();
         for (String word : wordDict) {
-            length = Math.max(length, word.length());
+            maxWordLen = Math.max(maxWordLen, word.length());
             dictSet.add(word);
         }
-
-        helper(str, result, candidates, dictSet, 0);
+        dfs(str, result, candidates, dictSet, 0);
         return result;
     }
 
     /**
      *
      */
-    private void helper(String str, List<String> result, List<String> tempList, Set<String> dictSet, int start) {
-        //可以成功来到str末尾, 把'tempList' 拼接成string后, 加入到result中.
-        if (start == str.length()) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < tempList.size() - 1; ++i) {
-                builder.append(tempList.get(i)).append(" ");
-            }
-            //去掉最后的空格而已.
-            builder.append(tempList.get(tempList.size() - 1));
-            result.add(builder.toString());
+    private void dfs(String str, List<String> result, List<String> tempList, Set<String> dictSet, int startIdx) {
+        // startIdx 可以成功来到 str 末尾, 把'tempList' 拼接成 string 后, 加入到 result 中.
+        if (startIdx == str.length()) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < tempList.size() - 1; ++i)
+                sb.append(tempList.get(i)).append(" ");
+            // 去掉最后的空格.
+            sb.append(tempList.get(tempList.size() - 1));
+            result.add(sb.toString());
             return;
         }
 
-        //遍历继续条件, 必须肯定是小于start + dict最大len 且 如果到达了 str 末尾, 则不能超过 原str.len
-        for (int index = start; index < start + length && index < str.length(); ++index) {
-            //从start开始切除遍历不同长度的subStr, 如果dictSet中存在, 则加入tempList
-            String subStr = str.substring(start, index + 1);
-            if (dictSet.contains(subStr)) {
-                tempList.add(subStr);
-                helper(str, result, tempList, dictSet, index + 1);
+        // 細節: 不能超過 startIdx + "dict 最大 len" 且 "原 str.len"
+        for (int index = startIdx; index < startIdx + maxWordLen && index < str.length(); ++index) {
+            // 从 startIdx 开始切除不同长度的 left 半邊, 如果 dictSet 中存在, 则加入 tempList
+            String left = str.substring(startIdx, index + 1);
+            if (dictSet.contains(left)) {
+                tempList.add(left);
+                dfs(str, result, tempList, dictSet, index + 1);
+                // backtracking
                 tempList.remove(tempList.size() - 1);
             }
         }
+    }
+
+    /**
+     * 有空再看, 沒那麼直觀
+     */
+    public List<String> wordBreak3(String s, List<String> wordDict) {
+        return wordBreak3(s, new HashSet<>(wordDict), new HashMap<>());
+    }
+
+    private List<String> wordBreak3(String s, Set<String> wordDict, Map<String, List<String>> memo) {
+        if (memo.containsKey(s)) {
+            return memo.get(s);
+        }
+
+        List<String> strToAllCombineList = new ArrayList<>();
+        if (wordDict.contains(s)) {
+            strToAllCombineList.add(s);
+        }
+
+        for (int i = 1; i < s.length(); i++) {
+            String left = s.substring(0, i);
+            if (wordDict.contains(left)) {
+                String right = s.substring(i);
+                // 剩餘的 str 繼續 遞歸 切分.
+                List<String> subResult = wordBreak3(right, wordDict, memo);
+                // 關鍵: 所有的 str 組合 都放到 同一個 list 中.
+                for (String sub : subResult) {
+                    strToAllCombineList.add(left + " " + sub);
+                }
+            }
+        }
+
+        memo.put(s, strToAllCombineList);
+        return strToAllCombineList;
     }
 
 
@@ -103,6 +132,10 @@ public class Q140 {
             }
             builder.setLength(builder.length() - w.length());
         }
+    }
 
+    public static void main(String[] args) {
+        Q140 q140 = new Q140();
+        List<String> strings = q140.wordBreak2("catsanddog", Arrays.asList("cat", "cats", "and", "sand", "dog"));
     }
 }

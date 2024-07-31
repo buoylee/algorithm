@@ -5,26 +5,31 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Q78 {
-
     /**
+     * 77
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=rtFHxiQAICA
-     * 典型回溯超简单. 一直用下一个元素就好
+     * https://www.youtube.com/watch?v=-0OycisNZTo 短
+     * 思路: backtracking, 典型排列組合, n選1, n-1選1, ...
+     * temp 每加入一個元素到 temp, 就放入 result, 就能得到所有子集.
+     * 題目限制選 num 只能由小到大, 直接 start + 1 然後遍歷 即可.
      */
-    public List<List<Integer>> subsets2(int[] S) {
+    public List<List<Integer>> subsets2(int[] nums) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        //第一个空, 已经先加入.
-        dfs(S, 0, new ArrayList<Integer>(), result);
+        dfs(nums, 0, new ArrayList<Integer>(), result);
         return result;
     }
 
-    public void dfs(int[] s, int index, List<Integer> path, List<List<Integer>> result) {
-        //直接加入result
-        result.add(new ArrayList<Integer>(path));
-
-        for (int i = index; i < s.length; i++) {
-            path.add(s[i]);
-            dfs(s, i + 1, path, result);
-            path.remove(path.size() - 1);
+    public void dfs(int[] s, int start, List<Integer> temp, List<List<Integer>> result) {
+        // 第一个是 ""
+        // 每一步都加入 result
+        result.add(new ArrayList<Integer>(temp));
+        for (int i = start; i < s.length; i++) {
+            temp.add(s[i]);
+            // 直接 i + 1 給 dfs 即可.
+            dfs(s, i + 1, temp, result);
+            // backtracking
+            temp.remove(temp.size() - 1);
         }
     }
 

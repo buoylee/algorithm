@@ -4,13 +4,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Q93 {
+    /**
+     * 簡單, 視頻
+     * https://www.youtube.com/watch?v=b8_w2ljAzeU
+     * 思路: backtracking, ip分4段, 每段遍歷 1/2/3位 3種可能, 判斷有效性; 當到達 分段數量 爲4, 且str index 到達末尾, 就是有效的ip, 加入result
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> result = new ArrayList<>();
+        dfs(result, new StringBuilder(), s, 0, 0);
+        return result;
+    }
 
     /**
-     * https://www.youtube.com/watch?v=b8_w2ljAzeU
-     * 视频参考思路就好, 用的是递归. 代码用下边的backtracking比较直观和容易记.
+     * @param result
+     * @param temp
+     * @param str
+     * @param start   當前分段的 起始 index
+     * @param segment 當前處理的第幾分段
      */
+    private void dfs(List<String> result, StringBuilder temp, String str, int start, int segment) {
+        if (segment == 4 && start == str.length()) {
+            result.add(temp.toString());
+            return;
+        }
+        // 不是上邊剛好都到達結尾的情況, 且來到了需要結束的位置: 取了4個 segment 或 str 到頭.
+        if (segment == 4 || start == str.length())
+            return;
+        // 關鍵: 遍歷 1/2/3位 3種可能
+        for (int len = 1; len <= 3 && start + len <= str.length(); len++) {
+            String part = str.substring(start, start + len);
+            if (isValid(part)) {
+                // 記錄未被修改前的 len 長度, 用於稍後 backtrack
+                int beforeLength = temp.length();
+                if (segment > 0) temp.append(".");
+                temp.append(part);
+                dfs(result, temp, str, start + len, segment + 1);
+                // backtrack
+                temp.setLength(beforeLength);
+            }
+        }
+    }
 
-    public List<String> restoreIpAddresses(String str) {
+    // 2個作用: 多位數不能以0開頭; 大小只能在 0~255;
+    private boolean isValid(String part) {
+        // 如果 segment 有多位數字, 如果以 0 開頭, 則爲無效數.
+        if (part.length() > 1 && part.charAt(0) == '0') return false;
+        int value = Integer.parseInt(part);
+        return value >= 0 && value <= 255;
+    }
+
+
+    public List<String> restoreIpAddresses2(String str) {
         List<String> res = new ArrayList<>();
         List<String> list = new ArrayList<>();
         if (str.length() < 4 || str.length() > 12) return res;

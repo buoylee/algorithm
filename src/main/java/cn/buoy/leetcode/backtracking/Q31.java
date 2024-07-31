@@ -2,7 +2,7 @@ package cn.buoy.leetcode.backtracking;
 
 public class Q31 {
     /**
-     * 可以跳过?
+     * 可以跳过
      * https://www.youtube.com/watch?v=K-QCteGM-Bk
      * 公式...背...
      */

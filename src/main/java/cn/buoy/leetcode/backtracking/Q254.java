@@ -5,33 +5,37 @@ import java.util.List;
 
 public class Q254 {
     /**
-     * 参考:
+     * 简单, 视频
      * https://www.youtube.com/watch?v=d0QvoL58SVg
-     * 这个比较好理解
+     * 思路: backtracking, 典型排列组合, 可以除重复元素, 只要严格按照小到大选数, 就不会出现重复的组合. 只要能整除就继续 dfs
+     * 关键: 当 remain == 1 时, 记得检查 是不是质数(只被除过1次就剩1)
      */
-    private void helper(List<List<Integer>> res, List<Integer> temp, int remain, int start) {
-        //剩1, 结束
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        // 不能除1
+        dfs(res, new ArrayList<>(), n, 2);
+        return res;
+    }
+
+    private void dfs(List<List<Integer>> res, List<Integer> temp, int remain, int start) {
+        // 剩1, 结束
         if (remain == 1) {
-            //质数丢掉
+            // 关键: 如果除了1次就到1了, 说明是质数, 不要.
             if (temp.size() > 1) {
                 res.add(new ArrayList<>(temp));
                 return;
             }
         }
-
+        // 只要严格从小到大选数, 就不会出现重复的组合.
         for (int divisor = start; divisor <= remain; divisor++) {
             if (remain % divisor == 0) {
                 temp.add(divisor);
-                helper(res, temp, remain / divisor, divisor);
+                // 可以重复除相同的digit
+                dfs(res, temp, remain / divisor, divisor);
+                // backtracking
                 temp.remove(temp.size() - 1);
             }
         }
-    }
-
-    public List<List<Integer>> getFactors(int n) {
-        List<List<Integer>> res = new ArrayList<>();
-        helper(res, new ArrayList<>(), n, 2);
-        return res;
     }
 
 

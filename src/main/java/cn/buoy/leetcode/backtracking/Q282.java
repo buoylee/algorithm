@@ -5,30 +5,31 @@ import java.util.List;
 
 public class Q282 {
     /**
+     * 其实是简单的, 听下视频思路就好, 看注释代码, 好理解.
      * https://www.youtube.com/watch?v=v05R1OIIg08
-     * 停下思路就好, 然后看下边代码, 好理解
+     * 思路: 遍历 numStr 各个长度的 preStr, 然后 把 preStr 传入下层 dfs, 再次用剩余 numStr 切出 第2个 preStr, 分 "+/-/*" 3种情况继续 dfs.
+     * 关键: prevCal currNum nextNum 运算顺序.
+     * 如果 currNum 和 nextNum 之间是 "+/-", 可以直接运算 prevCal 和 currNum, 运算后的结果作为 "新的 prevCal" 传入下一层 dfs
+     * 如果 currNum 和 nextNum 之间是 "*", 则先运算 currNum 和 currNum, 运算后的结果作为 "新的 currNum" 传入下一层 dfs
      */
     public List<String> addOperators(String numStr, int target) {
         List<String> res = new ArrayList();
-        //base case:
         if (numStr.length() == 0 || Long.parseLong(numStr) > Integer.MAX_VALUE)
             return res;
-        //把numStr拆开成字节数组, 及长度.
+        // numStr 转为 char[]
         char[] digitArr = numStr.toCharArray();
-        int n = digitArr.length;
-        //表达式str最长len n + (n - 1).
-        char[] expStr = new char[2 * n - 1];
-        //当前的组成的数字.
-        long curCal = 0;
-        //从第i位开始, 到 arr结尾 组成 数字的组合, 然后放在expStr第i位.
-        //numStr: 2134
-        //expStr: [2, 21, 213, 2134...]
-        for (int i = 0; i < n; i++) {
-            curCal = curCal * 10 + digitArr[i] - '0';
+        int numStrLen = digitArr.length;
+        // 表达式 str 最长 numStrLen, 因为中间可以多插 numStrLen - 1 个运算符
+        char[] expStr = new char[2 * numStrLen - 1];
+        // 当前的组成的数字.
+        long currNum = 0;
+        // 切出 digitArr 的 preStr, 作为 "下一个 num"
+        for (int i = 0; i < numStrLen; i++) {
+            currNum = currNum * 10 + digitArr[i] - '0';
             expStr[i] = digitArr[i];
-            dfs(res, expStr, i + 1, digitArr, i + 1, 0, curCal, target);
-            //如果存在leading zero, 直接退出.
-            if (curCal == 0) break;
+            dfs(res, expStr, i + 1, digitArr, i + 1, 0, currNum, target);
+            // 只有 '0' 合法, 不能出现 leading zero 的 多位数, 跳过.
+            if (currNum == 0) break;
         }
         return res;
     }
@@ -40,41 +41,37 @@ public class Q282 {
      * @param digitArr
      * @param digitArrStart
      * @param prevCal       前边 所有 运算 的结果
-     * @param prevTempNum   当前的组合数字, 在这个函数里 就是上一次 数组组合的值.
+     * @param currNum       本次运算 的第一个 num
      * @param target        目标结果
      */
-    private void dfs(List<String> result, char[] expStr, int expStart, char[] digitArr, int digitArrStart, long prevCal, long prevTempNum, int target) {
-        //遍历完整个digitArr, 检查是否 == target, 把exp加入result
+    private void dfs(List<String> result, char[] expStr, int expStart, char[] digitArr, int digitArrStart, long prevCal, long currNum, int target) {
+        // 遍历完整个digitArr, 检查是否 总结果 == target, 把exp加入result
         if (digitArrStart == digitArr.length) {
-            if (prevCal + prevTempNum == target)
+            if (prevCal + currNum == target)
                 result.add(new String(expStr, 0, expStart));
             return;
         }
-        //为现在准备参与运算的数字初始化
-        long currTempNum = 0;
-        //这里先跳过应该放操作符(+, -, *)的位置`expIndex`, 留给下边for里添加.
-        //为什么这里不考虑`什么操作符都不加`的情况, 因为 在上一层取数字的遍历中 已经考虑了. 这里只讨论 填什么操作符.
+        // 为现在准备参与运算的数字初始化
+        long nextNum = 0;
+        // 这里先 预留出 操作符(+/-/*)的位置 `expIndex`, 下边for里再处理.
+        // 为什么这里不考虑 `不加操作符` 的情况, 因为 在上一层 "切 preStr" 时, 已确定 这里放运算符的位置.
         int expIndex = expStart + 1;
         for (int digitIndex = digitArrStart; digitIndex < digitArr.length; digitIndex++) {
-            //构建此次的数字
-            currTempNum = currTempNum * 10 + digitArr[digitIndex] - '0';
+            // 构建参与运算的第2个数
+            nextNum = nextNum * 10 + digitArr[digitIndex] - '0';
+            // 关键: 这种写法很巧妙, 这样记录了 "运算符 index", 然后从 "运算符后的 index" 开始遍历, 就不用显式的写 backtracking
             expStr[expIndex++] = digitArr[digitIndex];
-            //每一层递归 都保留了 expStart, 每次遍历都会再从expStart开始, 不需要进行backtracking.
+            // 关键: prevCal, currNum, nextNum 的运算先后顺序:
+            // currNum 和 nextNum 的运算符是 "+/-", 则可以先执行 prevCal 和 currNum 的运算;
+            // 如果是 '*', 保留 prevCal, 执行 "prevCal 和 currNum 的运算", 直到后续层再次遇到 currNum 和 nextNum 的运算符为 "+/-", 才可以和 prevCal 运算.
             expStr[expStart] = '+';
-            //prevTempNum 是上次的数字组合
-            //关键在 如何处理 * 的运算顺序,
-            //prevCal, prevTempNum, currTempNum. 例如: prevCal + prevTempNum 和 prevCal - prevTempNum, 如果 prevCal 和 prevTempNum 之间是*, 那就需要currTempNum的参与运算才能加入'再'之前的运算值.
-            //分别是 `上上个被 + 或 - 隔开的之前所有运算的结果; 上一次的 数字组合; 当前的数字组合;
-            //关键代码: 延迟了 上一次数字的运算操作.
-            //在当前轮, 如果是*, 就要先运算与前数字的值, 直到 下次遇到不是*的情况, 才能 和prevCal做运算.
-            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal + prevTempNum, currTempNum, target);
+            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal + currNum, nextNum, target); // '+': prevCal + currNum
             expStr[expStart] = '-';
-            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal + prevTempNum, -currTempNum, target);
+            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal + currNum, -nextNum, target); // '-': prevCal + currNum
             expStr[expStart] = '*';
-            //这里还是不能和 prevCal 运算, 直到后续出现 +, -
-            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal, prevTempNum * currTempNum, target);
-            //0开头的数字不合法, 跳出这个start的遍历
-            if (currTempNum == 0) break;
+            dfs(result, expStr, expIndex, digitArr, digitIndex + 1, prevCal, currNum * nextNum, target); // '*': currNum * nextNum
+            // 只有 '0' 合法, 不能出现 leading zero 的 多位数, 跳过.
+            if (nextNum == 0) break;
         }
     }
 }
