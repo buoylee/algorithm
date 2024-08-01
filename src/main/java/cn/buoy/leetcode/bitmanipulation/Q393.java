@@ -5,13 +5,14 @@ public class Q393 {
      * 簡單, 視頻, 代碼.
      * https://www.youtube.com/watch?v=IKplJ57qNQg 失效
      * https://www.youtube.com/watch?v=x2Sdm1Nksnw
-     * 思路:
      * 第一个 byte, 如果0个`1`开头, data.len == 1
      * 第一个 byte, `10`开头, 不合法.
      * 第一个 byte, 如果2个`1`开头, data.len == 2
      * 第一个 byte, 如果3个`1`开头, data.len == 3
      * 第一个 byte, 如果4个`1`开头, data.len == 4
      * 題目是可能存在多個 utf-8 字符的, 所以需要檢查完所有.
+     * 思路: 取出 第一个标志 byte, 统计 "這個 int" 高位 有幾個连续 '1', 即可得知后续 follower 数量, 检查 每个 follower 合法性;
+     * 检查完 上一个 utf-8, 如果 data index 还没到尾部, 重复以上步骤.
      */
     public boolean validUtf8(int[] data) {
         int idx = 0;
