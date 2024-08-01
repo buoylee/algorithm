@@ -3,7 +3,6 @@ package cn.buoy.leetcode.dfsandbfs;
 public class Q52 {
     /**
      * 看51題就好, 幾乎完全一樣, 與51差別在於, 當發現1個有效結果時, result++即可, 不用記錄具體棋盤.
-     * <p>
      * https://www.youtube.com/watch?v=b9G4H00u3ZQ
      * 下邊寫法不太優化, 可以參考51題.
      */
