@@ -2,26 +2,27 @@ package cn.buoy.leetcode.bitmanipulation;
 
 public class Q137 {
     /**
+     * 簡單, 視頻
      * https://www.youtube.com/watch?v=puXcQpwgcD0
-     * 直接看視頻, 然後代碼就懂了, 算簡單. 思路: 使 所有元素 某位上 有n(题目要求 除答案外 重复元素的重复次数)的倍数的`1` 转化为0, 这 剩下的就是 答案.
+     * 思路: 关键要知道 %n 的功能, 能消除 "n倍 num" 的 num.
+     * 统计 "所有 num" 在 "同一个 bit" 上的 '1' 的个数, 然后 %3, 即可知道 "该 bit" 是否有 不是 3的倍数个的 1.
+     * % 完后, 将 % 后的结果, 填入 result 对应的位置, 当检查完 32bit, 就是答案.
      */
     public int singleNumber(int[] nums) {
-        int ans = 0;
-        //int 有32位
+        int result = 0;
+        // int 有32位
         for (int i = 0; i < 32; i++) {
-            int sum = 0;
+            int count = 0;
             for (int j = 0; j < nums.length; j++) {
-                //统计`1`个数,然后%3, 只会出现剩1, 题目没有2个.
-                if (((nums[j] >> i) & 1) == 1) {
-                    sum++;
-                    sum %= 3;
-                }
+                // 统计 "所有 num" 在该位上 `1` 的个数, 然后 %3, 只会出现剩0/1, 题目没有2个.
+                if (((nums[j] >> i) & 1) == 1)
+                    count++;
+                count %= 3;
             }
-            //左移几位取的`1`, 就 移回 几位 放回去.
-            if (sum != 0) {
-                ans |= sum << i;
-            }
+            // 右移几位 取的`1`, 就 左移几位 放入 result.
+            if (count != 0)
+                result |= count << i;
         }
-        return ans;
+        return result;
     }
 }
