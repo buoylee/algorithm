@@ -3,51 +3,42 @@ package cn.buoy.leetcode.dp;
 public class Q265 {
     /**
      * 256: https://www.youtube.com/watch?v=K-G6pMiwb_k
-     * <p>
      * https://www.youtube.com/watch?v=KVfQmGiwEMU (需要會員)
-     * https://www.youtube.com/watch?v=a6rDSwdW2Mo 先看思路, 然後看註釋. 算簡單.
-     * <p>
-     * 思路: 要得到 dp[i][j], 就要找出 min(dp[i-1][~j]) (涂到 i - 1 房子为止, i-1 房子顏色 不同于j顏色 的最小dp) + costs[i][j].
-     * 這是優化後的代碼, 思路一樣.
+     * https://www.youtube.com/watch?v=a6rDSwdW2Mo 当题目看, 然後看註釋. 算簡單.
+     * 思路: 要得到 dp[i][j], 就要找出 min(dp[i-1][非j]) + costs[i][j].
+     * 具体实现, 只需要记录 i - 1 房子 cost 最小的 2种颜色 即可, 因为 肯定 i 房子 如何选 都可以 在这2者中选出 与自己不同的颜色 保持最小 cost 的可能(dp[i][j]).
      */
     public int minCostII(int[][] costs) {
         if (costs == null || costs.length == 0) return 0;
-
         int houseLen = costs.length;
         int colorLen = costs[0].length;
-
-        // 當前房子塗色最小和次小顏色的index
-        // 關鍵: 只需要記錄, 某個房子的最小和次小花費顏色即可.
+        // 當前房子 "塗色 cost 最小和次小" 的顏色的 index
+        // 關鍵: 只需要記錄, 当前房子的 "最小和次小 cost 顏色" 即可. 因为 下一个房子的颜色, 不和 当前房子 颜色相同 即可.
         int currMin1 = -1;
         int currMin2 = -1;
-
+        // 遍历房子
         for (int i = 0; i < costs.length; i++) {
             // 上個房子塗色最小和次小顏色的index
             int lastMin1 = currMin1;
             int lastMin2 = currMin2;
-
             // 爲選出 當前房子 最小次小顏色index 初始化.
             currMin1 = -1;
             currMin2 = -1;
-
+            // 遍历当前房子颜色
             for (int j = 0; j < colorLen; j++) {
                 // 表示當前j顏色不是上一個房子最小花費的顏色(lastMin1)
                 if (j != lastMin1) {
-                    // 關鍵: lastMin1 == -1 表示已經在第一件房子, 前邊爲空, 用 -1 表示不存在的顏色.
+                    // 關鍵: lastMin1 == -1 表示 当前在第一间房子, 前邊爲空, 用 -1 表示不存在.
                     // 關鍵: 注意, 這裏 costs[i][j] 已經當作 dp 來使用(用來累加).
                     costs[i][j] += lastMin1 == -1 ? 0 : costs[i - 1][lastMin1];
-                } else { // 上一個最小的顏色(lastMin1)和當前j顏色相同, 那只能配上 上一個房子次小花費的顏色(lastMin2).
+                } else  // 上一個最小的顏色(lastMin1)和當前j顏色相同, 那只能配上 上一個房子次小花費的顏色(lastMin2).
                     costs[i][j] += lastMin2 == -1 ? 0 : costs[i - 1][lastMin2];
-                }
-
                 // 關鍵: 找出 當前房子 最小和次小的 顏色index.
-                // currMin1 == -1 理解爲 開始第一次爲這個房子挑顏色;
-                if (currMin1 == -1 || costs[i][j] < costs[i][currMin1]) {
-                    currMin2 = currMin1;
+                if (currMin1 == -1 || costs[i][j] < costs[i][currMin1]) { // currMin1 == -1 理解爲 開始第一次爲這個房子挑顏色;
+                    currMin2 = currMin1; // 发现比 最小的 还小, 先赋值给 currMin2, 再把 新值 付给 currMin1.
                     currMin1 = j;
-                } else if (currMin2 == -1 || costs[i][j] < costs[i][currMin2]) {
+                } else if (currMin2 == -1 || costs[i][j] < costs[i][currMin2]) // 不是 最小, 再考虑 currMin2
                     currMin2 = j;
-                }
             }
         }
         return costs[houseLen - 1][currMin1];

@@ -4,29 +4,32 @@ import java.util.Stack;
 
 public class Q85 {
     /**
+     * 84. 只要懂了 84题, 剩下就是转化成对应的柱形图表示, 然后调用84 func 即可.
+     * 视频
      * https://www.youtube.com/watch?v=2Yk3Avrzauk
-     * 這個視頻, 還要看 84.
-     * 只要懂了 84题, 剩下就是转化成对应的柱形图表示, 然后调用84 func 即可.
+     * 思路: 一行行来检查 柱型图, 增加一行就当作新的 柱形图,
+     * 如果 "新行某列" 为 '0', 新柱形图 此列归零;
+     * 如果 "新行某列" 为 '1', 新柱形图 "该列 height" + 1
+     * 更新完 一行, 就可以作为 新的柱形图 call 84 func.
      */
     public int maximalRectangle(char[][] matrix) {
         if (matrix.length == 0) return 0;
-        int n = matrix[0].length;
-        int[] heights = new int[n]; // using a array to reduce counting step of 1
-        int max = 0;
+        int heightLen = matrix[0].length;
+        int[] heights = new int[heightLen]; // using a array to reduce counting step of 1
+        int result = 0;
         for (char[] row : matrix) {
-            for (int i = 0; i < n; i++) {
-                //遇1, 则heights[i]++
+            for (int i = 0; i < heightLen; i++) {
+                // 遇1, 则heights[i]++
                 if (row[i] == '1') {
                     heights[i] += 1;
-                } else {
-                    //遇0, 则 置0
+                } else
+                    // 遇0, 则置0
                     heights[i] = 0;
-                }
             }
-            //然后call func 84 即可
-            max = Math.max(max, maxArea(heights)); // go a sub problem of Histogram
+            // 没处理完一行, 就 call func 84 即可.
+            result = Math.max(result, maxArea(heights)); // go a sub problem of Histogram
         }
-        return max;
+        return result;
     }
 
     /**

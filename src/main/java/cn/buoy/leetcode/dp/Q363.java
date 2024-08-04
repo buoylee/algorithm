@@ -4,20 +4,21 @@ import java.util.TreeSet;
 
 public class Q363 {
     /**
-     * https://www.bilibili.com/video/BV1w54y1y7Wf?from=search&seid=2005236116826940010
      * 看完視頻就懂, 簡單.
-     * 思路: dp[r][c] = dp[r - 1][c] + dp[r][c - 1] - dp[r - 1][c - 1] + matrix[r - 1][c - 1]
+     * https://www.bilibili.com/video/BV1w54y1y7Wf?from=search&seid=2005236116826940010
+     * 思路: 1. 先利用下边规律, 求出每一格的前缀和.
+     * dp[r][c] = dp[r - 1][c] + dp[r][c - 1] - dp[r - 1][c - 1] + matrix[r - 1][c - 1]
      * dp[r - 1][c]: [0,0] 到 靠 dp[r][c] 左邊的 的長方形區域.
      * dp[r][c - 1]: [0,0] 到 靠 dp[r][c] 上邊的 的長方形區域.
      * dp[r - 1][c - 1]: dp[r - 1][c] 和 dp[r][c - 1] 重疊的區域.
      * matrix[r - 1][c - 1]: dp[r][c] 本格的值.
      * 注意: dp[r][c] 對應的是 matrix[r - 1][c - 1] 的值.
+     * 2. 再使用, dp[r2][c2] - dp[r1 - 1][c2](上) - dp[r2][c1 - 1](左) + dp[r1 - 1][c1 - 1](重叠), 求出 '左上角的點'(r1, c1) 和 '右下角的點'(r2, c2) 的組合而成的長方形.
      */
     public int maxSumSubmatrix(int[][] matrix, int k) {
-        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
-            return 0;
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return 0;
         int rows = matrix.length, cols = matrix[0].length;
-        // 細節, 方便計算
+        // 細節, 方便計算, 因为使用到 dp[r - 1][c - 1] 前边的格子
         int[][] dp = new int[rows + 1][cols + 1];
         //给`每一格`填充前缀和:
         for (int r = 1; r <= rows; r++) {
@@ -34,9 +35,10 @@ public class Q363 {
             }
         }
         int max = Integer.MIN_VALUE;
-        //遍历每一種 '左上角的點'(r1, c1) 和 '右下角的點'(r2, c2) 的組合而成的長方形, 选出max.
-        for (int r1 = 1; r1 <= rows; r1++) {
+        // 遍历每一種 '左上角的點'(r1, c1) 和 '右下角的點'(r2, c2) 的組合而成的長方形, 选出max.
+        for (int r1 = 1; r1 <= rows; r1++) { // 左上
             for (int c1 = 1; c1 <= cols; c1++) {
+                // 右下
                 for (int r2 = r1; r2 <= rows; r2++) {
                     for (int c2 = c1; c2 <= cols; c2++) {
                         int area = dp[r2][c2];

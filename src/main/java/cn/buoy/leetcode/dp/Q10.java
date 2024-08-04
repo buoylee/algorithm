@@ -2,19 +2,47 @@ package cn.buoy.leetcode.dp;
 
 public class Q10 {
     /**
+     * 难! 一切不懂都要画出 2维的 str/pattern 图. 有空复习
      * https://www.youtube.com/watch?v=DqhPJ8MzDKM&t=3s
-     * 难!
-     * 关键在 转义方程, 需要用到 dp[i + 1][j + 1] 的 dp[i][j], dp[i + 1][j - 1], dp[i][j + 1], dp[i + 1][j - 1]的情况.
-     *
      * https://www.youtube.com/watch?v=c5vsle60Uw8
-     * 看這個可能比較好
+     * 思路: s 为 x轴, p 为 y轴, 从 dp[0][0] 到 dp[0][pi], 再外层循环 dp[1]~dp[si].
      */
     public boolean isMatch(String s, String p) {
-
-        if (s == null || p == null) {
-            return false;
+        int m = s.length(), n = p.length();
+        // dp[i][j] 表示, s取 i len, p取 j len, 2者能否匹配.
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+        // init, 如果 s 是 '', dp[0][i] 只需要看 p 的 前2位是否 match 即可. 也就是 dp[0][j] = dp[0][j - 2].
+        // 只要第一个不可能是 '*', 所以从 index1 开始
+        for (int j = 1; j <= n; j++) {
+            if (p.charAt(j - 1) == '*')
+                dp[0][j] = dp[0][j - 2];
         }
-        //dp[i][j]表示, str 前i substr 与 pat 前j substr 是否正则匹配.
+        for (int si = 1; si <= m; si++) {
+            for (int pi = 1; pi <= n; pi++) {
+//                if (p.charAt(pi - 1) == '*') {
+//                    dp[si][pi] = dp[si][pi - 2] || (dp[si - 1][pi] && (s.charAt(si - 1) == p.charAt(pi - 2) || p.charAt(pi - 2) == '.'));
+//                } else {
+//                    dp[si][pi] = dp[si - 1][pi - 1] && (s.charAt(si - 1) == p.charAt(pi - 1) || p.charAt(pi - 1) == '.');
+//                }
+                if (s.charAt(si - 1) == p.charAt(pi - 1) || p.charAt(pi - 1) == '.') // 这个简单, 如果 s[si] == p[pi] 或 p[pi] == '.', 只需要比较 s和p 前一位 dp 即可.
+                    dp[si][pi] = dp[si - 1][pi - 1];
+                else if (p.charAt(pi - 1) == '*') {
+                    if (s.charAt(si - 1) == p.charAt(pi - 2) || p.charAt(pi - 2) == '.') { // 关键难点: p '*'前一位 和 s '当前位' 是 相等 或 '.' 的情况,
+                        dp[si][pi] = dp[si][pi - 2] // 这里同样, '*' 可以当作 0 使用.
+                                || dp[si - 1][pi]; // 关键: 当作 1个或多个 '*' 前 char 来使用. 例: s: acbbbb; p: acb*; 这个时候就是看 acbbb 能否和 "acb*"/"ac.*" 匹配
+                    } else
+                        dp[si][pi] = dp[si][pi - 2]; // 这个简单, 如果 '*' "前一个 char" 不同/不是 '.', 那当前这个 '*' 只能当 0 来用了, 所以, 由 dp[si][pi - 2] 决定.
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+
+    public boolean isMatch2(String s, String p) {
+        if (s == null || p == null) return false;
+        // dp[i][j]表示, str 前i substr 与 pat 前j substr 是否正则匹配.
         boolean[][] dp = new boolean[s.length() + 1][p.length() + 1];
         //两str都为null时, 初始为 true.
         dp[0][0] = true;
@@ -54,11 +82,11 @@ public class Q10 {
     }
 
 
-    public boolean isMatch2(String s, String p) {
-        return isMatch(s, p, 0, 0, new Boolean[s.length()][p.length()]);
+    public boolean isMatch3(String s, String p) {
+        return isMatch3(s, p, 0, 0, new Boolean[s.length()][p.length()]);
     }
 
-    private boolean isMatch(String s, String p, int si, int pi, Boolean[][] cache) {
+    private boolean isMatch3(String s, String p, int si, int pi, Boolean[][] cache) {
         if (pi >= p.length()) return si >= s.length(); // both reaches to end
         if (si >= s.length()) return validPattern(p, pi);
         if (cache[si][pi] != null) return cache[si][pi];
@@ -66,10 +94,10 @@ public class Q10 {
         boolean result = false;
         boolean cMatch = s.charAt(si) == p.charAt(pi) || p.charAt(pi) == '.';
         if (pi + 1 < p.length() && p.charAt(pi + 1) == '*') { // aab, c*a*b || aab, a*b
-            result = isMatch(s, p, si, pi + 2, cache) ||
-                    cMatch && isMatch(s, p, si + 1, pi, cache);
+            result = isMatch3(s, p, si, pi + 2, cache) ||
+                    cMatch && isMatch3(s, p, si + 1, pi, cache);
         } else if (cMatch) {
-            result = isMatch(s, p, si + 1, pi + 1, cache);
+            result = isMatch3(s, p, si + 1, pi + 1, cache);
         }
         cache[si][pi] = result;
 
@@ -78,8 +106,8 @@ public class Q10 {
 
     // can only be a*b*.*, extra
     private boolean validPattern(String p, int i) {
-        if (i + 1 < p.length() && p.charAt(i + 1) == '*') return validPattern(p, i + 2);
-
+        if (i + 1 < p.length() && p.charAt(i + 1) == '*')
+            return validPattern(p, i + 2);
         return i == p.length();
     }
 }
