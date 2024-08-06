@@ -1,15 +1,14 @@
 package cn.buoy.leetcode.graph;
 
 public class Q335 {
-
     /**
-     *
-     * 複習優先級 -1.
-     *
+     * 归纳下来就是 3种情况, 视频, 就近于背了.
+     * https://www.youtube.com/watch?v=b8iINtg7zbs
      * https://www.youtube.com/watch?v=zo20CxMckjU&t=98s
-     * 這個比較直觀, 但是寫法很糟.
-     * @param lengths
-     * @return
+     * 思路: 3种相遇:
+     * 1. 一直缩小, 突然变大, 穿出来
+     * 2. 有一对边相等, 另一对插到自己
+     * 3. 变大途中变小.
      */
     public boolean isSelfCrossing(int[] lengths) {
         for (int i = 3; i < lengths.length; i++) {
@@ -21,7 +20,6 @@ public class Q335 {
             if (i >= 5 && lengths[i - 2] >= lengths[i - 4] && lengths[i - 5] + lengths[i - 1] >= lengths[i - 3] && lengths[i - 1] <= lengths[i - 3] && lengths[i - 4] + lengths[i] >= lengths[i - 2])
                 return true;
         }
-
         return false;
     }
 

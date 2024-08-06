@@ -4,17 +4,14 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q24 {
     /**
+     * 简单, 视频, 代码
      * https://www.youtube.com/watch?v=OJzYvbHX1G8
      * 思路: 連續的2個元素換位, 直到最後. 原第1个元素指向递归的剩余链表, 原第2个元素指向原第1个元素.
      * 2種都可以, 第1種寫法比較快, 第2種步驟清晰.
-     */
-
-    /**
-     * 用於交換 原 head 與 原 head.next 的位置, 的遞歸函數. 使得 原 head.next 成爲 新 head
+     * 1. 递归写法. 假用於交換 原 head 與 原 head.next 的位置, 的遞歸函數. 使得 原 head.next 成爲 新 head
      */
     public ListNode swapPairs(ListNode head) {
-        if ((head == null) || (head.next == null))
-            return head;
+        if ((head == null) || (head.next == null)) return head;
         // 記錄 原 head.next
         ListNode next = head.next;
         // 交換 原 head.next 和 原 head 的 位置:

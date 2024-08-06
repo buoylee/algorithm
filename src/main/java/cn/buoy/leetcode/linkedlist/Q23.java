@@ -5,27 +5,22 @@ import cn.buoy.leetcode.ListNode;
 import java.util.PriorityQueue;
 
 public class Q23 {
-
     /**
-     * https://www.youtube.com/watch?v=Jq6QWstM66s
      * 超簡單, 看.
-     * 思路: 直接用一個 PriorityQueue, k個 node push 進去, pop 出最小那個後, 在 push 他的 next 入隊, 如此循環直到 k個 node 都爲空.
+     * https://www.youtube.com/watch?v=Jq6QWstM66s
+     * 思路: 直接用一個 PriorityQueue, k個 link head 入队, pop 出最小那個後, 在 push 他的 next 入隊, 如此循環直到 k個 node 都爲空.
      */
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length == 0) return null;
-
         PriorityQueue<ListNode> queue = new PriorityQueue<>(lists.length, (a, b) -> a.val - b.val);
-
         ListNode dummy = new ListNode(0);
         ListNode curr = dummy;
-
-        // k個node 全部放入 queue
+        // k個 link 的 head 全部放入 queue
         for (ListNode node : lists)
             if (node != null)
                 queue.add(node);
-
         while (!queue.isEmpty()) {
-            // 弹出的链表还有next继续放回队列中.
+            // 弹出的 link head 还有 next, 就继续放回队列中.
             curr.next = queue.poll();
             curr = curr.next;
             if (curr.next != null)
@@ -33,7 +28,6 @@ public class Q23 {
         }
         return dummy.next;
     }
-
 
     /**
      * 递归

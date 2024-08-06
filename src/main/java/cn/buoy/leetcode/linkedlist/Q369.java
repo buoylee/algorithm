@@ -6,9 +6,9 @@ public class Q369 {
     /**
      * 简单, 视频举的例子不够清晰, 缺少 [1,2,3,9,9,1], 最后一个 1 才是 我们要找的 notEight.
      * https://www.youtube.com/watch?v=6bh8bKxT9o8
-     * 思路: 找到最后一个 非9的index(表示后续没有9  或 它就是最后一位), 这个其实就是需要 +1 的index,
+     * 思路: 找到最后一个 非9的index(表示后续没有9  或 它就是最后一位 非9, 但后续有 99..), 这个其实就是需要 +1 的index,
      * 如果 notNine 是 tail, 这个就是结果;
-     * 如果 notNine 后续还有元素, 那肯定都是9, 只要把后续9都改成1, 就是答案.
+     * 如果 notNine 后续还有元素, 那肯定都是9, 只要把后续9都改成0, 就是答案.
      */
     public ListNode plusOne(ListNode head) {
         ListNode dummy = new ListNode(0);

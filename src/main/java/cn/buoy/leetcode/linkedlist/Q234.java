@@ -20,9 +20,8 @@ public class Q234 {
             if (head.val == midNext.val) {
                 head = head.next;
                 midNext = midNext.next;
-            } else {
+            } else
                 return false;
-            }
         }
         return true;
     }

@@ -3,8 +3,8 @@ package cn.buoy.leetcode.linkedlist;
 import cn.buoy.leetcode.ListNode;
 
 /**
- * https://www.youtube.com/watch?v=72fBK4q0qxo
  * 超簡單, 視頻.
+ * https://www.youtube.com/watch?v=72fBK4q0qxo
  * 思路: 分2條 link, 一條 大於 x, 一條 小於等於 x,
  * 然後 smallerCurr 指向 biggerDummy.next,
  * 最後 返回 smallerDummy.next.
@@ -19,10 +19,9 @@ public class Q86 {
             if (head.val < x) {
                 // smallerCurr 指向 head, 然後更新 smallerCurr = smallerCurr.next
                 smallerCurr = smallerCurr.next = head;
-            } else { // x = 3 放右邊
+            } else  // x = 3 放右邊
                 biggerCurr = biggerCurr.next = head;
-            }
-            // head 移到 下一點(head.next)
+            // 原 head 移到 下一點(head.next)
             head = head.next;
         }
         // no need for extra check because of fake heads

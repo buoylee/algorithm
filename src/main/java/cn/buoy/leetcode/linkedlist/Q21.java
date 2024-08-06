@@ -4,15 +4,14 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q21 {
     /**
-     * https://www.youtube.com/watch?v=naUO9liCm4s
      * 簡單, 看視頻.
+     * https://www.youtube.com/watch?v=naUO9liCm4s
      * 思路: 不斷比較 頭部元素 較小的, 插入 curr node.next.
      */
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
         ListNode dummy = new ListNode(-1);
         ListNode curr = dummy;
-
-        while (l1 != null && l2 != null) {
+        while (l1 != null && l2 != null) { // 2 link 还都有 node 存在比较时
             // 哪個小, 就連接誰, 然後next.
             if (l1.val < l2.val) {
                 curr.next = l1;
@@ -23,7 +22,6 @@ public class Q21 {
             }
             curr = curr.next;
         }
-
         // 當有其一爲空, 不再需要比較, 直接連接 不爲空的 node.
         if (l1 != null)
             curr.next = l1;

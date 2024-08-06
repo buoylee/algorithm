@@ -4,8 +4,9 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q2 {
     /**
-     * https://www.youtube.com/watch?v=SeBLjY58iY8
      * 簡單到爆, 直接看視頻
+     * https://www.youtube.com/watch?v=SeBLjY58iY8
+     * 思路: 2 link 同步向前(如果有一link出现null, 用 0 替代即可), 记录每一步 餘數/進位, 最后记得, 如果 carry != 0, 要多补一位.
      */
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         // 爲了方便取結果, 保留dummy指針.
@@ -16,21 +17,18 @@ public class Q2 {
         while (l1 != null || l2 != null) {
             int x = l1 == null ? 0 : l1.val;
             int y = l2 == null ? 0 : l2.val;
-
             int sum = x + y + carry;
-            //餘數(加完後, curr 的值)
+            // 餘數(加完後, curr 的值)
             curr.next = new ListNode(sum % 10);
             // 進位
             carry = sum / 10;
-
             curr = curr.next;
             if (l1 != null) l1 = l1.next;
             if (l2 != null) l2 = l2.next;
         }
         // 最後一位如果要進位, 記得+個 ListNode(1).
-        if (carry != 0) {
+        if (carry != 0)
             curr.next = new ListNode(carry);
-        }
         return dummy.next;
     }
 

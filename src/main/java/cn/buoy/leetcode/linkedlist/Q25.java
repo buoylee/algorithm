@@ -3,35 +3,24 @@ package cn.buoy.leetcode.linkedlist;
 import cn.buoy.leetcode.ListNode;
 
 public class Q25 {
-
-    public static void main(String[] args) {
-        Q25 q25 = new Q25();
-        ListNode listNode = new ListNode(1);
-        listNode.next = new ListNode(2);
-        listNode.next.next = new ListNode(3);
-        listNode.next.next.next = new ListNode(4);
-        listNode.next.next.next.next = new ListNode(5);
-        listNode.next.next.next.next.next = new ListNode(6);
-//        listNode.next.next.next.next.next.next = new ListNode(7);
-        q25.reverseKGroup(listNode, 2);
-    }
-
     /**
+     * 24
+     * 可以复习
+     * 其實是簡單的. 視頻快速看, 然後看註釋就好.
      * https://www.youtube.com/watch?v=DryIN7iL4pA
-     * 很像 24, 其實是簡單的. 視頻快速看, 然後看註釋就好.
      * 思路: 翻轉 linklist 有多種方式, 分組k. 然後就是一些邊界問題要想清楚.
      */
     public ListNode reverseKGroup(ListNode head, int k) {
-        //为什么需要 k+1, curr 作为 下k个一组 的开头,
+        // 为什么需要 k+1, curr 作为 下k个一组 的开头,
         ListNode curr = head;
         int count = 0;
-        //看是否满足一轮k数量.
+        // 看是否满足一轮k数量.
         while (curr != null && count != k) { // find the k+1 node
             curr = curr.next;
             count++;
         }
         if (count == k) { // if k+1 node is found
-            //curr = k + 1位
+            // curr = k + 1位
             curr = reverseKGroup(curr, k); // reverse list with k+1 node as head
             // head - head-pointer to direct part,
             // curr - head-pointer to reversed part;
@@ -43,10 +32,14 @@ public class Q25 {
             while (count-- > 0) { // reverse current k-group:
                 ListNode tmp = head.next; // tmp - next head in direct part
                 //作为第k个
+                // 1 -> 5
                 head.next = curr; // preappending "direct" head to the reversed list
+                // curr = 1
                 curr = head; // move head of reversed part to a new node
+                // head = 2
                 head = tmp; // move "direct" head to the next node in direct part
             }
+            // 最后, 设置 head 在 原第k个数
             head = curr;
         }
         return head;
@@ -75,5 +68,17 @@ public class Q25 {
             tail = tail.next;
         }
         return dmy.next;
+    }
+
+    public static void main(String[] args) {
+        Q25 q25 = new Q25();
+        ListNode listNode = new ListNode(1);
+        listNode.next = new ListNode(2);
+        listNode.next.next = new ListNode(3);
+        listNode.next.next.next = new ListNode(4);
+        listNode.next.next.next.next = new ListNode(5);
+        listNode.next.next.next.next.next = new ListNode(6);
+//        listNode.next.next.next.next.next.next = new ListNode(7);
+        q25.reverseKGroup(listNode, 2);
     }
 }

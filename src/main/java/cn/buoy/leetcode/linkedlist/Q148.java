@@ -4,8 +4,8 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q148 {
     /**
-     * https://www.youtube.com/watch?v=xUFYCXsncm0 这个短
      * 简单, 视频
+     * https://www.youtube.com/watch?v=xUFYCXsncm0 这个短
      * 思路: 典型 merge sort
      */
     public ListNode sortList(ListNode head) {
@@ -24,20 +24,15 @@ public class Q148 {
 
     /**
      * 取中点, 注意边界.
-     *
-     * @param head
-     * @return
      */
     private ListNode getMiddle(ListNode head) {
         ListNode slow = head;
         ListNode fast = head;
-
         // 细节: 中点位置: while (fast != null && fast.next != null) // 奇数: 中点; 偶数: 后点
         while (fast.next != null && fast.next.next != null) { // 奇数: 中点; 偶数: 前点
             slow = slow.next;
             fast = fast.next.next;
         }
-
         return slow;
     }
 
@@ -59,12 +54,10 @@ public class Q148 {
             cur = cur.next;
         }
         // 当 其一 link == null, 就把 另一 link 剩余node 插入最后.
-        if (a == null) {
+        if (a == null)
             cur.next = b;
-        } else {
+        else
             cur.next = a;
-        }
-
         return dummy.next;
     }
 

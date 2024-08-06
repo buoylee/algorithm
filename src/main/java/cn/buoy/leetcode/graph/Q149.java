@@ -4,58 +4,55 @@ import java.util.*;
 
 public class Q149 {
     /**
+     * 需要复习?
      * https://www.youtube.com/watch?v=xF2G6DARKBM
      * 思路: 同一點 和 其他點, 組成的線 的斜率, 如果一樣, 說明在一個條直線上.
      * 細節: 爲什麼後邊的起始點不需要看前边的点? 因爲如果前邊的點影響後邊新組成的線上的點的max, 那麼說明, '前邊的點組成的線'其實和現在的點組成的是同一條線. 所以沒有必要統計前邊出現的點.
      */
-    //Returns slope of a line. Vertical line slope is undefined and represented as Max value
+    public int maxPoints(int[][] points) {
+        int result = 1;
+        for (int i = 0; i < points.length; i++) {
+            // How many points have a perticular slope w.r.t. this point
+            // 经过某个点的斜率相同的值.
+            // 其他语言可能精度不够, 通过不了, 可以用string((a/gcd)/(b/gcd))方式做key
+            Map<Double, Integer> slopesCount = new HashMap<Double, Integer>();
+            int dups = 0, max = 0;
+            // FIXME: 2021/5/7
+            // 为什么可以不用看前边的点?
+            // 細節: 反過來想, 如果需要遍歷前邊的點(0-i之間), 而且會影響最後的max, 那麼, 他們的組成的線(之前的點(0-i之間) 和 當前的點), 就會和之前的線重合, 所以其實可以跳過這些點(因爲只有後邊的點和前邊的組成的線不再同一條線上, 才會有更大的max出現).
+            for (int j = i + 1; j < points.length; j++) {
+                if (i == j) continue;
+                // dups
+                if (areSamePoints(points[i], points[j])) {
+                    dups++;
+                    continue;
+                }
+                double slope = slope(points[i], points[j]);
+                slopesCount.put(slope, slopesCount.getOrDefault(slope, 0) + 1);
+                // save max no of points with some slope
+                max = Math.max(max, slopesCount.get(slope));
+            }
+            result = Math.max(result, max + dups /*dups are always on same line*/ + 1/*self*/);
+        }
+        return result;
+    }
+
+    // Returns slope of a line. Vertical line slope is undefined and represented as Max value
+    // 求斜率
     private double slope(int[] p1, int[] p2) {
         int x1 = p1[0], y1 = p1[1];
         int x2 = p2[0], y2 = p2[1];
-
         if (x1 == x2) return Double.MAX_VALUE; // vertical line
         if (y1 == y2) return 0; // horizontal line
         return (double) (y2 - y1) / (double) (x2 - x1);
     }
 
     // Tells if these two points are same
+    // 是否同一个点
     private boolean areSamePoints(int[] p1, int[] p2) {
         return p1[0] == p2[0] && p1[1] == p2[1];
     }
 
-    public int maxPoints(int[][] points) {
-        int result = 1;
-        for (int i = 0; i < points.length; i++) {
-            // How many points have a perticular slope w.r.t. this point
-            //经过某个点的斜率相同的值.
-            //其他语言可能精度不够, 通过不了, 可以用string((a/gcd)/(b/gcd))方式做key
-            Map<Double, Integer> slopesCount = new HashMap<Double, Integer>();
-            int dups = 0, max = 0;
-
-            // FIXME: 2021/5/7
-            // 为什么可以不用看前边的点?
-            // 細節: 反過來想, 如果需要遍歷前邊的點(0-i之間), 而且會影響最後的max, 那麼, 他們的組成的線(之前的點(0-i之間) 和 當前的點), 就會和之前的線重合, 所以其實可以跳過這些點(因爲只有後邊的點和前邊的組成的線不再同一條線上, 才會有更大的max出現).
-            for (int j = i + 1; j < points.length; j++) {
-//            for (int j = 0; j < points.length; j++) {
-                if (i == j) continue;
-
-                // dups
-                if (areSamePoints(points[i], points[j])) {
-                    dups++;
-                    continue;
-                }
-
-                double slope = slope(points[i], points[j]);
-                slopesCount.put(slope, slopesCount.getOrDefault(slope, 0) + 1);
-                // save max no of points with some slope
-                max = Math.max(max, slopesCount.get(slope));
-            }
-
-            result = Math.max(result, max + dups /*dups are always on same line*/ + 1/*self*/);
-        }
-
-        return result;
-    }
 
     /**
      * 求最大公约数

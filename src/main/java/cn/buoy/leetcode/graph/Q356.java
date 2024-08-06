@@ -4,8 +4,8 @@ import java.util.HashSet;
 
 public class Q356 {
     /**
-     * https://www.youtube.com/watch?v=i2C2XfBBAWs
      * 簡單, 視頻.
+     * https://www.youtube.com/watch?v=i2C2XfBBAWs
      * 思路: 因爲是求一條 平行于 y軸 的 對稱線. 所以, 可以 用 最左 和 最右 必然是對稱線這個必然條件來解題.
      * 如何表達這個對稱線呢, 可以用 (x1 - x2)/2, 但是爲了代碼簡潔 使用 x1 - x2 或 x1 + x2, 也是可以表達對稱于某條y軸的條件.
      * 用最左 和 最右 找出, 對稱的條件後, 把 所有點都加入到set, 遍歷 set, 通過 前邊的條件 得到 某個點的對稱點, 一旦這個 對稱點 不存在于 set, 說明不存在這樣的線, 使 所有的點 都存在 都以某條y軸爲對稱線 的對稱點.

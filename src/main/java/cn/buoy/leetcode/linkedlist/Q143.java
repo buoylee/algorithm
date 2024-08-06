@@ -4,8 +4,8 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q143 {
     /**
-     * https://www.youtube.com/watch?v=h-lJwhlSzNo
      * 簡單, 視頻, 註釋.
+     * https://www.youtube.com/watch?v=h-lJwhlSzNo
      * 思路: fast == 2*slow, 當 fast 停止, slow 就在 偶數arr 後一點, 奇數arr 中點,
      * 爲什麼把 中點放在 後半部,
      * 這個時候, 如果 arr.size 是奇數, 只要遍歷到 前半部分 == null 時, 就可以結束(偶數當然也結束), 因爲最後一個(中點)已經在 後半部 arr 的末尾.

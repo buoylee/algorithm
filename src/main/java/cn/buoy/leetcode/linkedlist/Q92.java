@@ -2,14 +2,13 @@ package cn.buoy.leetcode.linkedlist;
 
 import cn.buoy.leetcode.ListNode;
 
-/**
- * https://www.youtube.com/watch?v=ecZ-_NqWRBo
- * 超簡單, 視頻
- * 思路: 找到 left 的左鄰居 pre, 然後 從 left 開始, 不斷把 curr.next 插到 pre 後邊, 直到 right.
- * 其實 pre 和 curr 對應的元素一直沒變.
- */
 public class Q92 {
-
+    /**
+     * 超簡單, 視頻
+     * https://www.youtube.com/watch?v=ecZ-_NqWRBo
+     * 思路: 找到 left 的左鄰居 pre, 然後 從 left 開始, 不斷把 curr.next 插到 pre 後邊, 直到 right.
+     * 其實 pre 和 curr 對應的元素一直沒變.
+     */
     public ListNode reverseBetween(ListNode head, int left, int right) {
         if (head == null)
             return head;
@@ -17,9 +16,8 @@ public class Q92 {
         dummy.next = head;
         ListNode prev = dummy;
         // 找到 left 的左鄰居 pre
-        for (int i = 1; i < left; i++) {
+        for (int i = 1; i < left; i++)
             prev = prev.next;
-        }
         // 不斷把 curr.next 和 curr 調換位置, 直到 n.
         ListNode curr = prev.next;
         for (int i = left; i < right; i++) {

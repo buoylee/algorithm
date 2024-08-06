@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Q399 {
     /**
+     * 簡單, 看視頻.
      * https://www.youtube.com/watch?v=u9LE_7apB38
      * https://www.youtube.com/watch?v=berj4Xm_YTY 看這個短的
-     * 簡單, 看視頻.
      * 思路: 当 有向带权图 处理, a / b = 2, b / c = 1 => a / c = 2;
      * a -> b -> c;
      */
@@ -24,7 +24,7 @@ public class Q399 {
         }
         double[] res = new double[queries.size()];
         for (int i = 0; i < queries.size(); i++)
-            //seen每次都 new 不需要backtracking
+            // seen 每次都 new 不需要backtracking
             res[i] = dfs(queries.get(i).get(0), queries.get(i).get(1), 1, equationMap, new HashSet<>());
         return res;
     }
@@ -38,10 +38,10 @@ public class Q399 {
      * @return
      */
     double dfs(String start, String tail, double tmpValue, Map<String, Map<String, Double>> equationMap, Set<String> used) {
-        //如果没有起点node, 或已经 used 返回失败-1
+        // 如果 不存在 "起点 node", 或已经 used, 返回失败-1
         if (!equationMap.containsKey(start) || !used.add(start))
             return -1;
-        //到了结尾
+        // 到了结尾
         if (start.equals(tail))
             return tmpValue;
         Map<String, Double> nextMap = equationMap.get(start);

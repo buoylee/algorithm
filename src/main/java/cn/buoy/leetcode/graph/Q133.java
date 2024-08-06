@@ -9,8 +9,9 @@ import java.util.List;
 
 public class Q133 {
     /**
+     * 簡單
      * https://www.youtube.com/watch?v=dhmIGSv-XXo
-     * 簡單, 關鍵在在如何排除 重複copy的點. 下邊都是講clone過的node放入map, 存在則跳過該node.
+     * 關鍵在在如何排除 重複copy的點. 下邊都是講clone過的node放入map, 存在則跳過該node.
      */
     private HashMap<Integer, UndirectedGraphNode> map = new HashMap<>();
 
@@ -23,16 +24,14 @@ public class Q133 {
      */
     private UndirectedGraphNode clone(UndirectedGraphNode node) {
         if (node == null) return null;
-        if (map.containsKey(node.val)) {
+        if (map.containsKey(node.val))
             return map.get(node.val);
-        }
-        // 複製 node
+        // 没复制过, 複製 node, 马上放入 map
         UndirectedGraphNode clone = new UndirectedGraphNode(node.val);
         map.put(clone.val, clone);
-        for (UndirectedGraphNode neighbor : node.neighbors) {
-            // 插入 neighbors時, 直接遞歸.
+        for (UndirectedGraphNode neighbor : node.neighbors)
+            // 关键: 插入 neighbors時, 直接遞歸.
             clone.neighbors.add(clone(neighbor));
-        }
         return clone;
     }
 

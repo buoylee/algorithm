@@ -4,15 +4,14 @@ import cn.buoy.leetcode.ListNode;
 
 public class Q203 {
     /**
-     * https://www.youtube.com/watch?v=l4OAzNyx9vw
      * 超简单, 视频
+     * https://www.youtube.com/watch?v=l4OAzNyx9vw
      * 思路: 查看 curr 的 next 是否为 val,
      * 是则, 跳过next, curr.next = curr.next.next;
      * 否则, 指针移到 next, curr = curr.next;
      */
     public ListNode removeElements(ListNode head, int val) {
-        if (head == null)
-            return head;
+        if (head == null) return head;
         ListNode dummy = new ListNode(-1);
         dummy.next = head;
         ListNode curr = dummy;
@@ -20,9 +19,8 @@ public class Q203 {
         while (curr.next != null) {
             if (curr.next.val == val) {
                 curr.next = curr.next.next;
-            } else {
+            } else
                 curr = curr.next;
-            }
         }
         return dummy.next;
     }
