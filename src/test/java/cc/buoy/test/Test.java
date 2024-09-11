@@ -73,7 +73,29 @@ public class Test {
 
 //        int i = "9".compareTo("133");
 //        System.out.println(i);
-        System.out.println(1/2);
+//        System.out.println(1/2);
+
     }
 
+
+}
+
+class HelloX {
+    public HelloX() {
+        System.out.print("HelloX:");
+    }
+    { System.out.print("I'm X class:"); }
+    static { System.out.print("static X:"); }
+}
+
+ class HelloY extends HelloX {
+    public HelloY() {
+        System.out.print("HelloY:");
+    }
+    { System.out.print("I'm Y class:"); }
+    static { System.out.print("static Y:"); }
+
+    public static void main(String[] args) {
+        new HelloY();
+    }
 }

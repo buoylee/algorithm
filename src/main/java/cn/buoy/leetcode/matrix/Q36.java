@@ -6,20 +6,19 @@ public class Q36 {
     /**
      * https://www.youtube.com/watch?v=iqe1JSjyldo
      * https://www.youtube.com/watch?v=ceOLAY4XUOw 短, 這個寫法更簡單.
-     * 思路: 前提是你要直到'只需要比較存在的數的格子之間和不合法'; 3種驗證, 行, 列, 3*3塊.
+     * 思路: 只需要比较, 现有的 "占用 格子的" 数字, 他们之间是否有不合法的放置情况即可. 3種驗證, 行, 列, 3*3塊, 不能有相同的 数字.
      */
     public boolean isValidSudoku(char[][] board) {
         HashSet<String> used = new HashSet<>();
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 char number = board[i][j];
-                if (number != '.') {
-                    // 關鍵: 直觀地存 str.
-                    if (!used.add(number + " in row " + i) ||
-                            !used.add(number + " in col " + j) ||
-                            !used.add(number + " in block " + i / 3 + "-" + j / 3))
-                        return false;
-                }
+                if (number != '.')
+                    // 關鍵: 把 存在的 "数字 的 格子位置" 直觀转为 存 str.
+                    if (!used.add(number + " in row " + i) || // 某行是否有 num
+                            !used.add(number + " in col " + j) || // 某列是否有 num
+                            !used.add(number + " in block " + i / 3 + "-" + j / 3)) // 某 block 是否有 num; 关键: block 的序号 如何计算, 当作9个大方格就好.
+                        return false; // 一旦有冲突就失败
             }
         }
         return true;

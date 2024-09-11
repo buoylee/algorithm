@@ -2,15 +2,15 @@ package cn.buoy.leetcode.matrix;
 
 public class Q37 {
     /**
-     * 簡單, 視頻 ,註釋
-     * https://www.youtube.com/watch?v=b6CxF17Y_k4
      * 和 36 類似, 多个backtracking
+     * 簡單, 視頻, 註釋
+     * https://www.youtube.com/watch?v=b6CxF17Y_k4
+     * https://www.youtube.com/watch?v=ZV0InYdJKYw block offset 讲解, 这里需要复习
      * 思路: 給每一個'.'嘗試所有可能(1~9), 檢查, row, col, block 中填入 該數 是否合法, 合法則dfs, 否則 backtracking.
      * 檢查 block 的代碼多看1眼.
      */
     public void solveSudoku(char[][] board) {
-        if (board == null || board.length == 0)
-            return;
+        if (board == null || board.length == 0) return;
         dfs(board);
     }
 
@@ -42,7 +42,7 @@ public class Q37 {
             if (board[i][col] != '.' && board[i][col] == value) return false; //check row
             // 檢查 row 一整還能夠 是否有 value.
             if (board[row][i] != '.' && board[row][i] == value) return false; //check column
-            //檢查 所屬的那個 3*3 block中, 是否有 value.
+            // 檢查 所屬的那個 3*3 block中, 是否有 value.
             // 關鍵: 可以想象成 分佈到 3*3 9個大格,
             // 3 * (row / 3) 代表 9個大格的 第幾行,
             //  i / 3 代表 這些行中的 第幾列.

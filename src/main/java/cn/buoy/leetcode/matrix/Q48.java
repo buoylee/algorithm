@@ -5,7 +5,6 @@ public class Q48 {
      * 簡單, 視頻. 註釋.
      * https://www.youtube.com/watch?v=9ryIfj5DohI
      * 思路: 知道公式, 1. 上下鏡像顛倒; 2. \(左上到右下)對角線鏡像顛倒. 結束.
-     * <p>
      * clockwise rotate
      * first reverse up to down, then swap the symmetry
      * 1 2 3     7 8 9     7 4 1
@@ -25,7 +24,7 @@ public class Q48 {
         }
         // \(左上到右下)對角線鏡像顛倒, 跳過對角線.
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = i + 1; j < matrix[i].length; j++) {
+            for (int j = i + 1; j < matrix[i].length; j++) { // j = i + 1 就是跳过 '\'对角线, 剩下就是 对调 x/y 即可.
                 int temp = matrix[i][j];
                 matrix[i][j] = matrix[j][i];
                 matrix[j][i] = temp;

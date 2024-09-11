@@ -3,11 +3,6 @@ package cn.buoy.leetcode.binarysearch;
 import java.util.Arrays;
 
 public class Q300 {
-    public static void main(String[] args) {
-        Q300 q300 = new Q300();
-        int length = q300.lengthOfLIS(new int[]{1, 3, 4, 0, 2});
-    }
-
     /**
      * 先看視頻了解思路, 就很好寫了.
      * DP, 看這個; DP比2分好理解, 2分比較巧妙: https://www.youtube.com/watch?v=7g3uoteFKug&ab_channel=%E5%AE%B0%E7%9B%B8%E5%B0%8F%E7%94%98%E7%BD%97
@@ -48,4 +43,10 @@ public class Q300 {
         }
         return len;
     }
+
+    public static void main(String[] args) {
+        Q300 q300 = new Q300();
+        int length = q300.lengthOfLIS(new int[]{1, 3, 4, 0, 2});
+    }
+
 }
